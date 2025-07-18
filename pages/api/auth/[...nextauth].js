@@ -2,7 +2,6 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { compare } from 'bcrypt';
 import { Pool } from 'pg';
-import { Adapter } from '@next-auth/postgres-adapter';
 
 const pool = new Pool(); // uses .env.local
 
