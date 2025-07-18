@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
-export default function UserForm({ user = null, onSubmit }) {
+export default function UserForm({ user = null, onSubmit, mode = "default"}) {
+  const [password, setPassword] = useState('');
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
   const [loading, setLoading] = useState(false);
@@ -15,9 +16,9 @@ export default function UserForm({ user = null, onSubmit }) {
 
     try {
       if (onSubmit) {
-        await onSubmit({ name, email });
+        await onSubmit({ name, email, ...(mode === 'signup' && { password }) });
       }
-      router.push('/');
+      if (mode !== 'signup') router.push('/');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -70,6 +71,23 @@ export default function UserForm({ user = null, onSubmit }) {
               />
             </div>
 
+            {mode === 'signup' && (
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="Enter password"
+                />
+              </div>
+            )}
+            
             <div className="flex justify-end space-x-3">
               <button
                 type="button"
