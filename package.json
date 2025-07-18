@@ -1,5 +1,5 @@
 {
-  "name": "my-crud-app",
+  "name": "nextjs-postgresql-crud",
   "version": "0.1.0",
   "private": true,
   "scripts": {
