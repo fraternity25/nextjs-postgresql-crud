@@ -16,13 +16,13 @@ export default async function handler(req, res) {
 
     case 'POST':
       try {
-        const { name, email } = req.body;
+        const { name, email, role} = req.body;
 
-        if (!name || !email) {
-          return res.status(400).json({ error: 'Name and email are required' });
+        if (!name || !email || !role) {
+          return res.status(400).json({ error: 'Name, email and role are required' });
         }
 
-        const newUser = await createUser({ name, email });
+        const newUser = await createUser({ name, email, role});
         res.status(201).json(newUser);
       } catch (error) {
         console.error(error);

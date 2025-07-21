@@ -1,14 +1,23 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import UserForm from '@/components/UserForm';
 
 export default function EditUser() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { data: session, status } = useSession();
   const router = useRouter();
+
   const { id } = router.query;
 
+  if (status === 'loading') return <p>Loading...</p>;
+  if (!session || !session.user.roles.includes('admin')) {
+    router.push('/');
+    return null;
+  }
+  
   useEffect(() => {
     if (id) {
       fetchUser();

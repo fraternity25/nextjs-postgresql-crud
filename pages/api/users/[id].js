@@ -22,11 +22,11 @@ export default async function handler(req, res) {
 
     case 'PUT':
       try {
-        const { name, email } = req.body;
-        if (!name || !email)
-          return res.status(400).json({ error: 'Name and email are required' });
+        const { name, email, role } = req.body;
+        if (!name || !email || !role)
+          return res.status(400).json({ error: 'Name, email and role are required' });
 
-        const updated = await updateUser(id, { name, email });
+        const updated = await updateUser(id, { name, email, role});
         res.status(200).json(updated);
       } catch (error) {
         console.error(error);

@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
 export default function UserForm({ user = null, onSubmit }) {
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
+  const [role, setRole] = useState(user?.role || 'viewer');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
+
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.roles?.includes('admin');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,7 +20,7 @@ export default function UserForm({ user = null, onSubmit }) {
 
     try {
       if (onSubmit) {
-        await onSubmit({ name, email });
+        await onSubmit({ name, email, role });
       }
       router.push('/');
     } catch (err) {
@@ -69,6 +74,23 @@ export default function UserForm({ user = null, onSubmit }) {
                 placeholder="Enter email"
               />
             </div>
+
+            {isAdmin && (
+              <div>
+                <label htmlFor="role" className="block text-sm font-medium text-gray-700">Role</label>
+                <select
+                  id="role"
+                  name="role"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="admin">Admin</option>
+                  <option value="editor">Editor</option>
+                  <option value="viewer">Viewer</option>
+                </select>
+              </div>
+            )}
 
             <div className="flex justify-end space-x-3">
               <button
