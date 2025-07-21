@@ -1,5 +1,6 @@
 import { signOut } from 'next-auth/react';
 import { getSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
@@ -7,6 +8,10 @@ export default function Home({ session }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { data: clientSession } = useSession();
+
+  const roles = clientSession?.user?.roles || session?.user?.roles || [];
+  const isAdmin = roles.includes('admin');
 
   useEffect(() => {
     fetchUsers();
@@ -75,12 +80,14 @@ export default function Home({ session }) {
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
             <div className="flex gap-2">
-              <Link
-                href="/users/new"
-                className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
-              >
-                Add user
-              </Link>
+              {isAdmin && (
+                <Link
+                  href="/users/new"
+                  className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+                >
+                  Add user
+                </Link>
+              )}
               <button
                 onClick={() => signOut({ callbackUrl: '/auth' })}
                 className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
@@ -107,6 +114,9 @@ export default function Home({ session }) {
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
                         Created
                       </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
+                        Roles
+                      </th>
                       <th scope="col" className="relative px-6 py-3">
                         <span className="sr-only">Actions</span>
                       </th>
@@ -131,6 +141,9 @@ export default function Home({ session }) {
                             minute: '2-digit'
                           })}
                         </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {(user.roles || []).join(', ')}
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <Link
                             href={`/users/${user.id}`}
@@ -138,18 +151,22 @@ export default function Home({ session }) {
                           >
                             View
                           </Link>
-                          <Link
-                            href={`/users/${user.id}/edit`}
-                            className="text-indigo-600 hover:text-indigo-900 mr-4"
-                          >
-                            Edit
-                          </Link>
-                          <button
-                            onClick={() => deleteUser(user.id)}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            Delete
-                          </button>
+                          {isAdmin && (
+                            <>
+                              <Link
+                                href={`/users/${user.id}/edit`}
+                                className="text-indigo-600 hover:text-indigo-900 mr-4"
+                              >
+                                Edit
+                              </Link>
+                              <button
+                                onClick={() => deleteUser(user.id)}
+                                className="text-red-600 hover:text-red-900"
+                              >
+                                Delete
+                              </button>
+                            </>
+                          )}
                         </td>
                       </tr>
                     ))}
