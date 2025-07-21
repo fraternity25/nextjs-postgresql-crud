@@ -1,15 +1,9 @@
-import UserForm from '@/components/UserForm';
+import SignupForm from '@/components/SignupForm';
 
 export default function SignupPage() {
-  const handleSubmit = async (userData) => {
-    const res = await fetch('/api/auth/signup', {
-      method: 'POST',
-      body: JSON.stringify(userData),
-      headers: { 'Content-Type': 'application/json' }
-    });
-    if (!res.ok) throw new Error('Signup failed');
-    // maybe route to login page here
-  };
-
-  return <UserForm onSubmit={handleSubmit} mode="signup" />;
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <SignupForm />
+    </div>
+  );
 }
