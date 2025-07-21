@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -6,8 +7,12 @@ export default function UserDetail() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { data: session } = useSession();
   const router = useRouter();
   const { id } = router.query;
+
+  const currentUserRoles = session?.user?.roles || [];
+  const isAdmin= currentUserRoles.includes('admin')
 
   useEffect(() => {
     if (id) {
@@ -81,6 +86,7 @@ export default function UserDetail() {
           <div className="px-6 py-8">
             <div className="flex items-center justify-between mb-6">
               <h1 className="text-2xl font-bold text-gray-900">User Details</h1>
+              {isAdmin && (
               <div className="flex space-x-3">
                 <Link
                   href={`/users/${user.id}/edit`}
@@ -95,6 +101,7 @@ export default function UserDetail() {
                   Delete
                 </button>
               </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 gap-6">
@@ -133,6 +140,13 @@ export default function UserDetail() {
                     hour: '2-digit',
                     minute: '2-digit'
                   })}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Roles</label>
+                <div className="mt-1 text-sm text-gray-900">
+                  {user.roles?.join(', ') || '—'}
                 </div>
               </div>
             </div>
