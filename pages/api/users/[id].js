@@ -2,7 +2,7 @@ import {
   getUserById,
   updateUser,
   deleteUser,
-} from '../../../lib/dataService';
+} from '@/lib/dataService';
 
 export default async function handler(req, res) {
   const { method, query } = req;

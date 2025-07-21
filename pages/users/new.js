@@ -1,4 +1,4 @@
-import UserForm from '../../components/UserForm';
+import UserForm from '@/components/UserForm';
 
 export default function NewUser() {
   const handleSubmit = async (userData) => {

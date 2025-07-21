@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import UserForm from '../../../components/UserForm';
+import UserForm from '@/components/UserForm';
 
 export default function EditUser() {
   const [user, setUser] = useState(null);
