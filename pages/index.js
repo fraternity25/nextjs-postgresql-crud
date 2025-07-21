@@ -1,7 +1,9 @@
+import { signOut } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-export default function Home() {
+export default function Home({ session }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -72,12 +74,20 @@ export default function Home() {
             </p>
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-            <Link
-              href="/users/new"
-              className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
-            >
-              Add user
-            </Link>
+            <div className="flex gap-2">
+              <Link
+                href="/users/new"
+                className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+              >
+                Add user
+              </Link>
+              <button
+                onClick={() => signOut({ callbackUrl: '/auth' })}
+                className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
         
@@ -158,4 +168,22 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth',
+        permanent: false
+      }
+    };
+  }
+
+  return {
+    props: { session }
+  };
 }

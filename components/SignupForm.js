@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { signIn } from 'next-auth/react';
 
 export default function SignupForm() {
   const [formData, setFormData] = useState({
@@ -38,8 +39,18 @@ export default function SignupForm() {
       }
 
       setError(null); // temizle
-      // Opsiyonel: router.push('/login') veya toast mesajı
-      router.push('/');
+
+      const loginResult = await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      });
+
+      if (loginResult.ok) {
+        router.push('/');
+      } else {
+        setError('Login failed after signup');
+      }
     } catch (err) {
       setError(err.message);
     }

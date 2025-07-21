@@ -5,7 +5,7 @@ import { Pool } from 'pg';
 
 const pool = new Pool(); // uses .env.local
 
-export default NextAuth({
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -25,7 +25,8 @@ export default NextAuth({
           };
         }
 
-        throw new Error("Invalid email or password");
+        //throw new Error("Invalid email or password");
+        return null;
       }
     })
   ],
@@ -53,4 +54,6 @@ export default NextAuth({
     }
   },
   secret: process.env.NEXTAUTH_SECRET
-});
+};
+
+export default NextAuth(authOptions);
