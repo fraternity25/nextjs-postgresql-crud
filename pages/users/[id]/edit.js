@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
-import UserForm from '@/components/UserForm';
+import UserForm from '@/components/TaskForm';
 
 export default function EditUser() {
   const [user, setUser] = useState(null);

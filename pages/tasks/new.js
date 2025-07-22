@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import UserForm from '@/components/TaskForm';
 
-export default function NewUser() {
+export default function AssignTask() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -11,23 +11,28 @@ export default function NewUser() {
     router.push('/');
     return null;
   }
-  
-  const handleSubmit = async (userData) => {
-    const response = await fetch('/api/users', {
+
+  const handleSubmit = async (formData) => {
+    const response = await fetch('/api/tasks', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(formData),
     });
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.error || 'Failed to create user');
+      throw new Error(error.error || 'Failed to assign task');
     }
 
     return response.json();
   };
 
-  return <UserForm onSubmit={handleSubmit} />;
+  return (
+    <UserForm
+      onSubmit={handleSubmit}
+      mode="assignTask"
+    />
+  );
 }

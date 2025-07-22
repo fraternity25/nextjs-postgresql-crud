@@ -33,6 +33,38 @@ async function seed() {
       WHERE u.email = $1 AND r.name = $2
       ON CONFLICT DO NOTHING;
     `, ['admin@example.com', 'admin']);
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS tasks (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        description TEXT,
+        deadline TIMESTAMP,
+        created_at TIMESTAMP DEFAULT NOW(),
+        created_by INTEGER REFERENCES users(id),
+        status TEXT DEFAULT 'pending'
+      );
+    `);
+
+    // Intermediate table for many-to-many relationship: task_assignments
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS task_assignments (
+        task_id INTEGER REFERENCES tasks(id) ON DELETE CASCADE,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        role_id INTEGER REFERENCES roles(id),
+        PRIMARY KEY (task_id, user_id)
+      );
+    `);
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS notifications (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id),
+        message TEXT NOT NULL,
+        is_read BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
   } catch (err) {
     console.error('❌ Error seeding data:', err);
   } finally {
