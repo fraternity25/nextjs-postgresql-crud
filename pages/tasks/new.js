@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import UserForm from '@/components/TaskForm';
+import TaskForm from '@/components/TaskForm';
 
 export default function AssignTask() {
   const { data: session, status } = useSession();
@@ -30,9 +30,9 @@ export default function AssignTask() {
   };
 
   return (
-    <UserForm
+    <TaskForm
       onSubmit={handleSubmit}
-      mode="assignTask"
+      mode='new'
     />
   );
 }

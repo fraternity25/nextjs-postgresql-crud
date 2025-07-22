@@ -39,7 +39,7 @@ async function seed() {
         id SERIAL PRIMARY KEY,
         title TEXT NOT NULL,
         description TEXT,
-        deadline TIMESTAMP,
+        deadline DATE,
         created_at TIMESTAMP DEFAULT NOW(),
         created_by INTEGER REFERENCES users(id),
         status TEXT DEFAULT 'pending'

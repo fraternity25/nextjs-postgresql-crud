@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 
-export default function TaskForm({ mode = 'new', task = null, user = null, users = [], onSubmit }) {
+export default function TaskForm({ mode = 'new', task = null, user = null, onSubmit }) {
+  const [users, setUsers] = useState([]);
   const [title, setTitle] = useState(task?.title || '');
   const [description, setDescription] = useState(task?.description || '');
   const [selectedUserId, setSelectedUserId] = useState(user?.id || '');
+  const [deadline, setDeadline] = useState('');
+  const [status, setStatus] = useState('pending');
   const [role, setRole] = useState(user?.role || 'viewer');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -17,6 +20,25 @@ export default function TaskForm({ mode = 'new', task = null, user = null, users
   const isView = mode === 'view';
   const isEdit = mode === 'edit';
   const isNew = mode === 'new';
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('/api/users');
+      if (!response.ok) {
+        throw new Error('Failed to fetch users');
+      }
+      const data = await response.json();
+      setUsers(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +52,9 @@ export default function TaskForm({ mode = 'new', task = null, user = null, users
           description,
           userId: selectedUserId || user?.id,
           role,
+          deadline,
+          status,
+          created_by: session?.user?.id
         });
       }
       router.push('/');
@@ -73,6 +98,31 @@ export default function TaskForm({ mode = 'new', task = null, user = null, users
                       {u.name} ({u.email})
                     </option>
                   ))}
+                </select>
+
+                <label htmlFor="deadline" className="block text-sm font-medium text-gray-700">
+                  Deadline
+                </label>
+                <input
+                  id="deadline"
+                  type="date"
+                  value={deadline}
+                  onChange={(e) => setDeadline(e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+                />
+
+                <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+                  Status
+                </label>
+                <select
+                  id="status"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+                >
+                  <option value="pending">Pending</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="completed">Completed</option>
                 </select>
               </div>
             )}
