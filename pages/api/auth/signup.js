@@ -1,5 +1,4 @@
-import bcrypt from 'bcrypt';
-import pool from '@/lib/db';
+import { createUser } from '@/lib/dataService';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -13,32 +12,20 @@ export default async function handler(req, res) {
   }
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const userRes = await pool.query(
-      'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id',
-      [name, email, hashedPassword]
-    );
-    const userId = userRes.rows[0].id;
-
-    const roleRes = await pool.query(
-      'SELECT id FROM roles WHERE name = $1',
-      ['viewer']
-    );
-    const roleId = roleRes.rows[0]?.id;
-
-    if (roleId !== undefined && roleId !== null) {
-      await pool.query(
-        'INSERT INTO user_roles (user_id, role_id) VALUES ($1, $2)',
-        [userId, roleId]
-      );
-    }
+    await createUser({
+      name,
+      email,
+      password,
+      roles: ['viewer'] // yeni kullanıcıya varsayılan role
+    });
 
     return res.status(201).json({ message: 'User created' });
 
   } catch (err) {
     console.error('Signup error:', err);
-    if (err.code === '23505') return res.status(409).json({ error: 'User already exists' });
+    if (err.message.includes('already exists')) {
+      return res.status(409).json({ error: err.message });
+    }
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
