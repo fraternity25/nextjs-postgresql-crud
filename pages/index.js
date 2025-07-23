@@ -3,6 +3,7 @@ import { getSession } from 'next-auth/react';
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import UserActionSelect from '@/components/UserActionSelect';
 
 export default function Home({ session }) {
   const [users, setUsers] = useState([]);
@@ -160,52 +161,23 @@ export default function Home({ session }) {
                           {(user.roles || []).join(', ')}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          {isAdmin && (
+                            <UserActionSelect user={user} tasks={tasks} />
+                          )}
                           <Link
                             href={`/users/${user.id}`}
-                            className="text-indigo-600 hover:text-indigo-900 mr-4"
+                            className="text-indigo-600 hover:text-indigo-900 ml-4"
                           >
                             View
                           </Link>
                           {isAdmin && (
-                            <>
-                              {tasks
-                                .filter((task) =>
-                                  task.assigned_users?.some((u) => u.user_id === user.id)
-                                )
-                                .map((task) => (
-                                  <Link
-                                    key={task.id}
-                                    href={`/tasks/${task.id}/edit`}
-                                    className="text-indigo-600 hover:text-indigo-900 mr-4"
-                                  >
-                                    Edit Task #{task.id}
-                                  </Link>
-                                ))
-                              }
-                              <button
-                                onClick={() => deleteUser(user.id)}
-                                className="text-red-600 hover:text-red-900"
-                              >
-                                Delete
-                              </button>
-                            </>
+                            <button
+                              onClick={() => deleteUser(user.id)}
+                              className="text-red-600 hover:text-red-900 ml-4"
+                            >
+                              Delete
+                            </button>
                           )}
-                          {/*isAdmin && (
-                            <>
-                              <Link
-                                href={`/tasks/${user.id}/edit`}
-                                className="text-indigo-600 hover:text-indigo-900 mr-4"
-                              >
-                                Edit
-                              </Link>
-                              <button
-                                onClick={() => deleteUser(user.id)}
-                                className="text-red-600 hover:text-red-900"
-                              >
-                                Delete
-                              </button>
-                            </>
-                          )*/}
                         </td>
                       </tr>
                     ))}
