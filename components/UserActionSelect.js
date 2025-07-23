@@ -15,6 +15,7 @@ export default function UserActionSelect({ user, tasks = [] }) {
       router.push({
         pathname: `/users/${user.id}/tasks`,
         query: {
+          user: JSON.stringify(user),
           userTasks: JSON.stringify(userTasks),
         },
       });
@@ -40,4 +41,3 @@ export default function UserActionSelect({ user, tasks = [] }) {
     </select>
   );
 }
-

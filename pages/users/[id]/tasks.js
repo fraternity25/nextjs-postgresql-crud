@@ -1,10 +1,23 @@
-// pages/users/[id]/tasks.js
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-export default function UserTasksPage({ user, tasks }) {
-  const userTasks = tasks.filter((task) =>
-    task.assigned_users?.some((u) => u.user_id === user.id)
-  );
+export default function UserTasksPage() {
+  const router = useRouter();
+  const [user, setUser] = useState(null);
+  const [userTasks, setUserTasks] = useState([]);
+
+  useEffect(() => {
+    if (router.isReady) {
+      const { user, userTasks } = router.query;
+      if (user && userTasks) {
+        setUser(JSON.parse(user));
+        setUserTasks(JSON.parse(userTasks));
+      }
+    }
+  }, [router.isReady, router.query]);
+
+  if (!user) return <p className="p-6">Loading...</p>;
 
   return (
     <div className="p-6">
