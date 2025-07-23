@@ -36,7 +36,7 @@ export default async function handler(req, res) {
         const updatedTask = await updateTask(id, {
           title,
           description,
-          user_id: userId,
+          userId,
           deadline,
           created_by,
           status,
