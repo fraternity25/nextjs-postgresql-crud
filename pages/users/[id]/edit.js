@@ -10,20 +10,13 @@ export default function EditUser() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const { id } = router.query;
+  const { id, mode } = router.query;
 
-  if (status === 'loading' || loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
-      </div>
-    );
-  }
-
-  if (!session || !session.user.roles.includes('admin')) {
-    router.push('/');
-    return null;
-  }
+  useEffect(() => {
+    if (status !== 'loading' && (!session || !session.user.roles.includes('admin'))) {
+      router.push('/');
+    }
+  }, [status, session]);
   
   useEffect(() => {
     if (id) {
@@ -63,6 +56,14 @@ export default function EditUser() {
     return response.json();
   };
 
+  if (status === 'loading' || loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -79,5 +80,5 @@ export default function EditUser() {
     );
   }
 
-  return <UserForm user={user} onSubmit={handleSubmit} />;
+  return <UserForm user={user} onSubmit={handleSubmit} hideSensitiveFields={mode === 'role-only'}/>;
 }

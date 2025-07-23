@@ -20,7 +20,12 @@ export default function UserActionSelect({ user, tasks = [] }) {
         },
       });
     } else if (value === 'change-role') {
-      router.push(`/users/${user.id}/edit`);
+      router.push({
+        pathname: `/users/${user.id}/edit`,
+        query: {
+          mode: 'role-only',
+        },
+      });
     }
 
     e.target.selectedIndex = 0;
