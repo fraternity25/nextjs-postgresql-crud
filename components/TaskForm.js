@@ -65,6 +65,35 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
     }
   };
 
+  const renderDeadlineAndStatus = () => (
+    <>
+      <label htmlFor="deadline" className="block text-sm font-medium text-gray-700">
+        Deadline
+      </label>
+      <input
+        id="deadline"
+        type="date"
+        value={deadline}
+        onChange={(e) => setDeadline(e.target.value)}
+        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+      />
+
+      <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+        Status
+      </label>
+      <select
+        id="status"
+        value={status}
+        onChange={(e) => setStatus(e.target.value)}
+        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+      >
+        <option value="pending">Pending</option>
+        <option value="in_progress">In Progress</option>
+        <option value="completed">Completed</option>
+      </select>
+    </>
+  );
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-md mx-auto">
@@ -100,30 +129,7 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
                   ))}
                 </select>
 
-                <label htmlFor="deadline" className="block text-sm font-medium text-gray-700">
-                  Deadline
-                </label>
-                <input
-                  id="deadline"
-                  type="date"
-                  value={deadline}
-                  onChange={(e) => setDeadline(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
-                />
-
-                <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-                  Status
-                </label>
-                <select
-                  id="status"
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
-                >
-                  <option value="pending">Pending</option>
-                  <option value="in_progress">In Progress</option>
-                  <option value="completed">Completed</option>
-                </select>
+                {renderDeadlineAndStatus()}
               </div>
             )}
 
@@ -135,6 +141,8 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
                 <div className="text-sm text-gray-700">
                   <strong>Email:</strong> {user.email}
                 </div>
+
+                {renderDeadlineAndStatus()}
               </div>
             )}
 
@@ -167,7 +175,7 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
               />
             </div>
-
+            
             {(isNew || isEdit) && isAdmin && (
               <div>
                 <label htmlFor="role" className="block text-sm font-medium text-gray-700">

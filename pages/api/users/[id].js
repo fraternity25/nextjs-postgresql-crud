@@ -26,7 +26,7 @@ export default async function handler(req, res) {
         if (!name || !email || !role)
           return res.status(400).json({ error: 'Name, email and role are required' });
 
-        const updated = await updateUser(id, { name, email, role});
+        const updated = await updateUser(id, { name, email, roles: [role]});
         res.status(200).json(updated);
       } catch (error) {
         console.error(error);

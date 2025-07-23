@@ -1,9 +1,19 @@
-import { createTask } from '@/lib/dataService';
+import { getTasks, createTask } from '@/lib/dataService';
 
 export default async function handler(req, res) {
   const { method } = req;
 
   switch (method) {
+    case 'GET':
+      try {
+        const tasks = await getTasks();
+        res.status(200).json(tasks);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to fetch tasks' });
+      }
+      break;
+
     case 'POST':
       try {
         const { title, description, deadline, status, created_by, userId, role } = req.body;
@@ -21,7 +31,7 @@ export default async function handler(req, res) {
       break;
 
     default:
-      res.setHeader('Allow', ['POST']);
+      res.setHeader('Allow', ['GET', 'POST']);
       res.status(405).end(`Method ${method} Not Allowed`);
   }
 }

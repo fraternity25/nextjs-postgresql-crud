@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
-import UserForm from '@/components/TaskForm';
+import UserForm from '@/components/UserForm';
 
 export default function EditUser() {
   const [user, setUser] = useState(null);
@@ -12,7 +12,14 @@ export default function EditUser() {
 
   const { id } = router.query;
 
-  if (status === 'loading') return <p>Loading...</p>;
+  if (status === 'loading' || loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
   if (!session || !session.user.roles.includes('admin')) {
     router.push('/');
     return null;
@@ -55,14 +62,6 @@ export default function EditUser() {
 
     return response.json();
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
-      </div>
-    );
-  }
 
   if (error) {
     return (

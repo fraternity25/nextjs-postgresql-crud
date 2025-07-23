@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 export default function Home({ session }) {
   const [users, setUsers] = useState([]);
+  const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { data: clientSession } = useSession();
@@ -15,6 +16,7 @@ export default function Home({ session }) {
 
   useEffect(() => {
     fetchUsers();
+    fetchTasks();
   }, []);
 
   const fetchUsers = async () => {
@@ -29,6 +31,19 @@ export default function Home({ session }) {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchTasks = async () => {
+    try {
+      const response = await fetch('/api/tasks');
+      if (!response.ok) {
+        throw new Error('Failed to fetch tasks');
+      }
+      const data = await response.json();
+      setTasks(data);
+    } catch (err) {
+      console.error('Task fetch error:', err);
     }
   };
 
@@ -153,8 +168,32 @@ export default function Home({ session }) {
                           </Link>
                           {isAdmin && (
                             <>
+                              {tasks
+                                .filter((task) =>
+                                  task.assigned_users?.some((u) => u.user_id === user.id)
+                                )
+                                .map((task) => (
+                                  <Link
+                                    key={task.id}
+                                    href={`/tasks/${task.id}/edit`}
+                                    className="text-indigo-600 hover:text-indigo-900 mr-4"
+                                  >
+                                    Edit Task #{task.id}
+                                  </Link>
+                                ))
+                              }
+                              <button
+                                onClick={() => deleteUser(user.id)}
+                                className="text-red-600 hover:text-red-900"
+                              >
+                                Delete
+                              </button>
+                            </>
+                          )}
+                          {/*isAdmin && (
+                            <>
                               <Link
-                                href={`/users/${user.id}/edit`}
+                                href={`/tasks/${user.id}/edit`}
                                 className="text-indigo-600 hover:text-indigo-900 mr-4"
                               >
                                 Edit
@@ -166,7 +205,7 @@ export default function Home({ session }) {
                                 Delete
                               </button>
                             </>
-                          )}
+                          )*/}
                         </td>
                       </tr>
                     ))}
