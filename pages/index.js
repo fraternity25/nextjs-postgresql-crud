@@ -162,14 +162,9 @@ export default function Home({ session }) {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           {isAdmin && (
-                            <UserActionSelect user={user} tasks={tasks} />
+                            <UserActionSelect user={user} tasks={tasks} mode="edit"/>
                           )}
-                          <Link
-                            href={`/users/${user.id}`}
-                            className="text-indigo-600 hover:text-indigo-900 ml-4"
-                          >
-                            View
-                          </Link>
+                          <UserActionSelect user={user} tasks={tasks} mode="view"/>
                           {isAdmin && (
                             <button
                               onClick={() => deleteUser(user.id)}

@@ -80,5 +80,5 @@ export default function EditUser() {
     );
   }
 
-  return <UserForm user={user} onSubmit={handleSubmit} hideSensitiveFields={mode === 'role-only'}/>;
+  return <UserForm user={user} onSubmit={handleSubmit} mode={mode === 'role-only' ? "view+edit-role" : "edit"}/>;
 }

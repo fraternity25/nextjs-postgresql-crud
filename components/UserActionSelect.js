@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-export default function UserActionSelect({ user, tasks = [] }) {
+export default function UserActionSelect({ user, tasks = [], mode = 'edit' }) {
   const router = useRouter();
 
   const userTasks = tasks.filter((task) =>
@@ -22,27 +22,49 @@ export default function UserActionSelect({ user, tasks = [] }) {
     } else if (value === 'change-role') {
       router.push({
         pathname: `/users/${user.id}/edit`,
-        query: {
-          mode: 'role-only',
-        },
+        query: { mode: 'role-only' },
       });
     }
 
     e.target.selectedIndex = 0;
   };
 
-  return (
-    <select
-      onChange={handleAction}
-      className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-    >
-      <option value="" disabled selected hidden>
-        Actions
-      </option>
-      <option value="change-role">Change Role</option>
-      {userTasks.length > 0 && (
-        <option value="edit-tasks">Edit Tasks</option>
-      )}
-    </select>
-  );
+  const handleView = () => {
+    router.push({
+      pathname: `/users/${user.id}`,
+      query: {
+        user: JSON.stringify(user),
+        userTasks: JSON.stringify(userTasks),
+      },
+    });
+  };
+  //className="text-indigo-600 hover:text-indigo-900 ml-4"
+  if (mode === 'view') {
+    return (
+      <button
+        onClick={handleView}
+        className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1 ml-4 text-sm text-gray-700 shadow-sm hover:bg-gray-50"
+      >
+        View
+      </button>
+    );
+  }
+  else if(mode === 'edit')
+  {
+    return (
+      <select
+        onChange={handleAction}
+        defaultValue="" // This controls the initial selected value
+        className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      >
+        <option value="" disabled hidden>
+          Actions
+        </option>
+        <option value="change-role">Change Role</option>
+        {userTasks.length > 0 && (
+          <option value="edit-tasks">Edit Tasks</option>
+        )}
+      </select>
+    );
+  }
 }

@@ -71,6 +71,7 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
         Deadline
       </label>
       <input
+        disabled={isView}
         id="deadline"
         type="date"
         value={deadline}
@@ -82,6 +83,7 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
         Status
       </label>
       <select
+        disabled={isView}
         id="status"
         value={status}
         onChange={(e) => setStatus(e.target.value)}
@@ -176,12 +178,13 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
               />
             </div>
             
-            {(isNew || isEdit) && isAdmin && (
+            {/*(isNew || isEdit) && isAdmin && */(
               <div>
                 <label htmlFor="role" className="block text-sm font-medium text-gray-700">
                   Role
                 </label>
                 <select
+                  disabled={isView}
                   id="role"
                   value={role}
                   onChange={(e) => setRole(e.target.value)}

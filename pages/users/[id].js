@@ -1,6 +1,6 @@
-import { useSession } from 'next-auth/react';
-import { useState, useEffect } from 'react';
+/*import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 export default function UserDetail() {
@@ -161,6 +161,123 @@ export default function UserDetail() {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}*/
+
+import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import UserForm from '@/components/UserForm';
+import TaskList from '@/components/TaskList';
+
+//const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+export default function UserDetailPage() {
+  const [user, setUser] = useState(null);
+  const [userTasks, setUserTasks] = useState([]);
+  const { data: session } = useSession();
+  const router = useRouter();
+  
+  useEffect(() => {
+    if (router.isReady) {
+      const { id, userTasks, user } = router.query;
+      if (user && userTasks) {
+        setUser(JSON.parse(user));
+        setUserTasks(JSON.parse(userTasks));
+      }
+    }
+  }, [router.isReady, router.query]);
+  /*useEffect(() => {
+    if (router.isReady) {
+      const { user, userTasks } = router.query;
+      try {
+        if (user && userTasks) {
+          const parsedUser = typeof user === 'string' ? JSON.parse(user) : user;
+          const parsedTasks = typeof userTasks === 'string' ? JSON.parse(userTasks) : userTasks;
+          setUser(parsedUser);
+          setUserTasks(parsedTasks);
+        }
+      } catch (err) {
+        console.error("Failed to parse user or tasks:", err);
+      }
+    }
+  }, [router.isReady, router.query]);*/
+
+  /*const { data: user, error, isLoading } = useSWR(
+    id ? `/api/users/${id}` : null,
+    fetcher
+  );*/
+
+  const isAdmin = session?.user?.roles?.includes('admin');
+
+  const deleteUser = async () => {
+    if (!confirm('Are you sure you want to delete this user?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/users/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete user');
+      }
+
+      router.push('/');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  /*if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-red-600">Eror while loading user: {error}</div>
+      </div>
+    );
+  }*/
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        {isAdmin && (
+          <div className="flex justify-end space-x-3 mt-6">
+            <button
+              onClick={() => router.push({
+                pathname: `/users/${user.id}/edit`,
+                query: { mode: 'role-only' },
+              })}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700"
+            >
+              Edit
+            </button>
+            <button
+              onClick={deleteUser}
+              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Delete
+            </button>
+          </div>
+        )}
+
+        <UserForm user={user} mode="view">
+          <div className="mt-10">
+            <TaskList user={user} tasks={userTasks} />
+          </div>
+        </UserForm>
+        
       </div>
     </div>
   );
