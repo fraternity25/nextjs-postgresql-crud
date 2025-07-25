@@ -27,14 +27,14 @@ export default function TaskList({ user, tasks }) {
   );*/
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">Assigned Tasks for {user.name}</h2>
+    <div>
+      <h2 className="text-2xl font-bold text-gray-900 mb-4">Assigned Tasks for {user.name}</h2>
       <ul className="space-y-2">
         {tasks.map((task) => (
           <li key={task.id}>
             <Link
               href={`/tasks/${task.id}/edit`}
-              className="text-indigo-600 hover:underline"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               Edit Task #{task.id}
             </Link>
