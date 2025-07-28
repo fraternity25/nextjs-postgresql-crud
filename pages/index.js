@@ -9,7 +9,6 @@ export default function Home() {
   const router = useRouter();
   const [users, setUsers] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const roles = session?.user?.roles || [];
@@ -26,13 +25,6 @@ export default function Home() {
     }
   }, [status]);
 
-  /*useEffect(() => {
-    if (status === 'authenticated') {
-      fetchUsers();
-      fetchTasks();
-    }
-  }, [status]);*/
-
   const fetchUsers = async () => {
     try {
       const response = await fetch('/api/users');
@@ -43,9 +35,7 @@ export default function Home() {
       setUsers(data);
     } catch (err) {
       setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   const fetchTasks = async () => {
@@ -81,7 +71,7 @@ export default function Home() {
     }
   };
 
-  if (status === 'loading' || loading) {
+  if (status === 'loading') {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
