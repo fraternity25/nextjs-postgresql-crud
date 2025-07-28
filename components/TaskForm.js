@@ -7,7 +7,7 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
   const [title, setTitle] = useState(task?.title || '');
   const [description, setDescription] = useState(task?.description || '');
   const [selectedUserId, setSelectedUserId] = useState(user?.id || '');
-  const [deadline, setDeadline] = useState('');
+  const [deadline, setDeadline] = useState(() => {return task?.deadline.split('T')[0] || new Date().toISOString().split('T')[0]});
   const [status, setStatus] = useState('pending');
   const [role, setRole] = useState(user?.role || 'viewer');
   const [loading, setLoading] = useState(false);
@@ -74,6 +74,7 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
         disabled={isView}
         id="deadline"
         type="date"
+        min={new Date().toISOString().split('T')[0]}
         value={deadline}
         onChange={(e) => setDeadline(e.target.value)}
         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
