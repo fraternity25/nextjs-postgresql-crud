@@ -9,14 +9,14 @@ import UserForm from '@/components/UserForm';
 export default function UserDetailPage() {
   const [user, setUser] = useState(null);
   const [userTasks, setUserTasks] = useState([]);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { data: session } = useSession();
   const router = useRouter();
   
   useEffect(() => {
     if (router.isReady) {
-      const { id, userTasks, user } = router.query;
+      const { userTasks, user } = router.query;
       try {
         if (user && userTasks) {
           setUser(JSON.parse(user));

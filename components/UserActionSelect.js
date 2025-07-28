@@ -22,7 +22,11 @@ export default function UserActionSelect({ user, tasks = [], mode = 'edit' }) {
     } else if (value === 'change-role') {
       router.push({
         pathname: `/users/${user.id}/edit`,
-        query: { mode: 'role-only' },
+        query: {
+          mode: 'role-only',
+          user: JSON.stringify(user),
+          userTasks: JSON.stringify(userTasks),
+        },
       });
     }
 

@@ -5,20 +5,40 @@ import UserForm from '@/components/UserForm';
 
 export default function EditUser() {
   const [user, setUser] = useState(null);
+  const [userTasks, setUserTasks] = useState([]);
+  const [mode, setMode] = useState('edit'); // Default mode
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { data: session, status } = useSession();
   const router = useRouter();
-
-  const { id, mode } = router.query;
-
+  
   useEffect(() => {
     if (status !== 'loading' && (!session || !session.user.roles.includes('admin'))) {
       router.push('/');
     }
   }, [status, session]);
-  
+
   useEffect(() => {
+    if (router.isReady) {
+      const { mode, userTasks, user } = router.query;
+      try {
+        if (user && userTasks && mode) {
+          setUser(JSON.parse(user));
+          setUserTasks(JSON.parse(userTasks));
+          setMode(mode); 
+        }
+      } 
+      catch (err) {
+        console.error("Failed to parse user, tasks or mode:", err);
+        setError(err.message);
+      } 
+      finally {
+        setLoading(false);
+      }
+    }
+  }, [router.isReady, router.query]);
+  
+  /*useEffect(() => {
     if (id) {
       fetchUser();
     }
@@ -37,7 +57,7 @@ export default function EditUser() {
     } finally {
       setLoading(false);
     }
-  };
+  };*/
 
   const handleSubmit = async (userData) => {
     const response = await fetch(`/api/users/${id}`, {
@@ -80,5 +100,12 @@ export default function EditUser() {
     );
   }
 
-  return <UserForm user={user} onSubmit={handleSubmit} mode={mode === 'role-only' ? "view+edit-role" : "edit"}/>;
+  return (
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/*we are not inserting TaskList component as children since we are passing tasks prop*/}
+        <UserForm onSubmit={handleSubmit} user={user} tasks={userTasks} mode={mode === 'role-only' ? "view+edit:role" : "edit"} /> 
+      </div>
+    </div>
+  );
 }

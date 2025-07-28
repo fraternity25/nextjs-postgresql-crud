@@ -1,12 +1,22 @@
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 export default function TaskList({ user, tasks }) {
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.roles?.includes('admin');
+
   if (!user || !tasks) return <p className="p-6">Loading...</p>;
-  if (tasks.length === 0) return <p className="p-6">No tasks assigned.</p>;
-  console.log(`tasks:\n`);
-  console.log(tasks);
-  console.log(`user:\n`);
-  console.log(user);
+  if (tasks.length === 0) 
+  {
+    return ( 
+      <p 
+        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+      >
+        No tasks assigned.
+      </p>
+    );
+  }
+    
 
   /*return (
     <div className="p-6">
@@ -33,8 +43,12 @@ export default function TaskList({ user, tasks }) {
         {tasks.map((task) => (
           <li key={task.id}>
             <Link
-              href={`/tasks/${task.id}/edit`}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              href={isAdmin ? `/tasks/${task.id}/edit` : '#'}
+              className={`mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+                !isAdmin ? 'pointer-events-none opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'
+              }`}
+              aria-disabled={!isAdmin}
+              tabIndex={!isAdmin ? -1 : undefined}
             >
               Edit Task #{task.id}
             </Link>

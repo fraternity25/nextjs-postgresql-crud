@@ -14,10 +14,91 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
   const { data: session } = useSession();
   const isAdmin = session?.user?.roles?.includes('admin');
 
-  const isView = mode === 'view';
-  const isEdit = mode === 'edit';
-  const isNew = mode === 'new';
-  const editRole = isAdmin && (isEdit || mode.includes("edit-role"));
+  // Parse the mode string into permission flags
+  const parseMode = (modeString) => {
+    const permissions = {
+      view: { all: false, fields: [] },
+      edit: { all: false, fields: [] },
+      create: false
+    };
+
+    if (modeString === 'new') {
+      return {
+        ...permissions,
+        create: true
+      };
+    }
+    else if (modeString === 'view') {
+      return {
+        ...permissions,
+        view: { all: true, fields: [] }
+      };
+    }
+    else if (modeString === 'edit') {
+      return {
+        ...permissions,
+        edit: { all: true, fields: [] },
+      };
+    }
+
+    // Split into operations (view/edit/new)
+    const operations = modeString.split('+');
+    //console.log(`operations = ${operations}`)
+    
+    operations.forEach(op => {
+      if (op === 'new') {
+        permissions.create = true;
+        return;
+      }
+
+      const [action, params] = op.split(':');
+      if (!['view', 'edit'].includes(action)) return;
+
+      //console.log(`action = ${action} and params = ${params}\n`)
+
+      if (!params) {
+        // No parameters means all fields
+        permissions[action] = { all: true, fields: [] };
+      } else if (params.startsWith('exclude:')) {
+        // "exclude:" prefix means all except specified
+        const excludeFields = params.replace('exclude:', '').split(',').map(f => f.trim());
+        permissions[action] = { all: true, exclude: excludeFields };
+      } else {
+        // Specific fields only
+        const fields = params.split(',').map(f => f.trim());
+        permissions[action] = { all: false, fields };
+      }
+    });
+
+    return permissions;
+  };
+
+  const { view, edit, create } = parseMode(mode);
+  //console.log(`view = \n${JSON.stringify(view)}, \nedit = \n${JSON.stringify(edit)} and \ncreate = \n${create}`);
+
+  // Helper functions to check field permissions
+  const canView = (field) => {
+    if (view.all) {
+      return !(view.exclude || []).includes(field);
+    }
+    return view.fields.includes(field);
+  };
+
+  const canEdit = (field) => {
+    if (edit.all) {
+      return !(edit.exclude || []).includes(field);
+    }
+    return edit.fields.includes(field);
+  };
+
+  // Usage examples in your form:
+  // {canView('name') && <NameField viewMode={true} />}
+  // {canEdit('email') && <EmailField editable={true} />}
+
+  const isView = view.all;
+  const isEdit = edit.all && !view.all && !create;
+  const isNew = create;
+  const editRole = isAdmin && canEdit('role');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,24 +142,39 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
       <div className="bg-white shadow rounded-lg px-6 py-2">
         <div className="flex items-center justify-between mb-2">
           <h1 className="text-2xl font-bold text-center text-gray-900 mb-2">
-            {isView ? 'User Details' : isEdit ? 'Edit User' : 'Sign Up'}
+            {editRole || isEdit ? 'Edit User' : isView ? 'User Details' : 'Sign Up'}
           </h1>
           
           {isAdmin && (
             <div className="flex justify-end space-x-3 mb-2">
-              <button
-                onClick={() => router.push({
-                  pathname: `/users/${user.id}/edit`,
-                  query: {
-                    mode: 'role-only',
-                    user: JSON.stringify(user),
-                    userTasks: JSON.stringify(tasks),
-                  },
-                })}
-                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Edit
-              </button>
+              {editRole || isEdit ? (
+                <button
+                  onClick={() => router.push({
+                    pathname: `/users/${user.id}`,
+                    query: {
+                      user: JSON.stringify(user),
+                      userTasks: JSON.stringify(tasks),
+                    },
+                  })}
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  View
+                </button>
+              ) : isView && (
+                <button
+                  onClick={() => router.push({
+                    pathname: `/users/${user.id}/edit`,
+                    query: {
+                      mode: 'role-only',
+                      user: JSON.stringify(user),
+                      userTasks: JSON.stringify(tasks),
+                    },
+                  })}
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Edit
+                </button>
+              )}
               <button
                 onClick={deleteUser}
                 className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
