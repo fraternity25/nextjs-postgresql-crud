@@ -108,6 +108,7 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
     try {
       if (onSubmit) {
         await onSubmit({ name, email, role });
+        setLoading(true);
       }
       router.push('/');
     } catch (err) {
@@ -279,6 +280,15 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
           }
           
           <div className="flex justify-end space-x-3">
+            {(!isView || editRole) && ( 
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+              >
+                {loading ? 'Saving...' : editRole || isEdit ? 'Update' : 'Sign Up'}
+              </button>
+            )}
             <button
               type="button"
               onClick={() => router.push('/')}
@@ -286,15 +296,6 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
             >
               Cancel
             </button>
-            {!isView && ( 
-              <button
-                type="submit"
-                disabled={loading}
-                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-              >
-                {loading ? 'Saving...' : isEdit ? 'Update' : 'Sign Up'}
-              </button>
-            )}
           </div>
         </form>
       </div>

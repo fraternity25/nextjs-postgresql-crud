@@ -37,30 +37,9 @@ export default function EditUser() {
       }
     }
   }, [router.isReady, router.query]);
-  
-  /*useEffect(() => {
-    if (id) {
-      fetchUser();
-    }
-  }, [id]);
-
-  const fetchUser = async () => {
-    try {
-      const response = await fetch(`/api/users/${id}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch user');
-      }
-      const data = await response.json();
-      setUser(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };*/
 
   const handleSubmit = async (userData) => {
-    const response = await fetch(`/api/users/${id}`, {
+    const response = await fetch(`/api/users/${router.query.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
