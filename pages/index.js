@@ -1,24 +1,37 @@
-import { signOut } from 'next-auth/react';
-import { getSession } from 'next-auth/react';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import UserActionSelect from '@/components/UserActionSelect';
 
-export default function Home({ session }) {
+export default function Home() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [users, setUsers] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { data: clientSession } = useSession();
 
-  const roles = clientSession?.user?.roles || session?.user?.roles || [];
+  const roles = session?.user?.roles || [];
   const isAdmin = roles.includes('admin');
 
+  // Giriş yapılmamışsa auth sayfasına yönlendir
   useEffect(() => {
-    fetchUsers();
-    fetchTasks();
-  }, []);
+    if (status === 'unauthenticated') {
+      router.push('/auth');
+    }
+    else if(status === 'authenticated') {
+      fetchUsers();
+      fetchTasks();
+    }
+  }, [status]);
+
+  /*useEffect(() => {
+    if (status === 'authenticated') {
+      fetchUsers();
+      fetchTasks();
+    }
+  }, [status]);*/
 
   const fetchUsers = async () => {
     try {
@@ -68,13 +81,15 @@ export default function Home({ session }) {
     }
   };
 
-  if (loading) {
+  if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
       </div>
     );
   }
+
+  if (!session) return null;
 
   if (error) {
     return (
@@ -191,22 +206,4 @@ export default function Home({ session }) {
       </div>
     </div>
   );
-}
-
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth',
-        permanent: false
-      }
-    };
-  }
-
-  return {
-    props: { session }
-  };
 }
