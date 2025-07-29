@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import TaskList from '@/components/TaskList';
+import ConfirmModal from '@/components/ConfirmModal';
 
 export default function UserForm({  mode = 'view', user = null, tasks=null, onSubmit = null, children}) {
   const [name, setName] = useState(user?.name || '');
@@ -9,6 +10,7 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
   const [role, setRole] = useState(user?.role || 'viewer');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const router = useRouter();
 
   const { data: session } = useSession();
@@ -119,12 +121,8 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
   };
 
   const deleteUser = async () => {
-    if (!confirm('Are you sure you want to delete this user?')) {
-      return;
-    }
-
     try {
-      const response = await fetch(`/api/users/${id}`, {
+      const response = await fetch(`/api/users/${user.id}`, {
         method: 'DELETE',
       });
 
@@ -135,6 +133,8 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
       router.push('/');
     } catch (err) {
       setError(err.message);
+    } finally {
+      setShowConfirmModal(false);
     }
   };
   
@@ -177,11 +177,20 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
                 </button>
               )}
               <button
-                onClick={deleteUser}
+                onClick={() => setShowConfirmModal(true)}
                 className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
               >
                 Delete
               </button>
+              {showConfirmModal && (
+                <ConfirmModal
+                  message="Are you sure you want to delete this user?"
+                  onConfirm={deleteUser}
+                  onCancel={() => {
+                    setShowConfirmModal(false);
+                  }}
+                />
+              )}
             </div>
           )}
         </div>

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import UserActionSelect from '@/components/UserActionSelect';
+import ConfirmModal from '@/components/ConfirmModal';
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -10,6 +11,8 @@ export default function Home() {
   const [users, setUsers] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   const roles = session?.user?.roles || [];
   const isAdmin = roles.includes('admin');
@@ -52,10 +55,6 @@ export default function Home() {
   };
 
   const deleteUser = async (id) => {
-    if (!confirm('Are you sure you want to delete this user?')) {
-      return;
-    }
-
     try {
       const response = await fetch(`/api/users/${id}`, {
         method: 'DELETE',
@@ -68,6 +67,9 @@ export default function Home() {
       setUsers(users.filter(user => user.id !== id));
     } catch (err) {
       setError(err.message);
+    } finally {
+      setShowConfirmModal(false);
+      setSelectedUserId(null);
     }
   };
 
@@ -172,7 +174,10 @@ export default function Home() {
                           <UserActionSelect user={user} tasks={tasks} mode="view"/>
                           {isAdmin && (
                             <button
-                              onClick={() => deleteUser(user.id)}
+                              onClick={() => {
+                                setSelectedUserId(user.id);
+                                setShowConfirmModal(true);
+                              }}
                               className="text-red-600 hover:text-red-900 ml-4"
                             >
                               Delete
@@ -181,6 +186,16 @@ export default function Home() {
                         </td>
                       </tr>
                     ))}
+                    {showConfirmModal && (
+                      <ConfirmModal
+                        message="Are you sure you want to delete this user?"
+                        onConfirm={() => deleteUser(selectedUserId)}
+                        onCancel={() => {
+                          setSelectedUserId(null);
+                          setShowConfirmModal(false);
+                        }}
+                      />
+                    )}
                   </tbody>
                 </table>
                 
