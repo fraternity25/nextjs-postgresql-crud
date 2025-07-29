@@ -157,7 +157,7 @@ export default function TasksForm({ mode = 'new', tasks = [], onSubmit }) {
               </div>
             )}
 
-            {!isNew && task?.assigned_users?.length > 0 && (
+            {!isNew && task?.assigned_users?.length > 0 && (  //task'a erişilemiyor tasks'ı kullanmadın
               <div className="space-y-2">
                 <h2 className="text-sm font-medium text-gray-700">Assigned Users</h2>
                 {task.assigned_users.map((au) => {
