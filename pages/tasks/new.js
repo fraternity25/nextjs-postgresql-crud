@@ -1,16 +1,28 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import TaskForm from '@/components/TaskForm';
+import { useState, useEffect } from 'react';
+import TasksForm from '@/components/TasksForm';
 
 export default function AssignTask() {
+  const [tasks, setTasks] = useState([]);
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  if (status === 'loading') return <p>Loading...</p>;
+  useEffect(() => {
+    if (router.isReady) {
+      const { tasks } = router.query;
+      if (tasks) {
+        setTasks(JSON.parse(tasks));
+      }
+    }
+  }, [router.isReady, router.query]);
+
   if (!session || !session.user.roles.includes('admin')) {
     router.push('/');
     return null;
   }
+
+  if (!tasks || status === 'loading') return <p className="p-6">Loading...</p>;
 
   const handleSubmit = async (formData) => {
     const response = await fetch('/api/tasks', {
@@ -30,8 +42,9 @@ export default function AssignTask() {
   };
 
   return (
-    <TaskForm
+    <TasksForm
       onSubmit={handleSubmit}
+      tasks={tasks}
       mode='new'
     />
   );

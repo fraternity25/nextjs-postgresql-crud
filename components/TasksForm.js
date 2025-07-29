@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 
-export default function TaskForm({ mode = 'new', task = null, user = null, onSubmit }) {
+export default function TasksForm({ mode = 'new', tasks = [], onSubmit }) {
   const [users, setUsers] = useState([]);
-  const [title, setTitle] = useState(task?.title || '');
-  const [description, setDescription] = useState(task?.description || '');
-  const [selectedUserId, setSelectedUserId] = useState(user?.id || '');
-  const [deadline, setDeadline] = useState(() => {return task?.deadline.split('T')[0] || new Date().toISOString().split('T')[0]});
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [selectedUserId, setSelectedUserId] = useState('');
+  const [deadline, setDeadline] = useState(new Date().toISOString().split('T')[0]);
   const [status, setStatus] = useState('pending');
-  const [role, setRole] = useState(user?.role || 'viewer');
+  const [roles, setRoles] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
@@ -23,6 +23,14 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
 
   useEffect(() => {
     fetchUsers();
+
+    if (isEdit && tasks.length === 1) {
+      const t = tasks[0];
+      setTitle(t.title);
+      setDescription(t.description);
+      setDeadline(t.deadline?.split('T')[0] || new Date().toISOString().split('T')[0]);
+      setStatus(t.status || 'pending');
+    }
   }, []);
 
   const fetchUsers = async () => {
@@ -50,7 +58,7 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
         await onSubmit({
           title,
           description,
-          userId: selectedUserId || user?.id,
+          userId: selectedUserId,
           role,
           deadline,
           status,
@@ -63,6 +71,19 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleUserChange = (e) => {
+    const userId = e.target.value;
+    setSelectedUserId(userId);
+    if (!roles[userId]) {
+      setRoles((prev) => ({ ...prev, [userId]: 'viewer' }));
+    }
+  };
+
+  const handleRoleChange = (e) => {
+    const newRole = e.target.value;
+    setRoles((prev) => ({ ...prev, [selectedUserId]: newRole }));
   };
 
   const renderDeadlineAndStatus = () => (
@@ -120,7 +141,7 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
                 <select
                   id="user"
                   value={selectedUserId}
-                  onChange={(e) => setSelectedUserId(e.target.value)}
+                  onChange={handleUserChange}
                   required
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
                 >
@@ -136,14 +157,30 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
               </div>
             )}
 
-            {!isNew && user && (
-              <div className="space-y-1">
-                <div className="text-sm text-gray-700">
-                  <strong>Name:</strong> {user.name}
-                </div>
-                <div className="text-sm text-gray-700">
-                  <strong>Email:</strong> {user.email}
-                </div>
+            {!isNew && task?.assigned_users?.length > 0 && (
+              <div className="space-y-2">
+                <h2 className="text-sm font-medium text-gray-700">Assigned Users</h2>
+                {task.assigned_users.map((au) => {
+                  const assignedUser = users.find((u) => u.id === au.user_id);
+                  if (!assignedUser) return null;
+
+                  return (
+                    <div
+                      key={au.user_id}
+                      className="text-sm text-gray-700 border border-gray-200 rounded px-3 py-2"
+                    >
+                      <div>
+                        <strong>Name:</strong> {assignedUser.name}
+                      </div>
+                      <div>
+                        <strong>Email:</strong> {assignedUser.email}
+                      </div>
+                      <div>
+                        <strong>Role:</strong> {au.role}
+                      </div>
+                    </div>
+                  );
+                })}
 
                 {renderDeadlineAndStatus()}
               </div>
@@ -187,8 +224,8 @@ export default function TaskForm({ mode = 'new', task = null, user = null, onSub
                 <select
                   disabled={isView}
                   id="role"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
+                  value={roles[selectedUserId] || 'viewer'}
+                  onChange={handleRoleChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
                 >
                   <option value="admin">Admin</option>

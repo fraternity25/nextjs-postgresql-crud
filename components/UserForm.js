@@ -207,6 +207,7 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
               Name
             </label>
             <input
+              autoComplete="on"
               disabled={isView}
               type="text"
               id="name"
@@ -223,6 +224,7 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
               Email
             </label>
             <input
+              autoComplete="on"
               disabled={isView}
               type="email"
               id="email"
@@ -253,9 +255,9 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  {"Created At:  "}
+                <div className="inline text-sm font-medium text-gray-700">
                   <span className="mt-1 mr-2 text-sm text-gray-900">
+                    {"Created At:  "}
                     {new Date(user.created_at).toLocaleString('en-US', {
                       hour12: false,
                       year: 'numeric',
@@ -265,8 +267,10 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
                       minute: '2-digit'
                     }) + "  "}
                   </span>
-                  {"Updated At:  "}
+                </div>
+                <div className="inline text-sm font-medium text-gray-700">
                   <span className="mt-1 text-sm text-gray-900">
+                    {"Updated At:  "}
                     {new Date(user.updated_at).toLocaleString('en-US', {
                       hour12: false,
                       year: 'numeric',
@@ -276,7 +280,7 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
                       minute: '2-digit'
                     })}
                   </span>
-                </label>
+                </div>
               </div>
             </>
           )}

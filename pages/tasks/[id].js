@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import TaskForm from '@/components/TaskForm';
+import TasksForm from '@/components/TasksForm';
 
 export default function TaskPage() {
   const { query } = useRouter();
@@ -20,5 +20,5 @@ export default function TaskPage() {
 
   if (!task) return <div>Loading...</div>;
 
-  return <TaskForm task={task} mode="edit" />;
+  return <TasksForm task={task} mode="edit" />;
 }

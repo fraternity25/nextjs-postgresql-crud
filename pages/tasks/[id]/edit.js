@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
-import TaskForm from '@/components/TaskForm';
+import TasksForm from '@/components/TasksForm';
 
 export default function EditTask() {
   const [task, setTask] = useState(null);
@@ -89,5 +89,12 @@ export default function EditTask() {
     );
   }
 
-  return <TaskForm mode="edit" task={task} user={user} onSubmit={handleSubmit} />;
+  return (
+    <TasksForm 
+      mode="edit" 
+      task={task} 
+      user={user} 
+      onSubmit={handleSubmit} 
+    />
+  );
 }

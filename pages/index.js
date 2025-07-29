@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import UserActionSelect from '@/components/UserActionSelect';
 import ConfirmModal from '@/components/ConfirmModal';
+import Toast from '@/components/Toast';
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -13,6 +14,7 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [toastMessages, setToastMessages] = useState([]);
 
   const roles = session?.user?.roles || [];
   const isAdmin = roles.includes('admin');
@@ -63,6 +65,18 @@ export default function Home() {
       if (!response.ok) {
         throw new Error('Failed to delete user');
       }
+      
+      const idleTasks = tasks.filter((task) =>
+        task.assigned_users?.length === 1 &&
+        task.assigned_users[0].user_id === id
+      );
+
+      if (idleTasks.length > 0) {
+        setToastMessages(
+          ["After deleting user, there are no users left working on these tasks: ",
+          ...idleTasks.map(task => `${task.title}`)]
+        );
+      }
 
       setUsers(users.filter(user => user.id !== id));
     } catch (err) {
@@ -105,7 +119,10 @@ export default function Home() {
             <div className="flex gap-2">
               {isAdmin && (
                 <Link
-                  href="/tasks/new"
+                  href={{
+                    pathname: "/tasks/new",
+                    query: { tasks: JSON.stringify(tasks)}
+                  }}
                   className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
                 >
                   Assign Task
@@ -195,6 +212,9 @@ export default function Home() {
                           setShowConfirmModal(false);
                         }}
                       />
+                    )}
+                    { toastMessages.length !== 0 && (
+                      <Toast messages={toastMessages} onClose={() => setToastMessages([])} />
                     )}
                   </tbody>
                 </table>
