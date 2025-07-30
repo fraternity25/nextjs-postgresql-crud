@@ -22,16 +22,21 @@ export default function AssignTask() {
     return null;
   }
 
-  if (!tasks || status === 'loading') return <p className="p-6">Loading...</p>;
+  if (tasks.length === 0 || status === 'loading') return <p className="p-6">Loading...</p>;
 
   const handleSubmit = async (formData) => {
-    const response = await fetch('/api/tasks', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
+    const isExistingTask = !!formData.task_id;
+
+    const response = await fetch(
+      isExistingTask ? `/api/tasks/${formData.task_id}` : '/api/tasks',
+      {
+        method: isExistingTask ? 'PATCH' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      }
+    );
 
     if (!response.ok) {
       const error = await response.json();

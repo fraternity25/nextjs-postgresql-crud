@@ -24,7 +24,10 @@ export default function TaskList({ user, tasks }) {
         {tasks.map((task) => (
           <li key={task.id}>
             <Link
-              href={isAdmin ? `/tasks/${task.id}/edit` : '#'}
+              href={{
+                pathname: isAdmin ? `/tasks/${task.id}/edit` : '#',
+                query: isAdmin ? { userId: user.id } : null
+              }}
               className={`mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
                 !isAdmin ? 'pointer-events-none opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'
               }`}

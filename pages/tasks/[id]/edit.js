@@ -5,13 +5,12 @@ import TasksForm from '@/components/TasksForm';
 
 export default function EditTask() {
   const [task, setTask] = useState(null);
-  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const { id } = router.query;
+  const { id, userId } = router.query;
 
   useEffect(() => {
     if (status !== 'loading' && (!session || !session.user.roles.includes('admin'))) {
@@ -33,14 +32,6 @@ export default function EditTask() {
       }
       const data = await res.json();
       setTask(data);
-
-      // fetch assigned user
-      const userRes = await fetch(`/api/users/${data.user_id}`);
-      if (!userRes.ok) {
-        throw new Error('Failed to fetch user');
-      }
-      const userData = await userRes.json();
-      setUser(userData);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -81,10 +72,10 @@ export default function EditTask() {
     );
   }
 
-  if (!task || !user) {
+  if (!task) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Task or user not found</div>
+        <div className="text-gray-600">Task not found</div>
       </div>
     );
   }
@@ -92,8 +83,8 @@ export default function EditTask() {
   return (
     <TasksForm 
       mode="edit" 
-      task={task} 
-      user={user} 
+      id={userId}
+      tasks={[task]} 
       onSubmit={handleSubmit} 
     />
   );

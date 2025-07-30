@@ -1,7 +1,8 @@
 import { 
   getTaskById, 
   updateTask, 
-  deleteTask 
+  deleteTask,
+  assignUserToTask
 } from '@/lib/dataService';
 
 export default async function handler(req, res) {
@@ -46,6 +47,24 @@ export default async function handler(req, res) {
         res.status(200).json(updatedTask);
       } catch (error) {
         console.error('[API] Error fetching task:', error); // 🪵 3
+        console.error(error);
+        res.status(500).json({ error: error.message });
+      }
+      break;
+
+    case 'PATCH':
+      try {
+        const { userId, role } = req.body;
+
+        if (!userId || !role) {
+          return res.status(400).json({ error: 'userId and role are required' });
+        }
+
+        // task_assignments tablosuna insert
+        assignUserToTask(id, userId, role);
+
+        res.status(200).json({ id, userId, role });
+      } catch (error) {
         console.error(error);
         res.status(500).json({ error: error.message });
       }
