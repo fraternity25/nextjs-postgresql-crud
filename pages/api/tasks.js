@@ -16,13 +16,13 @@ export default async function handler(req, res) {
 
     case 'POST':
       try {
-        const { title, description, deadline, status, created_by, userId, role } = req.body;
+        const { title, description, deadline, status, created_by, userIdList, roleList } = req.body;
 
-        if (!title || !description || !userId) {
-          return res.status(400).json({ error: 'Title, description and userId are required' });
+        if (!title || !description || !deadline) {
+          return res.status(400).json({ error: 'Title, description and deadline are required' });
         }
 
-        const task = await createTask({ title, description, deadline, status, created_by, userId, role });
+        const task = await createTask({ title, description, deadline, status, created_by, userIdList, roleList });
         res.status(201).json(task);
       } catch (error) {
         console.error(error);

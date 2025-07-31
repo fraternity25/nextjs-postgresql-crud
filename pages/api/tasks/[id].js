@@ -29,19 +29,19 @@ export default async function handler(req, res) {
 
     case 'PUT':
       try {
-        const { title, description, userId, deadline, created_by, status, role } = req.body;
+        const { title, description, deadline, status, created_by, userIdList, roleList } = req.body;
 
-        if (!title || !description || !userId || !status)
-          return res.status(400).json({ error: 'Missing required fields' });
+        if (!title || !description ||!deadline)
+          return res.status(400).json({ error: 'Title, description and deadline are required' });
 
         const updatedTask = await updateTask(id, {
           title,
           description,
-          userId,
           deadline,
-          created_by,
           status,
-          role,
+          created_by,
+          userIdList,
+          roleList,
         });
 
         res.status(200).json(updatedTask);
@@ -54,16 +54,16 @@ export default async function handler(req, res) {
 
     case 'PATCH':
       try {
-        const { userId, role } = req.body;
+        const { userIdList, roleList } = req.body;
 
-        if (!userId || !role) {
-          return res.status(400).json({ error: 'userId and role are required' });
+        if (!userIdList || !roleList) {
+          return res.status(400).json({ error: 'userIdList and roleList are required' });
         }
 
         // task_assignments tablosuna insert
-        assignUserToTask(id, userId, role);
+        assignUserToTask(id, userIdList, roleList);
 
-        res.status(200).json({ id, userId, role });
+        res.status(200).json({ id, userIdList, roleList });
       } catch (error) {
         console.error(error);
         res.status(500).json({ error: error.message });

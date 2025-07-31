@@ -6,7 +6,7 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
   const [users, setUsers] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [selectedUserId, setSelectedUserId] = useState(id || '');
+  const [selectedUserIdList, setSelectedUserIdList] = useState([id] || '');
   const [selectedTaskId, setSelectedTaskId] = useState('');
   const [showTasks, setShowTasks] = useState(mode === "new");
   const [deadline, setDeadline] = useState(new Date().toISOString().split('T')[0]);
@@ -35,7 +35,7 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
       setDescription(t.description);
       setDeadline(t.deadline?.split('T')[0] || new Date().toISOString().split('T')[0]);
       setStatus(t.status || 'pending');
-      setRoles((prev) => ({ ...prev, [selectedUserId]: au.role }));
+      setRoles((prev) => ({ ...prev, [selectedUserIdList]: au.role }));
     }
   }, [tasks]);
 
@@ -62,7 +62,7 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
     try {
       if (onSubmit) {
         await onSubmit({
-          ...(selectedTaskId
+          ...(showTasks
             ? { task_id: selectedTaskId }
             : {
                 title,
@@ -70,8 +70,8 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
                 deadline,
                 status,
               }),
-          userId: selectedUserId,
-          role: roles[selectedUserId],
+          userIdList: selectedUserIdList,
+          roleList: roles,
           created_by: session?.user?.id,
         });
       }
@@ -85,7 +85,7 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
 
   const handleUserChange = (e) => {
     const userId = e.target.value;
-    setSelectedUserId(userId);
+    setSelectedUserIdList(userId);
     if (!roles[userId]) {
       setRoles((prev) => ({ ...prev, [userId]: 'viewer' }));
     }
@@ -93,18 +93,22 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
 
   const handleRoleChange = (e) => {
     const newRole = e.target.value;
-    setRoles((prev) => ({ ...prev, [selectedUserId]: newRole }));
+    setRoles((prev) => ({ ...prev, [selectedUserIdList]: newRole }));
   };
 
   const renderTasks = () => (
     showTasks && tasks?.length > 0 && (
       <>
         <div className="space-y-2 mt-6">
-          <h2 className="text-sm font-medium text-gray-700">Select a Task</h2>
+          <label htmlFor="selectTask" className="block text-sm font-medium text-gray-700">
+            Select a Task
+          </label>
           <select
+            id="selectTask"
             className="w-full border rounded px-3 py-2 text-sm"
             value={selectedTaskId}
             onChange={(e) => setSelectedTaskId(e.target.value)}
+            required
           >
             <option value="">-- Select a task --</option>
             {tasks.map((task) => (
@@ -131,6 +135,7 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
           min={new Date().toISOString().split('T')[0]}
           value={deadline}
           onChange={(e) => setDeadline(e.target.value)}
+          required
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
         />
 
@@ -196,9 +201,9 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
                   </label>
                   <select
                     id="user"
-                    value={selectedUserId}
+                    value={selectedUserIdList}
                     onChange={handleUserChange}
-                    required
+                    required={showTasks}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
                   >
                     <option value="">Select user</option>
@@ -286,7 +291,7 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
                 <select
                   disabled={isView}
                   id="role"
-                  value={roles[selectedUserId] || 'viewer'}
+                  value={roles[selectedUserIdList] || 'viewer'}
                   onChange={handleRoleChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
                 >
