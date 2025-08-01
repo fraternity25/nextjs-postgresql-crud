@@ -1,0 +1,83 @@
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+
+const Sidebar = () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const router = useRouter();
+
+  const menuItems = [
+    {
+      icon: 'fa-home',
+      label: 'Açılış',
+      href: '/',
+      tooltip: 'Ana sayfaya dön'
+    },
+    {
+      icon: 'fa-plus',
+      label: 'Destek kaydı aç',
+      href: '/create-ticket',
+      tooltip: 'Yeni destek kaydı oluştur'
+    },
+    {
+      icon: 'fa-headset',
+      label: 'Formlar',
+      href: '/forms',
+      tooltip: 'Formları görüntüle'
+    },
+    {
+      icon: 'fa-exclamation-circle',
+      label: 'Destek kayıtları',
+      href: '/tickets',
+      tooltip: 'Destek kayıtlarını listele'
+    }
+  ];
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  return (
+    <aside className={`fixed top-0 left-0 z-40 h-screen transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-64'}`}>
+      <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 border-r border-gray-200">
+        {/* Logo/Link - Daraltıldığında sadece icon gösterir */}
+        <Link href="/" className={`flex items-center ${isCollapsed ? 'justify-center' : 'ps-2.5 mb-5'}`}>
+          {isCollapsed ? (
+            <span className="text-xl font-semibold">L</span>
+          ) : (
+            <span className="text-xl font-semibold whitespace-nowrap">LOGO</span>
+          )}
+        </Link>
+
+        {/* Menü Alanı */}
+        <ul className="space-y-2 font-medium">
+          {menuItems.map((item, index) => (
+            <li key={index}>
+              <Link
+                href={item.href}
+                className={`flex items-center p-2 rounded-lg group ${router.pathname === item.href ? 'bg-blue-100 text-blue-600' : 'text-gray-900 hover:bg-gray-100'}`}
+                title={isCollapsed ? item.tooltip : ''}
+              >
+                <i className={`fas ${item.icon} w-5 h-5 ${router.pathname === item.href ? 'text-blue-600' : 'text-gray-500'} transition duration-75 group-hover:text-gray-900`}></i>
+                {!isCollapsed && <span className="ms-3">{item.label}</span>}
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        {/* Menüyü Daraltma/Açma Butonu */}
+        <div className="absolute bottom-4 left-0 right-0 px-3">
+          <button 
+            onClick={toggleSidebar}
+            className="w-full flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+          >
+            <i className={`fas ${isCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'} w-5 h-5 text-gray-500`}></i>
+            {!isCollapsed && <span className="ms-3">Menüyü daralt</span>}
+          </button>
+        </div>
+      </div>
+    </aside>
+  );
+};
+
+export default Sidebar;
