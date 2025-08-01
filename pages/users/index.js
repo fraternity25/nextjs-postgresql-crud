@@ -229,7 +229,7 @@ export default function Home() {
                 
                 {users.length === 0 && (
                   <div className="text-center py-12">
-                    <p className="text-gray-500">No users found. Create your first user!</p>
+                    <p className="text-gray-500">No users found</p>
                   </div>
                 )}
               </div>
