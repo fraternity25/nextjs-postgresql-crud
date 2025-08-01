@@ -1,6 +1,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faHome,
+  faPlus,
+  faHeadset,
+  faCircleExclamation,
+  faChevronLeft,
+  faChevronRight
+} from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -8,25 +17,25 @@ const Sidebar = () => {
 
   const menuItems = [
     {
-      icon: 'fa-home',
+      icon: faHome,
       label: 'Açılış',
       href: '/',
       tooltip: 'Ana sayfaya dön'
     },
     {
-      icon: 'fa-plus',
+      icon: faPlus,
       label: 'Destek kaydı aç',
       href: '/create-ticket',
       tooltip: 'Yeni destek kaydı oluştur'
     },
     {
-      icon: 'fa-headset',
+      icon: faHeadset,
       label: 'Formlar',
       href: '/forms',
       tooltip: 'Formları görüntüle'
     },
     {
-      icon: 'fa-exclamation-circle',
+      icon: faCircleExclamation,
       label: 'Destek kayıtları',
       href: '/tickets',
       tooltip: 'Destek kayıtlarını listele'
@@ -58,7 +67,10 @@ const Sidebar = () => {
                 className={`flex items-center p-2 rounded-lg group ${router.pathname === item.href ? 'bg-blue-100 text-blue-600' : 'text-gray-900 hover:bg-gray-100'}`}
                 title={isCollapsed ? item.tooltip : ''}
               >
-                <i className={`fas ${item.icon} w-5 h-5 ${router.pathname === item.href ? 'text-blue-600' : 'text-gray-500'} transition duration-75 group-hover:text-gray-900`}></i>
+                <FontAwesomeIcon 
+                  icon={item.icon} 
+                  className={`w-5 h-5 ${router.pathname === item.href ? 'text-blue-600' : 'text-gray-500'} transition duration-75 group-hover:text-gray-900`} 
+                />
                 {!isCollapsed && <span className="ms-3">{item.label}</span>}
               </Link>
             </li>
@@ -71,7 +83,10 @@ const Sidebar = () => {
             onClick={toggleSidebar}
             className="w-full flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
           >
-            <i className={`fas ${isCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'} w-5 h-5 text-gray-500`}></i>
+            <FontAwesomeIcon 
+              icon={isCollapsed ? faChevronRight : faChevronLeft} 
+              className="w-5 h-5 text-gray-500" 
+            />
             {!isCollapsed && <span className="ms-3">Menüyü daralt</span>}
           </button>
         </div>
