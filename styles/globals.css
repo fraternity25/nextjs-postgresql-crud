@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes slide-right-to-left {
+  0% { width: 100%; }
+  100% { width: 0%; }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+.animate-slide-right-to-left {
+  animation: slide-right-to-left linear;
+  animation-duration: var(--toast-duration); /* Dynamic from props */
+  animation-fill-mode: forwards;
+}
+
+.pause-animation {
+  animation-play-state: paused !important;
+}
+
+/* Optional: Add to Tailwind config if using custom animations (requires config update)
+@layer utilities {
+  .pause-animation {
+    animation-play-state: paused;
+  }
+}*/
+
 /*@import "tailwindcss";
 
 :root {

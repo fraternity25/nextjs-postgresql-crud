@@ -6,7 +6,21 @@ module.exports = {
     './styles/**/*.css',
   ],
   theme: {
-    extend: {},
+    extend: {
+      /*animation: {
+        'slide-right-to-left': 'slide-right-to-left linear forwards',
+      },
+      keyframes: {
+        'slide-right-to-left': {
+          '0%': { width: '100%' },
+          '100%': { width: '0%' },
+        },
+      },
+      animationPlayState: { 
+        paused: 'paused',
+        running: 'running',
+      },*/
+    },
   },
   plugins: [],
 };

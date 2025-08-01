@@ -73,8 +73,16 @@ export default function Home() {
 
       if (idleTasks.length > 0) {
         setToastMessages(
-          ["After deleting user, there are no users left working on these tasks: ",
-          ...idleTasks.map(task => `${task.title}`)]
+          [
+            {
+              type:"h1", 
+              content:"After deleting user, there are no users left working on these tasks: "
+            },
+            {
+              type:"ul",
+              content:idleTasks.map(task => `${task.title}`)
+            }
+          ]
         );
       }
 
@@ -214,7 +222,7 @@ export default function Home() {
                       />
                     )}
                     { toastMessages.length !== 0 && (
-                      <Toast messages={toastMessages} onClose={() => setToastMessages([])} />
+                      <Toast messages={toastMessages} time={5000} onClose={() => setToastMessages([])} />
                     )}
                   </tbody>
                 </table>
