@@ -49,14 +49,23 @@ const Sidebar = () => {
   return (
     <aside className={`fixed top-0 left-0 z-40 h-screen transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-64'}`}>
       <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 border-r border-gray-200">
-        {/* Logo/Link - Daraltıldığında sadece icon gösterir */}
-        <Link href="/" className={`flex items-center ${isCollapsed ? 'justify-center' : 'ps-2.5 mb-5'}`}>
-          {isCollapsed ? (
-            <span className="text-xl font-semibold">L</span>
-          ) : (
-            <span className="text-xl font-semibold whitespace-nowrap">LOGO</span>
-          )}
-        </Link>
+        {/* Logo/Link - Daraltıldığında sadece icon gösterir 
+          <Link href="/" className={`flex items-center ${isCollapsed ? 'justify-center' : 'ps-2.5 mb-5'}`}>
+            {isCollapsed ? (
+                <img 
+                src="/logo-G-100-white.png"
+                alt="Logo"
+                className="w-8 h-8"
+                />
+            ) : (
+                <img 
+                src="/logo-GLPI-100-white.png" 
+                alt="Logo"
+                className="h-8" // width otomatik ayarlanır
+                />
+            )}
+          </Link>
+        */}
 
         {/* Menü Alanı */}
         <ul className="space-y-2 font-medium">
