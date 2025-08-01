@@ -2,14 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faHome,
-  faPlus,
-  faHeadset,
-  faCircleExclamation,
-  faChevronLeft,
-  faChevronRight
-} from '@fortawesome/free-solid-svg-icons';
+import { sidebarIcons, userIcons, taskIcons, notificationIcons } from '@/components/icons';
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -17,8 +10,26 @@ const Sidebar = () => {
 
   const menuItems = [
     {
+      icon: userIcons.list,
+      label: 'Users',
+      href: '/',
+      tooltip: 'Users page'
+    },
+    {
+      icon: taskIcons.list,
+      label: 'Tasks',
+      href: '/tasks',
+      tooltip: 'Tasks page'
+    },
+    {
+      icon: notificationIcons.info,
+      label: 'Notifications',
+      href: '/notifications',
+      tooltip: 'Notifications page'
+    }
+    /*{
       icon: faHome,
-      label: 'Açılış',
+      label: 'Home',
       href: '/',
       tooltip: 'Ana sayfaya dön'
     },
@@ -39,7 +50,7 @@ const Sidebar = () => {
       label: 'Destek kayıtları',
       href: '/tickets',
       tooltip: 'Destek kayıtlarını listele'
-    }
+    }*/
   ];
 
   const toggleSidebar = () => {
@@ -93,10 +104,10 @@ const Sidebar = () => {
             className="w-full flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
           >
             <FontAwesomeIcon 
-              icon={isCollapsed ? faChevronRight : faChevronLeft} 
+              icon={isCollapsed ? sidebarIcons.expand : sidebarIcons.collapse} 
               className="w-5 h-5 text-gray-500" 
             />
-            {!isCollapsed && <span className="ms-3">Menüyü daralt</span>}
+            {!isCollapsed && <span className="ms-3">Collapse menu</span>}
           </button>
         </div>
       </div>
