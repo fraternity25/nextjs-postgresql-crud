@@ -12,7 +12,7 @@ const Sidebar = () => {
     {
       icon: userIcons.list,
       label: 'Users',
-      href: '/',
+      href: '/users',
       tooltip: 'Users page'
     },
     {
