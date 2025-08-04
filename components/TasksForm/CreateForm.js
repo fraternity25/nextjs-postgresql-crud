@@ -19,7 +19,6 @@ export default function CreateForm({
     status, setStatus,
     selectedUserIdList, setSelectedUserIdList,
     selectedTaskId, setSelectedTaskId,
-    showTasks, setShowTasks,
     loading, setLoading,
     error, setError
   } = states;
@@ -41,7 +40,6 @@ export default function CreateForm({
           id="user"
           value={selectedUserIdList}
           onChange={handleUserChange}
-          required={showTasks}
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
         >
           <option value="">Select user</option>
@@ -51,8 +49,12 @@ export default function CreateForm({
             </option>
           ))}
         </select>
-        {renderTasks(false, tasks, selectedTaskId, (e) => setSelectedTaskId(e.target.value))}
-        {renderDeadlineAndStatus(false, tasks, isView, deadline, status, (e) => setDeadline(e.target.value))}
+        {renderTasks(false, tasks, selectedTaskId, (e) =>
+          setSelectedTaskId(e.target.value)
+        )}
+        {renderDeadlineAndStatus(false, tasks, isView, deadline, status, (e) =>
+          setDeadline(e.target.value)
+        )}
       </div>
 
       {!isNew && tasks?.length > 0 && (
@@ -87,46 +89,45 @@ export default function CreateForm({
         </div>
       )}
 
-      {/*
-        <div>
-            <label
-            htmlFor="title"
-            className="block text-sm font-medium text-gray-700"
-            >
-            Title
-            </label>
-            <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            disabled={isView}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
-            />
-        </div>
+      <div>
+        <label
+          htmlFor="title"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Title
+        </label>
+        <input
+          type="text"
+          id="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          disabled={isView}
+          required
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+        />
+      </div>
 
-        <div>
-            <label
-            htmlFor="description"
-            className="block text-sm font-medium text-gray-700"
-            >
-            Description
-            </label>
-            <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            disabled={isView}
-            rows={4}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
-            />
-        </div>
-      */}
+      <div>
+        <label
+          htmlFor="description"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Description
+        </label>
+        <textarea
+          id="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          disabled={isView}
+          rows={4}
+          required
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+        />
+      </div>
 
       {
-        /*(isNew || isEdit) && isAdmin && */ <div>
+        /*(isNew || isEdit) && isAdmin && */ 
+        <div>
           <label
             htmlFor="role"
             className="block text-sm font-medium text-gray-700"
