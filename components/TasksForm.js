@@ -2,48 +2,57 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 
-export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit }) {
+export default function TasksForm({
+  mode = "new",
+  tasks = [],
+  userId = null,
+  onSubmit,
+}) {
   const [users, setUsers] = useState([]);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [selectedUserIdList, setSelectedUserIdList] = useState([id] || '');
-  const [selectedTaskId, setSelectedTaskId] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [selectedUserIdList, setSelectedUserIdList] = useState([userId] || "");
+  const [selectedTaskId, setSelectedTaskId] = useState("");
   const [showTasks, setShowTasks] = useState(mode === "new");
-  const [deadline, setDeadline] = useState(new Date().toISOString().split('T')[0]);
-  const [status, setStatus] = useState('pending');
+  const [deadline, setDeadline] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+  const [status, setStatus] = useState("pending");
   const [roles, setRoles] = useState({});
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const { data: session } = useSession();
-  const isAdmin = session?.user?.roles?.includes('admin');
+  const isAdmin = session?.user?.roles?.includes("admin");
 
-  const isView = mode === 'view';
-  const isEdit = mode === 'edit';
-  const isNew = mode === 'new';
+  const isView = mode === "view";
+  const isEdit = mode === "edit";
+  const isNew = mode === "new";
 
   useEffect(() => {
-    if(isNew) {
+    if (isNew) {
       fetchUsers();
     }
-    
+
     if (isEdit && tasks.length === 1) {
       const t = tasks[0];
-      const au = t.assigned_users.filter((au) => au.user_id == id)[0];
+      const au = t.assigned_users.filter((au) => au.user_id == userId)[0];
       setTitle(t.title);
       setDescription(t.description);
-      setDeadline(t.deadline?.split('T')[0] || new Date().toISOString().split('T')[0]);
-      setStatus(t.status || 'pending');
+      setDeadline(
+        t.deadline?.split("T")[0] || new Date().toISOString().split("T")[0]
+      );
+      setStatus(t.status || "pending");
       setRoles((prev) => ({ ...prev, [selectedUserIdList]: au.role }));
     }
   }, [tasks]);
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('/api/users');
+      const response = await fetch("/api/users");
       if (!response.ok) {
-        throw new Error('Failed to fetch users');
+        throw new Error("Failed to fetch users");
       }
       const data = await response.json();
       setUsers(data);
@@ -57,7 +66,7 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       if (onSubmit) {
@@ -75,7 +84,7 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
           created_by: session?.user?.id,
         });
       }
-      router.push('/');
+      router.push("/");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -87,7 +96,7 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
     const userId = e.target.value;
     setSelectedUserIdList(userId);
     if (!roles[userId]) {
-      setRoles((prev) => ({ ...prev, [userId]: 'viewer' }));
+      setRoles((prev) => ({ ...prev, [userId]: "viewer" }));
     }
   };
 
@@ -96,11 +105,15 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
     setRoles((prev) => ({ ...prev, [selectedUserIdList]: newRole }));
   };
 
-  const renderTasks = () => (
-    showTasks && tasks?.length > 0 && (
+  const renderTasks = () =>
+    showTasks &&
+    tasks?.length > 0 && (
       <>
         <div className="space-y-2 mt-6">
-          <label htmlFor="selectTask" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="selectTask"
+            className="block text-sm font-medium text-gray-700"
+          >
             Select a Task
           </label>
           <select
@@ -119,27 +132,32 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
           </select>
         </div>
       </>
-    )
-  );
+    );
 
-  const renderDeadlineAndStatus = () => (
+  const renderDeadlineAndStatus = () =>
     (!showTasks || tasks?.length == 0) && (
       <>
-        <label htmlFor="deadline" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="deadline"
+          className="block text-sm font-medium text-gray-700"
+        >
           Deadline
         </label>
         <input
           disabled={isView}
           id="deadline"
           type="date"
-          min={new Date().toISOString().split('T')[0]}
+          min={new Date().toISOString().split("T")[0]}
           value={deadline}
           onChange={(e) => setDeadline(e.target.value)}
           required
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
         />
 
-        <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="status"
+          className="block text-sm font-medium text-gray-700"
+        >
           Status
         </label>
         <select
@@ -154,15 +172,14 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
           <option value="completed">Completed</option>
         </select>
       </>
-    )
-  );
+    );
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-md mx-auto">
         <div className="bg-white shadow rounded-lg px-6 py-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-6">
-            {isView ? 'View Task' : isEdit ? 'Edit Task' : 'Assign Task'}
+            {isView ? "View Task" : isEdit ? "Edit Task" : "Assign Task"}
           </h1>
 
           {error && (
@@ -179,7 +196,7 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
                     type="button"
                     onClick={() => setShowTasks(false)}
                     className={`px-3 py-1 border rounded ${
-                      !showTasks ? 'bg-indigo-600 text-white' : 'bg-white'
+                      !showTasks ? "bg-indigo-600 text-white" : "bg-white"
                     }`}
                   >
                     Create New Task
@@ -188,7 +205,7 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
                     type="button"
                     onClick={() => setShowTasks(true)}
                     className={`px-3 py-1 border rounded ${
-                      showTasks ? 'bg-indigo-600 text-white' : 'bg-white'
+                      showTasks ? "bg-indigo-600 text-white" : "bg-white"
                     }`}
                   >
                     Assign Existing Task
@@ -196,7 +213,10 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
                 </div>
 
                 <div>
-                  <label htmlFor="user" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="user"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Assign To
                   </label>
                   <select
@@ -223,7 +243,9 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
               <div className="space-y-2">
                 {tasks.map((task) => (
                   <ul key={task.id}>
-                    <h2 className="text-sm font-medium text-gray-700">Assigned Users for {task.title}</h2>
+                    <h2 className="text-sm font-medium text-gray-700">
+                      Assigned Users for {task.title}
+                    </h2>
                     {task.assigned_users.map((au) => {
                       return (
                         <div
@@ -252,7 +274,10 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
             {(!showTasks || tasks?.length == 0) && (
               <>
                 <div>
-                  <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="title"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Title
                   </label>
                   <input
@@ -267,7 +292,10 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
                 </div>
 
                 <div>
-                  <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="description"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Description
                   </label>
                   <textarea
@@ -282,16 +310,19 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
                 </div>
               </>
             )}
-            
-            {/*(isNew || isEdit) && isAdmin && */(
-              <div>
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+
+            {
+              /*(isNew || isEdit) && isAdmin && */ <div>
+                <label
+                  htmlFor="role"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Role
                 </label>
                 <select
                   disabled={isView}
                   id="role"
-                  value={roles[selectedUserIdList] || 'viewer'}
+                  value={roles[selectedUserIdList] || "viewer"}
                   onChange={handleRoleChange}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
                 >
@@ -300,12 +331,12 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
                   <option value="viewer">Viewer</option>
                 </select>
               </div>
-            )}
+            }
 
             <div className="flex justify-end space-x-3">
               <button
                 type="button"
-                onClick={() => router.push('/')}
+                onClick={() => router.push("/tasks")}
                 className="px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white"
               >
                 Cancel
@@ -316,7 +347,7 @@ export default function TasksForm({ mode = 'new', tasks = [], id=null, onSubmit 
                   disabled={loading}
                   className="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm disabled:opacity-50"
                 >
-                  {loading ? 'Saving...' : isEdit ? 'Update' : 'Assign'}
+                  {loading ? "Saving..." : isEdit ? "Update" : "Assign"}
                 </button>
               )}
             </div>
