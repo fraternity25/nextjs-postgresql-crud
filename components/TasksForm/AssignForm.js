@@ -2,12 +2,12 @@ import { useRouter } from 'next/router';
 
 export default function AssignForm({ 
   mode = "edit", 
+  tasks,
   handleSubmit, 
   handleUserChange,
   handleRoleChange,
   renderDeadlineAndStatus,
   renderTasks,
-  tasks,
   states
 }) 
 {

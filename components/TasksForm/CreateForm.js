@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 
 export default function CreateForm({ 
   mode = "edit", 
+  tasks,
   handleSubmit, 
   handleUserChange,
   handleTitleChange,
@@ -9,7 +10,6 @@ export default function CreateForm({
   handleRoleChange,
   renderDeadlineAndStatus,
   renderTasks,
-  tasks,
   states
 })
 {

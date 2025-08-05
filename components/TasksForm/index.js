@@ -1,4 +1,4 @@
-import useTasksFormState from '@/hooks/useTasksFormState';
+import useTasksFormStates from '@/hooks/useTasksFormStates';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
@@ -11,7 +11,7 @@ export default function TasksForm({
   userId = "",
   onSubmit,
 }) {
-  const states = useTasksFormState(mode, userId);
+  const states = useTasksFormStates(mode, userId);
   const {
     users, setUsers,
     roles, setRoles,
@@ -239,6 +239,7 @@ export default function TasksForm({
           {(!showTasks || tasks?.length == 0) ? (
             <CreateForm 
               mode={mode} 
+              tasks={tasks}
               handleSubmit={handleSubmit} 
               handleUserChange={handleUserChange}
               handleTitleChange={handleTitleChange}
@@ -246,7 +247,6 @@ export default function TasksForm({
               handleRoleChange={handleRoleChange}
               renderDeadlineAndStatus={renderDeadlineAndStatus}
               renderTasks={renderTasks}
-              tasks={tasks}
               states={{
                 users, 
                 roles, 
@@ -259,12 +259,12 @@ export default function TasksForm({
           ) : showTasks && tasks?.length > 0 && (
             <AssignForm 
               mode={mode} 
+              tasks={tasks}
               handleSubmit={handleSubmit} 
               handleUserChange={handleUserChange}
               handleRoleChange={handleRoleChange}
               renderDeadlineAndStatus={renderDeadlineAndStatus}
               renderTasks={renderTasks}
-              tasks={tasks}
               states={{
                 users,
                 roles,
