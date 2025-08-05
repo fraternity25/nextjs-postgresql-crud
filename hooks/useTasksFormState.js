@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 export default function useTasksFormState({
   mode = "edit",
-  userId = null,
+  userId = "",
 }) {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState({});
@@ -10,7 +10,7 @@ export default function useTasksFormState({
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState(new Date().toISOString().split("T")[0]);
   const [status, setStatus] = useState('pending');
-  const [selectedUserIdList, setSelectedUserIdList] = useState([userId] || "");
+  const [selectedUserIdList, setSelectedUserIdList] = useState([userId]);
   const [selectedTaskId, setSelectedTaskId] = useState('');
   const [showTasks, setShowTasks] = useState(mode === "new");
   const [loading, setLoading] = useState(false);

@@ -8,7 +8,7 @@ import CreateForm from './CreateForm'
 export default function TasksForm({
   mode = "new",
   tasks = [],
-  userId = null,
+  userId = "",
   onSubmit,
 }) {
   const states = useTasksFormState(mode, userId);
@@ -55,14 +55,18 @@ export default function TasksForm({
 
     if (isEdit && tasks.length === 1) {
       const t = tasks[0];
-      const au = t.assigned_users.filter((au) => au.user_id == userId)[0];
+      if(userId)
+      {
+        const au = t.assigned_users.filter((au) => au.user_id == userId)[0];
+        setRoles((prev) => ({ ...prev, [selectedUserIdList.at(0)]: au.role }));
+      }
+      setSelectedTaskId(t.id);
       setTitle(t.title);
       setDescription(t.description);
       setDeadline(
         t.deadline?.split("T")[0] || new Date().toISOString().split("T")[0]
       );
       setStatus(t.status || "pending");
-      setRoles((prev) => ({ ...prev, [selectedUserIdList]: au.role }));
     }
   }, [tasks]);
 

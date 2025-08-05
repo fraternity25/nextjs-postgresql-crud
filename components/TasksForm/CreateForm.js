@@ -34,31 +34,33 @@ export default function CreateForm({
         <div className="space-y-2">
           {tasks.map((task) => (
             task.assigned_users.length > 0 ? (
-              <ul key={task.id}>
-                <h2 className="text-sm font-medium text-gray-700">
-                  Assigned users for {task.title}
-                </h2>
-                {task.assigned_users.map((au) => {
-                  return (
-                    <div
-                      key={au.user_id}
-                      className="text-sm text-gray-700 border border-gray-200 rounded px-3 py-2"
-                    >
-                      <div>
-                        <strong>Name:</strong> {au.user_name}
+              <>
+                <ul key={task.id}>
+                  <h2 className="text-sm font-medium text-gray-700">
+                    Assigned users for {task.title}
+                  </h2>
+                  {task.assigned_users.map((au) => {
+                    return (
+                      <div
+                        key={au.user_id}
+                        className="text-sm text-gray-700 border border-gray-200 rounded px-3 py-2"
+                      >
+                        <div>
+                          <strong>Name:</strong> {au.user_name}
+                        </div>
+                        <div>
+                          <strong>Email:</strong> {au.user_email}
+                        </div>
+                        <div>
+                          <strong>Role:</strong> {au.role}
+                        </div>
                       </div>
-                      <div>
-                        <strong>Email:</strong> {au.user_email}
-                      </div>
-                      <div>
-                        <strong>Role:</strong> {au.role}
-                      </div>
-                    </div>
-                  );
-                })}
-              </ul> 
+                    );
+                  })}
+                </ul> 
+              </>
             ) : (
-              <h2 className="text-sm font-medium text-gray-700">
+              <h2 key={task.id} className="text-sm font-medium text-gray-700">
                 There is no assigned users for {task.title}
               </h2>
             )
