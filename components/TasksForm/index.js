@@ -118,6 +118,9 @@ export default function TasksForm({
     }
   };
 
+  const handleTitleChange = (e) => setTitle(e.target.value)
+  const handleDescriptionChange = (e) => setDescription(e.target.value)
+
   const handleRoleChange = (e) => {
     const newRole = e.target.value;
     setRoles((prev) => ({ ...prev, [selectedUserIdList]: newRole }));
@@ -234,11 +237,20 @@ export default function TasksForm({
               mode={mode} 
               handleSubmit={handleSubmit} 
               handleUserChange={handleUserChange}
+              handleTitleChange={handleTitleChange}
+              handleDescriptionChange={handleDescriptionChange}
               handleRoleChange={handleRoleChange}
               renderDeadlineAndStatus={renderDeadlineAndStatus}
               renderTasks={renderTasks}
               tasks={tasks}
-              states={states}
+              states={{
+                users, 
+                roles, 
+                title,
+                description,
+                selectedUserIdList,
+                loading, 
+              }}
             />
           ) : showTasks && tasks?.length > 0 && (
             <AssignForm 
@@ -249,7 +261,12 @@ export default function TasksForm({
               renderDeadlineAndStatus={renderDeadlineAndStatus}
               renderTasks={renderTasks}
               tasks={tasks}
-              states={states}
+              states={{
+                users,
+                roles,
+                selectedUserIdList,
+                loading, 
+              }}
             />
           )}
         </div>

@@ -1,10 +1,11 @@
-/*import { renderDeadlineAndStatus } from "./index";
-import { renderTasks } from "./index";*/
+import { useRouter } from 'next/router';
 
 export default function CreateForm({ 
   mode = "edit", 
   handleSubmit, 
   handleUserChange,
+  handleTitleChange,
+  handleDescriptionChange,
   handleRoleChange,
   renderDeadlineAndStatus,
   renderTasks,
@@ -13,17 +14,15 @@ export default function CreateForm({
 })
 {
   const {
-    users, setUsers,
-    roles, setRoles,
-    title, setTitle,
-    description, setDescription,
-    deadline, setDeadline,
-    status, setStatus,
-    selectedUserIdList, setSelectedUserIdList,
-    selectedTaskId, setSelectedTaskId,
-    loading, setLoading,
-    error, setError
+    users, 
+    roles, 
+    title,
+    description,
+    selectedUserIdList,
+    loading, 
   } = states;
+
+  const router = useRouter();
 
   const isView = mode === "view";
   const isEdit = mode === "edit";
@@ -51,13 +50,7 @@ export default function CreateForm({
             </option>
           ))}
         </select>
-        {/*renderTasks(false, tasks, selectedTaskId, (e) =>
-          setSelectedTaskId(e.target.value)
-        )*/}
         {renderTasks()}
-        {/*renderDeadlineAndStatus(false, tasks, isView, deadline, status, (e) =>
-          setDeadline(e.target.value)
-        )*/}
         {renderDeadlineAndStatus()}
       </div>
 
@@ -104,7 +97,7 @@ export default function CreateForm({
           type="text"
           id="title"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={handleTitleChange}
           disabled={isView}
           required
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
@@ -121,7 +114,7 @@ export default function CreateForm({
         <textarea
           id="description"
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={handleDescriptionChange}
           disabled={isView}
           rows={4}
           required

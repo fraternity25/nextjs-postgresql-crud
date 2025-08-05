@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+
 export default function AssignForm({ 
   mode = "edit", 
   handleSubmit, 
@@ -10,17 +12,13 @@ export default function AssignForm({
 }) 
 {
   const {
-    users, setUsers,
-    roles, setRoles,
-    title, setTitle,
-    description, setDescription,
-    deadline, setDeadline,
-    status, setStatus,
-    selectedUserIdList, setSelectedUserIdList,
-    selectedTaskId, setSelectedTaskId,
-    loading, setLoading,
-    error, setError
+    users,
+    roles,
+    selectedUserIdList,
+    loading, 
   } = states;
+
+  const router = useRouter();
 
   const isView = mode === "view";
   const isEdit = mode === "edit";
