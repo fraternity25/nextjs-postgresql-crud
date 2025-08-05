@@ -12,7 +12,7 @@ export default function useTasksFormState({
   const [status, setStatus] = useState('pending');
   const [selectedUserIdList, setSelectedUserIdList] = useState([userId] || "");
   const [selectedTaskId, setSelectedTaskId] = useState('');
-  const [showTasks, setShowTasks] = useState(mode === "edit");
+  const [showTasks, setShowTasks] = useState(mode === "new");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
