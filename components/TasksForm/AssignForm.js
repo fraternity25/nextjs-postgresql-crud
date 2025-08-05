@@ -1,11 +1,10 @@
-import { renderDeadlineAndStatus } from "./index";
-import { renderTasks } from "./index";
-
 export default function AssignForm({ 
   mode = "edit", 
   handleSubmit, 
   handleUserChange,
   handleRoleChange,
+  renderDeadlineAndStatus,
+  renderTasks,
   tasks,
   states
 }) 
@@ -38,7 +37,7 @@ export default function AssignForm({
         </label>
         <select
           id="user"
-          value={selectedUserIdList}
+          value={selectedUserIdList.at(-1)}
           onChange={handleUserChange}
           required
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
@@ -50,8 +49,8 @@ export default function AssignForm({
             </option>
           ))}
         </select>
-        {renderTasks(true, tasks, selectedTaskId, (e) => setSelectedTaskId(e.target.value))}
-        {renderDeadlineAndStatus(true, tasks, isView, deadline, status, (e) => setDeadline(e.target.value))}
+        {renderTasks()}
+        {renderDeadlineAndStatus()}
       </div>
 
       {!isNew && tasks?.length > 0 && (
@@ -86,46 +85,9 @@ export default function AssignForm({
         </div>
       )}
 
-      {/*
-        <div>
-            <label
-            htmlFor="title"
-            className="block text-sm font-medium text-gray-700"
-            >
-            Title
-            </label>
-            <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            disabled={isView}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
-            />
-        </div>
-
-        <div>
-            <label
-            htmlFor="description"
-            className="block text-sm font-medium text-gray-700"
-            >
-            Description
-            </label>
-            <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            disabled={isView}
-            rows={4}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
-            />
-        </div>
-      */}
-
       {
-        /*(isNew || isEdit) && isAdmin && */ <div>
+        /*(isNew || isEdit) && isAdmin && */ 
+        <div>
           <label
             htmlFor="role"
             className="block text-sm font-medium text-gray-700"

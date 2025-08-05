@@ -1,11 +1,13 @@
-import { renderDeadlineAndStatus } from "./index";
-import { renderTasks } from "./index";
+/*import { renderDeadlineAndStatus } from "./index";
+import { renderTasks } from "./index";*/
 
 export default function CreateForm({ 
   mode = "edit", 
   handleSubmit, 
   handleUserChange,
   handleRoleChange,
+  renderDeadlineAndStatus,
+  renderTasks,
   tasks,
   states
 })
@@ -38,7 +40,7 @@ export default function CreateForm({
         </label>
         <select
           id="user"
-          value={selectedUserIdList}
+          value={selectedUserIdList.at(-1)}
           onChange={handleUserChange}
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
         >
@@ -49,12 +51,14 @@ export default function CreateForm({
             </option>
           ))}
         </select>
-        {renderTasks(false, tasks, selectedTaskId, (e) =>
+        {/*renderTasks(false, tasks, selectedTaskId, (e) =>
           setSelectedTaskId(e.target.value)
-        )}
-        {renderDeadlineAndStatus(false, tasks, isView, deadline, status, (e) =>
+        )*/}
+        {renderTasks()}
+        {/*renderDeadlineAndStatus(false, tasks, isView, deadline, status, (e) =>
           setDeadline(e.target.value)
-        )}
+        )*/}
+        {renderDeadlineAndStatus()}
       </div>
 
       {!isNew && tasks?.length > 0 && (

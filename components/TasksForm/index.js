@@ -5,77 +5,6 @@ import { useSession } from 'next-auth/react';
 import AssignForm from './AssignForm';
 import CreateForm from './CreateForm'
 
-export function renderTasks(showTasks, tasks, selectedTaskId, onChange){
-  showTasks &&
-  tasks?.length > 0 && (
-    <>
-      <div className="space-y-2 mt-6">
-        <label
-          htmlFor="selectTask"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Select a Task
-        </label>
-        <select
-          id="selectTask"
-          className="w-full border rounded px-3 py-2 text-sm"
-          value={selectedTaskId}
-          onChange={onChange}
-          required
-        >
-          <option value="">-- Select a task --</option>
-          {tasks.map((task) => (
-            <option key={task.id} value={task.id}>
-              {task.title}
-            </option>
-          ))}
-        </select>
-      </div>
-    </>
-  );
-}
-
-export function renderDeadlineAndStatus(showTasks, tasks, isView, deadline, status, onChange){
-  (!showTasks || tasks?.length == 0) && (
-    <>
-      <label
-        htmlFor="deadline"
-        className="block text-sm font-medium text-gray-700"
-      >
-        Deadline
-      </label>
-      <input
-        disabled={isView}
-        id="deadline"
-        type="date"
-        min={new Date().toISOString().split("T")[0]}
-        value={deadline}
-        onChange={onChange}
-        required
-        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
-      />
-
-      <label
-        htmlFor="status"
-        className="block text-sm font-medium text-gray-700"
-      >
-        Status
-      </label>
-      <select
-        disabled={isView}
-        id="status"
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
-      >
-        <option value="pending">Pending</option>
-        <option value="in_progress">In Progress</option>
-        <option value="completed">Completed</option>
-      </select>
-    </>
-  );
-}
-
 export default function TasksForm({
   mode = "new",
   tasks = [],
@@ -194,6 +123,75 @@ export default function TasksForm({
     setRoles((prev) => ({ ...prev, [selectedUserIdList]: newRole }));
   };
 
+  const renderDeadlineAndStatus = () =>
+    (!showTasks || tasks?.length == 0) && (
+      <>
+        <label
+          htmlFor="deadline"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Deadline
+        </label>
+        <input
+          disabled={isView}
+          id="deadline"
+          type="date"
+          min={new Date().toISOString().split("T")[0]}
+          value={deadline}
+          onChange={(e) => setDeadline(e.target.value)}
+          required
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+        />
+
+        <label
+          htmlFor="status"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Status
+        </label>
+        <select
+          disabled={isView}
+          id="status"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+        >
+          <option value="pending">Pending</option>
+          <option value="in_progress">In Progress</option>
+          <option value="completed">Completed</option>
+        </select>
+      </>
+    );
+
+  const renderTasks = () =>
+    showTasks &&
+    tasks?.length > 0 && (
+      <>
+        <div className="space-y-2 mt-6">
+          <label
+            htmlFor="selectTask"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Select a Task
+          </label>
+          <select
+            id="selectTask"
+            className="w-full border rounded px-3 py-2 text-sm"
+            value={selectedTaskId}
+            onChange={(e) => setSelectedTaskId(e.target.value)}
+            required
+          >
+            <option value="">-- Select a task --</option>
+            {tasks.map((task) => (
+              <option key={task.id} value={task.id}>
+                {task.title}
+              </option>
+            ))}
+          </select>
+        </div>
+      </>
+    );
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-md mx-auto">
@@ -237,6 +235,8 @@ export default function TasksForm({
               handleSubmit={handleSubmit} 
               handleUserChange={handleUserChange}
               handleRoleChange={handleRoleChange}
+              renderDeadlineAndStatus={renderDeadlineAndStatus}
+              renderTasks={renderTasks}
               tasks={tasks}
               states={states}
             />
@@ -246,6 +246,8 @@ export default function TasksForm({
               handleSubmit={handleSubmit} 
               handleUserChange={handleUserChange}
               handleRoleChange={handleRoleChange}
+              renderDeadlineAndStatus={renderDeadlineAndStatus}
+              renderTasks={renderTasks}
               tasks={tasks}
               states={states}
             />
