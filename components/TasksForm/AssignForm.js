@@ -2,13 +2,9 @@ import { useRouter } from 'next/router';
 
 export default function AssignForm({ 
   mode = "edit", 
-  tasks,
-  handleSubmit, 
-  handleUserChange,
-  handleRoleChange,
-  renderDeadlineAndStatus,
+  states,
+  handlers,
   renderTasks,
-  states
 }) 
 {
   const {
@@ -17,6 +13,12 @@ export default function AssignForm({
     selectedUserIdList,
     loading, 
   } = states;
+
+  const {
+    handleSubmit, 
+    handleUserChange,
+    handleRoleChange,
+  } = handlers;
 
   const router = useRouter();
 
@@ -48,40 +50,7 @@ export default function AssignForm({
           ))}
         </select>
         {renderTasks()}
-        {renderDeadlineAndStatus()}
       </div>
-
-      {!isNew && tasks?.length > 0 && (
-        <div className="space-y-2">
-          {tasks.map((task) => (
-            <ul key={task.id}>
-              <h2 className="text-sm font-medium text-gray-700">
-                Assigned Users for {task.title}
-              </h2>
-              {task.assigned_users.map((au) => {
-                return (
-                  <div
-                    key={au.user_id}
-                    className="text-sm text-gray-700 border border-gray-200 rounded px-3 py-2"
-                  >
-                    <div>
-                      <strong>Name:</strong> {au.user_name}
-                    </div>
-                    <div>
-                      <strong>Email:</strong> {au.user_email}
-                    </div>
-                    <div>
-                      <strong>Role:</strong> {au.role}
-                    </div>
-                  </div>
-                );
-              })}
-            </ul>
-          ))}
-
-          {renderDeadlineAndStatus()}
-        </div>
-      )}
 
       {
         /*(isNew || isEdit) && isAdmin && */ 

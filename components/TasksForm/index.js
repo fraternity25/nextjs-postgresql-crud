@@ -1,6 +1,5 @@
-import useTasksFormStates from '@/hooks/useTasksFormStates';
+import useTasksForm from '@/hooks/useTasksForm';
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import AssignForm from './AssignForm';
 import CreateForm from './CreateForm'
@@ -11,7 +10,8 @@ export default function TasksForm({
   userId = "",
   onSubmit,
 }) {
-  const states = useTasksFormStates(mode, userId);
+  const { states, handlers, renderers }= useTasksForm(mode, userId);
+
   const {
     users, setUsers,
     roles, setRoles,
@@ -25,20 +25,19 @@ export default function TasksForm({
     loading, setLoading,
     error, setError
   } = states;
-  /*const [users, setUsers] = useState([]);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [selectedUserIdList, setSelectedUserIdList] = useState([userId] || "");
-  const [selectedTaskId, setSelectedTaskId] = useState("");
-  const [showTasks, setShowTasks] = useState(mode === "new");
-  const [deadline, setDeadline] = useState(
-    new Date().toISOString().split("T")[0]
-  );
-  const [status, setStatus] = useState("pending");
-  const [roles, setRoles] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");*/
-  const router = useRouter();
+
+  const {
+    handleSubmit,
+    handleUserChange, 
+    handleTitleChange, 
+    handleDescriptionChange, 
+    handleRoleChange
+  } = handlers;
+
+  const {
+    renderDeadlineAndStatus,
+    renderTasks
+  } = renderers;
 
   const { data: session } = useSession();
   const isAdmin = session?.user?.roles?.includes("admin");
@@ -85,120 +84,6 @@ export default function TasksForm({
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      if (onSubmit) {
-        await onSubmit({
-          ...(showTasks
-            ? { task_id: selectedTaskId }
-            : {
-                title,
-                description,
-                deadline,
-                status,
-              }),
-          userIdList: selectedUserIdList,
-          roleList: roles,
-          created_by: session?.user?.id,
-        });
-      }
-      router.push("/");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleUserChange = (e) => {
-    const userId = e.target.value;
-    setSelectedUserIdList(userId);
-    if (!roles[userId]) {
-      setRoles((prev) => ({ ...prev, [userId]: "viewer" }));
-    }
-  };
-
-  const handleTitleChange = (e) => setTitle(e.target.value)
-  const handleDescriptionChange = (e) => setDescription(e.target.value)
-
-  const handleRoleChange = (e) => {
-    const newRole = e.target.value;
-    setRoles((prev) => ({ ...prev, [selectedUserIdList]: newRole }));
-  };
-
-  const renderDeadlineAndStatus = () =>
-    (!showTasks || tasks?.length == 0) && (
-      <>
-        <label
-          htmlFor="deadline"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Deadline
-        </label>
-        <input
-          disabled={isView}
-          id="deadline"
-          type="date"
-          min={new Date().toISOString().split("T")[0]}
-          value={deadline}
-          onChange={(e) => setDeadline(e.target.value)}
-          required
-          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
-        />
-
-        <label
-          htmlFor="status"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Status
-        </label>
-        <select
-          disabled={isView}
-          id="status"
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
-        >
-          <option value="pending">Pending</option>
-          <option value="in_progress">In Progress</option>
-          <option value="completed">Completed</option>
-        </select>
-      </>
-    );
-
-  const renderTasks = () =>
-    showTasks &&
-    tasks?.length > 0 && (
-      <>
-        <div className="space-y-2 mt-6">
-          <label
-            htmlFor="selectTask"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Select a Task
-          </label>
-          <select
-            id="selectTask"
-            className="w-full border rounded px-3 py-2 text-sm"
-            value={selectedTaskId}
-            onChange={(e) => setSelectedTaskId(e.target.value)}
-            required
-          >
-            <option value="">-- Select a task --</option>
-            {tasks.map((task) => (
-              <option key={task.id} value={task.id}>
-                {task.title}
-              </option>
-            ))}
-          </select>
-        </div>
-      </>
-    );
-
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-md mx-auto">
@@ -236,17 +121,48 @@ export default function TasksForm({
             </div>
           )}
 
+          {!isNew && tasks?.length > 0 && (
+            <div className="space-y-2">
+              {tasks.map((task) => (
+                task.assigned_users.length > 0 ? (
+                  <>
+                    <ul key={task.id}>
+                      <h2 className="text-sm font-medium text-gray-700">
+                        Assigned users for {task.title}
+                      </h2>
+                      {task.assigned_users.map((au) => {
+                        return (
+                          <div
+                            key={au.user_id}
+                            className="text-sm text-gray-700 border border-gray-200 rounded px-3 py-2"
+                          >
+                            <div>
+                              <strong>Name:</strong> {au.user_name}
+                            </div>
+                            <div>
+                              <strong>Email:</strong> {au.user_email}
+                            </div>
+                            <div>
+                              <strong>Role:</strong> {au.role}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </ul> 
+                  </>
+                ) : (
+                  <h2 key={task.id} className="text-sm font-medium text-gray-700">
+                    There is no assigned users for {task.title}
+                  </h2>
+                )
+              ))}
+            </div>
+          )}
+
           {(!showTasks || tasks?.length == 0) ? (
             <CreateForm 
               mode={mode} 
               tasks={tasks}
-              handleSubmit={handleSubmit} 
-              handleUserChange={handleUserChange}
-              handleTitleChange={handleTitleChange}
-              handleDescriptionChange={handleDescriptionChange}
-              handleRoleChange={handleRoleChange}
-              renderDeadlineAndStatus={renderDeadlineAndStatus}
-              renderTasks={renderTasks}
               states={{
                 users, 
                 roles, 
@@ -255,22 +171,31 @@ export default function TasksForm({
                 selectedUserIdList,
                 loading, 
               }}
+              handlers={{
+                handleSubmit,
+                handleUserChange,
+                handleTitleChange,
+                handleDescriptionChange,
+                handleRoleChange
+              }}
+              renderDeadlineAndStatus={renderDeadlineAndStatus}
             />
           ) : showTasks && tasks?.length > 0 && (
             <AssignForm 
               mode={mode} 
               tasks={tasks}
-              handleSubmit={handleSubmit} 
-              handleUserChange={handleUserChange}
-              handleRoleChange={handleRoleChange}
-              renderDeadlineAndStatus={renderDeadlineAndStatus}
-              renderTasks={renderTasks}
               states={{
                 users,
                 roles,
                 selectedUserIdList,
                 loading, 
               }}
+              handlers={{
+                handleSubmit,
+                handleUserChange,
+                handleRoleChange
+              }}
+              renderTasks={renderTasks}
             />
           )}
         </div>
