@@ -4,7 +4,7 @@ export default function AssignForm({
   mode = "edit", 
   states,
   handlers,
-  renderTasks,
+  renderers
 }) 
 {
   const {
@@ -20,6 +20,11 @@ export default function AssignForm({
     handleRoleChange,
   } = handlers;
 
+  const {
+    renderAssignedUsers,
+    renderTasks
+  } = renderers;
+
   const router = useRouter();
 
   const isView = mode === "view";
@@ -28,6 +33,7 @@ export default function AssignForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {renderAssignedUsers()}
       <div>
         <label
           htmlFor="user"

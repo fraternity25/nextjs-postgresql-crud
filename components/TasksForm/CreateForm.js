@@ -4,7 +4,7 @@ export default function CreateForm({
   mode = "edit", 
   states,
   handlers,
-  renderDeadlineAndStatus
+  renderers
 })
 {
   const {
@@ -24,6 +24,11 @@ export default function CreateForm({
     handleRoleChange
   } = handlers;
 
+  const {
+    renderAssignedUsers,
+    renderDeadlineAndStatus
+  } = renderers;
+
   const router = useRouter();
 
   const isView = mode === "view";
@@ -32,6 +37,7 @@ export default function CreateForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {renderAssignedUsers()}
       <div>
         <label
           htmlFor="user"
