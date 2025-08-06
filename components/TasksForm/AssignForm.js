@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 
 export default function AssignForm({ 
   mode = "edit", 
+  tasks,
   states,
   handlers,
   renderers
@@ -11,6 +12,7 @@ export default function AssignForm({
     users,
     roles,
     selectedUserIdList,
+    showTasks, 
     loading, 
   } = states;
 
@@ -33,7 +35,7 @@ export default function AssignForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {renderAssignedUsers()}
+      {renderAssignedUsers(isNew, tasks)}
       <div>
         <label
           htmlFor="user"
@@ -55,7 +57,7 @@ export default function AssignForm({
             </option>
           ))}
         </select>
-        {renderTasks()}
+        {renderTasks(true, tasks, isView)}
       </div>
 
       {

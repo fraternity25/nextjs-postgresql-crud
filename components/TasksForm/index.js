@@ -10,7 +10,7 @@ export default function TasksForm({
   userId = "",
   onSubmit,
 }) {
-  const { states, handlers, renderers }= useTasksForm(mode, userId);
+  const { states, handlers, renderers }= useTasksForm(mode, tasks, userId);
 
   const {
     users, setUsers,
@@ -57,7 +57,7 @@ export default function TasksForm({
       const t = tasks[0];
       if(userId)
       {
-        const au = t.assigned_users.filter((au) => au.user_id == userId)[0];
+        const au = t.assigned_users.find((au) => au.user_id == userId);
         setRoles((prev) => ({ ...prev, [selectedUserIdList.at(0)]: au.role }));
       }
       setSelectedTaskId(t.id);

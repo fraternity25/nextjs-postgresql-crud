@@ -3,7 +3,9 @@ import { useRouter } from 'next/router';
 
 export default function useTasksForm({
   mode = "edit",
+  tasks = [],
   userId = "",
+  form = "tasks"
 }) {
   const router = useRouter();
   //States
@@ -18,6 +20,9 @@ export default function useTasksForm({
   const [showTasks, setShowTasks] = useState(mode === "new");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const isAssignForm = form === "assign"
+  const isCreateForm = form === "create"
 
   //Handlers
   const handleSubmit = async (e) => {
@@ -66,7 +71,7 @@ export default function useTasksForm({
   };
 
   //Renderers
-  const renderAssignedUsers = () =>
+  const renderAssignedUsers = (isNew, tasks) =>
     {!isNew && tasks?.length > 0 && (
       <div className="space-y-2">
         {tasks.map((task) => (
@@ -105,7 +110,7 @@ export default function useTasksForm({
       </div>
     )}
 
-  const renderDeadlineAndStatus = () =>
+  const renderDeadlineAndStatus = (showTasks, tasks, isView) =>
     (!showTasks || tasks?.length == 0) && (
       <>
         <label
@@ -145,7 +150,7 @@ export default function useTasksForm({
       </>
     );
 
-  const renderTasks = () =>
+  const renderTasks = (showTasks, tasks) =>
     showTasks &&
     tasks?.length > 0 && (
       <>
@@ -178,27 +183,49 @@ export default function useTasksForm({
     states: {
       users, setUsers,
       roles, setRoles,
-      title, setTitle,
-      description, setDescription,
-      deadline, setDeadline,
-      status, setStatus,
+      ...(!isAssignForm && !isCreateForm
+        ? { 
+            title, setTitle,
+            description, setDescription,
+            deadline, setDeadline,
+            status, setStatus, 
+            selectedTaskId, setSelectedTaskId,
+            showTasks, setShowTasks,
+          }
+        : isCreateForm && {
+            title, setTitle,
+            description, setDescription,
+          }
+        ),
       selectedUserIdList, setSelectedUserIdList,
-      selectedTaskId, setSelectedTaskId,
-      showTasks, setShowTasks,
       loading, setLoading,
       error, setError
     },
     handlers: {
       handleSubmit,
       handleUserChange, 
-      handleTitleChange, 
-      handleDescriptionChange, 
+      ...(!isAssignForm &&
+          { 
+            handleTitleChange, 
+            handleDescriptionChange, 
+          }
+         ),
       handleRoleChange
     },
     renderers: {
       renderAssignedUsers,
-      renderDeadlineAndStatus,
-      renderTasks
+      ...(!isAssignForm && !isCreateForm
+        ? { 
+            renderDeadlineAndStatus,
+            renderTasks
+          }
+        : isCreateForm ? {
+            renderDeadlineAndStatus
+          }
+        : isAssignForm && {
+            renderTasks
+          } 
+        )
     }
   };
 }

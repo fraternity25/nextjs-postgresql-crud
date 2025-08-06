@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 
 export default function CreateForm({ 
   mode = "edit", 
+  tasks,
   states,
   handlers,
   renderers
@@ -37,7 +38,7 @@ export default function CreateForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {renderAssignedUsers()}
+      {renderAssignedUsers(isNew, tasks)}
       <div>
         <label
           htmlFor="user"
@@ -58,7 +59,7 @@ export default function CreateForm({
             </option>
           ))}
         </select>
-        {renderDeadlineAndStatus()}
+        {renderDeadlineAndStatus(false, tasks, isView)}
       </div>
 
       <div>
