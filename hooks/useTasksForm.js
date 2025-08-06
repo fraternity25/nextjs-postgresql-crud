@@ -77,7 +77,7 @@ export default function useTasksForm({
     setSelectedUserIdList(prev => 
       prev.includes(userId) ? prev : [...prev, userId]
     );
-    if (!roles[userId]) {
+    if (!roles[userId]?.role) {
       setRoles((prev) => 
       prev.map(item => 
         item.userId === userId
