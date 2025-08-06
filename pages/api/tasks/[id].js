@@ -55,6 +55,11 @@ export default async function handler(req, res) {
     case 'PATCH':
       try {
         const { userIdList, roleList } = req.body;
+        console.log("api/tasks/id-patch:")
+        console.log("userIdList:")
+        console.log(userIdList)
+        console.log("roleList:")
+        console.log(roleList)
 
         if (!userIdList || !roleList) {
           return res.status(400).json({ error: 'userIdList and roleList are required' });

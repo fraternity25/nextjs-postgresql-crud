@@ -12,7 +12,6 @@ export default function AssignForm({
     users,
     roles,
     selectedUserIdList,
-    showTasks, 
     loading, 
   } = states;
 

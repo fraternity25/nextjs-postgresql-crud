@@ -6,7 +6,33 @@ import { useState, useEffect } from "react";
 export default function assign() {
   const router = useRouter();
   const [tasks, setTasks] = useState([]);
-  const form = useTasksForm({ mode: "edit" , tasks: tasks, form:"assign"});
+  const [isLoading, setIsLoading] = useState(true);
+
+  const onSubmit = async (formData) => {
+    const isExistingTask = !!formData.task_id;
+
+    console.log("formData.task_id = ");
+    console.log(formData.task_id);
+    const response = await fetch(
+      isExistingTask ? `/api/tasks/${formData.task_id}` : '/api/tasks',
+      {
+        method: isExistingTask ? 'PATCH' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to assign task');
+    }
+
+    return response.json();
+  };
+
+  const form = useTasksForm({ mode: "edit" , tasks: tasks, form:"assign", onSubmit:onSubmit});
   const {states: { setUsers } } = form;
 
   useEffect(() => {
@@ -17,8 +43,17 @@ export default function assign() {
         //setSelectedTaskId(id);
         setTasks([JSON.parse(task)]);
       }
+      setIsLoading(false);
     }
   }, [router.isReady, router.query]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">

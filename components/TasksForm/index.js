@@ -10,7 +10,7 @@ export default function TasksForm({
   userId = "",
   onSubmit,
 }) {
-  const { states, handlers, renderers }= useTasksForm(mode, tasks, userId);
+  const { states, handlers, renderers }= useTasksForm(mode, tasks, userId, onSubmit);
 
   const {
     users, setUsers,

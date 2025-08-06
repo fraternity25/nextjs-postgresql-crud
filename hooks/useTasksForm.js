@@ -1,28 +1,41 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
 export default function useTasksForm({
   mode = "edit",
   tasks = [],
   userId = "",
-  form = "tasks"
+  form = "tasks",
+  onSubmit
 }) {
   const router = useRouter();
   //States
   const [users, setUsers] = useState([]);
-  const [roles, setRoles] = useState({});
+  const [roles, setRoles] = useState([{}]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState(new Date().toISOString().split("T")[0]);
   const [status, setStatus] = useState('pending');
-  const [selectedUserIdList, setSelectedUserIdList] = useState([userId]);
+  const [selectedUserIdList, setSelectedUserIdList] = useState(userId ? [userId] : []);
   const [selectedTaskId, setSelectedTaskId] = useState('');
-  const [showTasks, setShowTasks] = useState(mode === "new");
+  const [showTasks, setShowTasks] = useState(form !== "create");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.roles?.includes("admin");
+
   const isAssignForm = form === "assign"
   const isCreateForm = form === "create"
+
+  useEffect(() => {
+    if(isAssignForm && tasks.length == 1)
+    {
+      const t = tasks[0];
+      setSelectedTaskId(t.id);
+    }
+  }, [form, tasks])
 
   //Handlers
   const handleSubmit = async (e) => {
@@ -31,7 +44,12 @@ export default function useTasksForm({
     setError("");
 
     try {
+      console.log("onSUbmit = ", onSubmit);
       if (onSubmit) {
+        console.log("onSubmit true");
+        console.log("selectedTaskId = ");
+        console.log(selectedTaskId);
+        console.log("showTasks = ", showTasks);
         await onSubmit({
           ...(showTasks
             ? { task_id: selectedTaskId }
@@ -56,9 +74,17 @@ export default function useTasksForm({
 
   const handleUserChange = (e) => {
     const userId = e.target.value;
-    setSelectedUserIdList(userId);
+    setSelectedUserIdList(prev => 
+      prev.includes(userId) ? prev : [...prev, userId]
+    );
     if (!roles[userId]) {
-      setRoles((prev) => ({ ...prev, [userId]: "viewer" }));
+      setRoles((prev) => 
+      prev.map(item => 
+        item.userId === userId
+          ? { ...item, role: "viewer" } 
+          : item
+      )
+    );
     }
   };
 
@@ -67,13 +93,22 @@ export default function useTasksForm({
 
   const handleRoleChange = (e) => {
     const newRole = e.target.value;
-    setRoles((prev) => ({ ...prev, [selectedUserIdList]: newRole }));
+    setRoles((prev) => 
+      prev.map(item => 
+        item.userId === selectedUserIdList.at(-1) 
+          ? { ...item, role: newRole } 
+          : item
+      )
+    );
   };
 
   //Renderers
   const renderAssignedUsers = (isNew, tasks) =>
-    {!isNew && tasks?.length > 0 && (
-      <div className="space-y-2">
+  {
+    if(!isNew && tasks?.length > 0)  
+    {
+      return (
+        <div className="space-y-2">
         {tasks.map((task) => (
           task.assigned_users.length > 0 ? (
             <>
@@ -107,8 +142,10 @@ export default function useTasksForm({
             </h2>
           )
         ))}
-      </div>
-    )}
+        </div>
+      );
+    }
+  }
 
   const renderDeadlineAndStatus = (showTasks, tasks, isView) =>
     (!showTasks || tasks?.length == 0) && (
