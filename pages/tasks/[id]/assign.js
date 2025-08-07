@@ -11,8 +11,13 @@ export default function assign() {
   const onSubmit = async (formData) => {
     const isExistingTask = !!formData.task_id;
 
-    console.log("formData.task_id = ");
-    console.log(formData.task_id);
+    console.log("formData.roleMap= ");
+    console.log(formData.roleMap);
+    console.log(Object.prototype.toString.call(formData.rolesMap));
+    const body = JSON.stringify({
+                    ...formData,
+                    rolesMap: Array.from(formData.rolesMap.entries()) // [[key1,val1],[key2,val2]]
+                  });
     const response = await fetch(
       isExistingTask ? `/api/tasks/${formData.task_id}` : '/api/tasks',
       {
@@ -20,7 +25,7 @@ export default function assign() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: body,
       }
     );
 

@@ -12,7 +12,8 @@ export default function useTasksForm({
   const router = useRouter();
   //States
   const [users, setUsers] = useState([]);
-  const [roles, setRoles] = useState([{}]);
+  //const [roles, setRoles] = useState([{}]);
+  const [rolesMap, setRolesMap] = useState(new Map());
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState(new Date().toISOString().split("T")[0]);
@@ -50,6 +51,9 @@ export default function useTasksForm({
         console.log("selectedTaskId = ");
         console.log(selectedTaskId);
         console.log("showTasks = ", showTasks);
+        console.log("rolesMap-0:")
+        console.log(rolesMap)
+        console.log(Object.prototype.toString.call(rolesMap));
         await onSubmit({
           ...(showTasks
             ? { task_id: selectedTaskId }
@@ -60,11 +64,11 @@ export default function useTasksForm({
                 status,
               }),
           userIdList: selectedUserIdList,
-          roleList: roles,
+          rolesMap: rolesMap,
           created_by: session?.user?.id,
         });
       }
-      router.push("/");
+      router.push("/tasks");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -74,17 +78,22 @@ export default function useTasksForm({
 
   const handleUserChange = (e) => {
     const userId = e.target.value;
+    const last = selectedUserIdList.at(-1);
     setSelectedUserIdList(prev => 
-      prev.includes(userId) ? prev : [...prev, userId]
+      [...prev.slice(0, -1), userId]
+      //prev.includes(userId) ? prev : [...prev, userId]
     );
-    if (!roles[userId]?.role) {
-      setRoles((prev) => 
-      prev.map(item => 
-        item.userId === userId
-          ? { ...item, role: "viewer" } 
-          : item
-      )
-    );
+    
+    // Update map if user doesn't exist
+    if (!rolesMap.has(userId)) {
+      setRolesMap(prev => {
+        const newMap = new Map(prev);
+        if (last && newMap.has(last)) {
+            newMap.delete(last);
+        }
+        newMap.set(userId, "viewer"); // Default role
+        return newMap;
+      });
     }
   };
 
@@ -93,13 +102,13 @@ export default function useTasksForm({
 
   const handleRoleChange = (e) => {
     const newRole = e.target.value;
-    setRoles((prev) => 
-      prev.map(item => 
-        item.userId === selectedUserIdList.at(-1) 
-          ? { ...item, role: newRole } 
-          : item
-      )
-    );
+    const userId = selectedUserIdList.at(-1);
+    
+    setRolesMap(prev => {
+      const newMap = new Map(prev);
+      newMap.set(userId, newRole);
+      return newMap;
+    });
   };
 
   //Renderers
@@ -219,7 +228,7 @@ export default function useTasksForm({
   return {
     states: {
       users, setUsers,
-      roles, setRoles,
+      rolesMap, setRolesMap,
       ...(!isAssignForm && !isCreateForm
         ? { 
             title, setTitle,

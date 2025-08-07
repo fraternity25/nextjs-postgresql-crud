@@ -14,7 +14,7 @@ export default function TasksForm({
 
   const {
     users, setUsers,
-    roles, setRoles,
+    rolesMap, setRolesMap,
     title, setTitle,
     description, setDescription,
     deadline, setDeadline,
@@ -58,7 +58,11 @@ export default function TasksForm({
       if(userId)
       {
         const au = t.assigned_users.find((au) => au.user_id == userId);
-        setRoles((prev) => ({ ...prev, [selectedUserIdList.at(0)]: au.role }));
+        setRolesMap(prev => {
+          const newMap = new Map(prev);
+          newMap.set(selectedUserIdList.at(0), au.role);
+          return newMap;
+        });
       }
       setSelectedTaskId(t.id);
       setTitle(t.title);
@@ -128,7 +132,7 @@ export default function TasksForm({
               tasks={tasks}
               states={{
                 users, 
-                roles, 
+                rolesMap, 
                 title,
                 description,
                 selectedUserIdList,
@@ -152,7 +156,7 @@ export default function TasksForm({
               tasks={tasks}
               states={{
                 users,
-                roles,
+                rolesMap,
                 selectedUserIdList,
                 loading, 
               }}

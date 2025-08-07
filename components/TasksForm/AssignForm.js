@@ -10,7 +10,7 @@ export default function AssignForm({
 {
   const {
     users,
-    roles,
+    rolesMap,
     selectedUserIdList,
     loading, 
   } = states;
@@ -31,6 +31,9 @@ export default function AssignForm({
   const isView = mode === "view";
   const isEdit = mode === "edit";
   const isNew = mode === "new";
+
+  console.log("selectedUserIdList = ", selectedUserIdList);
+  console.log("rolesMap = ", rolesMap);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -71,7 +74,7 @@ export default function AssignForm({
           <select
             disabled={isView}
             id="role"
-            value={roles[selectedUserIdList] || "viewer"}
+            value={rolesMap.get(selectedUserIdList.at(-1)) || "viewer"}
             onChange={handleRoleChange}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
           >

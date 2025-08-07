@@ -16,13 +16,14 @@ export default async function handler(req, res) {
 
     case 'POST':
       try {
-        const { title, description, deadline, status, created_by, userIdList, roleList } = req.body;
+        const { title, description, deadline, status, created_by, userIdList, rolesMap: rolesMapEntries } = req.body;
+        const rolesMap = new Map(rolesMapEntries);
 
         if (!title || !description || !deadline) {
           return res.status(400).json({ error: 'Title, description and deadline are required' });
         }
 
-        const task = await createTask({ title, description, deadline, status, created_by, userIdList, roleList });
+        const task = await createTask({ title, description, deadline, status, created_by, userIdList, rolesMap });
         res.status(201).json(task);
       } catch (error) {
         console.error(error);

@@ -29,7 +29,8 @@ export default async function handler(req, res) {
 
     case 'PUT':
       try {
-        const { title, description, deadline, status, created_by, userIdList, roleList } = req.body;
+        const { title, description, deadline, status, created_by, userIdList, rolesMap: rolesMapEntries } = req.body;
+        const rolesMap = new Map(rolesMapEntries);
 
         if (!title || !description ||!deadline)
           return res.status(400).json({ error: 'Title, description and deadline are required' });
@@ -41,7 +42,7 @@ export default async function handler(req, res) {
           status,
           created_by,
           userIdList,
-          roleList,
+          rolesMap,
         });
 
         res.status(200).json(updatedTask);
@@ -54,21 +55,23 @@ export default async function handler(req, res) {
 
     case 'PATCH':
       try {
-        const { userIdList, roleList } = req.body;
+        const { userIdList, rolesMap: rolesMapEntries } = req.body;
+        const rolesMap = new Map(rolesMapEntries);
         console.log("api/tasks/id-patch:")
         console.log("userIdList:")
         console.log(userIdList)
-        console.log("roleList:")
-        console.log(roleList)
+        console.log("rolesMap:")
+        console.log(rolesMap)
+        console.log(Object.prototype.toString.call(rolesMap));
 
-        if (!userIdList || !roleList) {
-          return res.status(400).json({ error: 'userIdList and roleList are required' });
+        if (!userIdList || !rolesMap) {
+          return res.status(400).json({ error: "user id's and roles are required" });
         }
 
         // task_assignments tablosuna insert
-        assignUserToTask(id, userIdList, roleList);
+        assignUserToTask(id, userIdList, rolesMap);
 
-        res.status(200).json({ id, userIdList, roleList });
+        res.status(200).json({ id, userIdList, rolesMap });
       } catch (error) {
         console.error(error);
         res.status(500).json({ error: error.message });
