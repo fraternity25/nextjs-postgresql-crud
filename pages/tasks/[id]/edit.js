@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import useTasksForm from "@/hooks/useTasksForm";
+import CreateForm from "@/components/TasksForm/CreateForm";
+import { useRouter } from "next/router";
 import { useSession } from 'next-auth/react';
-import TasksForm from '@/components/TasksForm';
+import { useState, useEffect } from "react";
 
 export default function EditTask() {
+  const router = useRouter();
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { data: session, status } = useSession();
-  const router = useRouter();
 
   const { id, userId } = router.query;
 
@@ -39,7 +40,7 @@ export default function EditTask() {
     }
   };
 
-  const handleSubmit = async (updatedData) => {
+  const onSubmit = async (updatedData) => {
     const body = JSON.stringify({
                     ...updatedData,
                     rolesMap: Array.from(updatedData.rolesMap.entries()) // [[key1,val1],[key2,val2]]
@@ -59,6 +60,9 @@ export default function EditTask() {
 
     return await res.json();
   };
+
+  const form = useTasksForm({ mode: "edit" , tasks: [task], userId:userId, form:"create", onSubmit:onSubmit});
+  const {states: { setUsers } } = form;
 
   if (status === 'loading' || loading) {
     return (
@@ -85,11 +89,16 @@ export default function EditTask() {
   }
 
   return (
-    <TasksForm 
-      mode="edit" 
-      userId={userId}
-      tasks={[task]} 
-      onSubmit={handleSubmit} 
-    />
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-md mx-auto">
+        <div className="bg-white shadow rounded-lg px-6 py-4">
+          <CreateForm
+            mode={"edit"}
+            tasks={[task]}
+            {...form}
+          />
+        </div>
+      </div>
+    </div>
   );
 }
