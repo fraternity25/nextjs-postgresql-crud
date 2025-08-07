@@ -40,12 +40,16 @@ export default function EditTask() {
   };
 
   const handleSubmit = async (updatedData) => {
+    const body = JSON.stringify({
+                    ...updatedData,
+                    rolesMap: Array.from(updatedData.rolesMap.entries()) // [[key1,val1],[key2,val2]]
+                  });
     const res = await fetch(`/api/tasks/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(updatedData),
+      body: body,
     });
 
     if (!res.ok) {
