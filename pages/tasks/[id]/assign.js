@@ -10,10 +10,6 @@ export default function assign() {
 
   const onSubmit = async (formData) => {
     const isExistingTask = !!formData.task_id;
-
-    console.log("formData.roleMap= ");
-    console.log(formData.roleMap);
-    console.log(Object.prototype.toString.call(formData.rolesMap));
     const body = JSON.stringify({
                     ...formData,
                     rolesMap: Array.from(formData.rolesMap.entries()) // [[key1,val1],[key2,val2]]

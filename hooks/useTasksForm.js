@@ -45,15 +45,7 @@ export default function useTasksForm({
     setError("");
 
     try {
-      console.log("onSUbmit = ", onSubmit);
       if (onSubmit) {
-        console.log("onSubmit true");
-        console.log("selectedTaskId = ");
-        console.log(selectedTaskId);
-        console.log("showTasks = ", showTasks);
-        console.log("rolesMap-0:")
-        console.log(rolesMap)
-        console.log(Object.prototype.toString.call(rolesMap));
         await onSubmit({
           ...(showTasks
             ? { task_id: selectedTaskId }
@@ -233,9 +225,9 @@ export default function useTasksForm({
         ? { 
             title, setTitle,
             description, setDescription,
-            deadline, setDeadline,
-            status, setStatus, 
-            selectedTaskId, setSelectedTaskId,
+            setDeadline,
+            setStatus, 
+            setSelectedTaskId,
             showTasks, setShowTasks,
           }
         : isCreateForm && {
@@ -243,7 +235,7 @@ export default function useTasksForm({
             description, setDescription,
           }
         ),
-      selectedUserIdList, setSelectedUserIdList,
+      selectedUserIdList,
       loading, setLoading,
       error, setError
     },
