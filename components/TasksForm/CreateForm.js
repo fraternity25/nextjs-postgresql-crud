@@ -10,7 +10,7 @@ export default function CreateForm({
 {
   const {
     users, 
-    roles, 
+    rolesMap, 
     title,
     description,
     selectedUserIdList,
@@ -110,7 +110,7 @@ export default function CreateForm({
           <select
             disabled={isView}
             id="role"
-            value={roles[selectedUserIdList] || "viewer"}
+            value={rolesMap.get(selectedUserIdList.at(-1)) || "viewer"}
             onChange={handleRoleChange}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
           >

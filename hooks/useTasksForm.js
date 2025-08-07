@@ -12,7 +12,6 @@ export default function useTasksForm({
   const router = useRouter();
   //States
   const [users, setUsers] = useState([]);
-  //const [roles, setRoles] = useState([{}]);
   const [rolesMap, setRolesMap] = useState(new Map());
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
