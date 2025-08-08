@@ -29,6 +29,16 @@ export default function assign() {
     }
   }, [router.isReady, router.query]);
 
+  /*useEffect(() => {
+    task?.assigned_users.forEach((au) => {
+      setRolesMap(prev => {
+        const newMap = new Map(prev);
+        newMap.set(au.user_id, au.role);
+        return newMap;
+      });
+    })
+  }, [task]);*/
+
   const fetchTask = async (id) => {
     try {
       const res = await fetch(`/api/tasks/${id}`);
@@ -70,7 +80,7 @@ export default function assign() {
   };
 
   const form = useTasksForm({ mode: "edit" , tasks: [task], form:"assign", onSubmit:onSubmit});
-  const {states: { setUsers } } = form;
+  const {states: { setUsers, setRolesMap } } = form;
 
   if (status === 'loading' || loading) {
     return (

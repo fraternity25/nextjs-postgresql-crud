@@ -67,6 +67,7 @@ export default function SignupForm() {
         value={formData.name}
         onChange={handleChange}
         placeholder="Name"
+        autoComplete="on"
         className="w-full px-3 py-2 border rounded"
       />
       <input
@@ -74,6 +75,7 @@ export default function SignupForm() {
         value={formData.email}
         onChange={handleChange}
         placeholder="Email"
+        autoComplete="on"
         className="w-full px-3 py-2 border rounded"
       />
       <input
@@ -82,6 +84,7 @@ export default function SignupForm() {
         value={formData.password}
         onChange={handleChange}
         placeholder="Password"
+        autoComplete="new-password"
         className="w-full px-3 py-2 border rounded"
       />
       <input
@@ -90,6 +93,7 @@ export default function SignupForm() {
         value={formData.confirmPassword}
         onChange={handleChange}
         placeholder="Confirm Password"
+        autoComplete="new-password"
         className="w-full px-3 py-2 border rounded"
       />
 

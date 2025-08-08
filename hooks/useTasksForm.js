@@ -78,13 +78,27 @@ export default function useTasksForm({
     );
     
     // Update map if user doesn't exist
-    if (!rolesMap.has(userId)) {
+    const task = tasks.find((task) => task.id === selectedTaskId);
+    console.log("task in handler: ", task);
+    const au = task.assigned_users.find((au) => au.user_id == userId);
+    console.log("au: ", au);
+    if(!au && !rolesMap.has(userId)){
       setRolesMap(prev => {
         const newMap = new Map(prev);
         if (last && newMap.has(last)) {
             newMap.delete(last);
         }
         newMap.set(userId, "viewer"); // Default role
+        return newMap;
+      });
+    }
+    else if (au) {
+      setRolesMap(prev => {
+        const newMap = new Map(prev);
+        if (last && newMap.has(last)) {
+            newMap.delete(last);
+        }
+        newMap.set(userId, au.role); 
         return newMap;
       });
     }
@@ -113,31 +127,28 @@ export default function useTasksForm({
         <div className="space-y-2">
         {tasks.map((task) => (
           task.assigned_users.length > 0 ? (
-            <>
-              <ul key={task.id}>
-                <h2 className="text-sm font-medium text-gray-700">
-                  Assigned users for {task.title}
-                </h2>
-                {task.assigned_users.map((au) => {
-                  return (
-                    <div
-                      key={au.user_id}
-                      className="text-sm text-gray-700 border border-gray-200 rounded px-3 py-2"
-                    >
-                      <div>
-                        <strong>Name:</strong> {au.user_name}
+            <ul key={task.id}>
+              <h2 className="text-sm font-medium text-gray-700">
+                Assigned users for {task.title}
+              </h2>
+              {task.assigned_users.map((au) => {
+                return (
+                  <div
+                    key={au.user_id}
+                    className="w-full text-sm text-gray-700 border border-gray-300 rounded-md shadow-sm mt-1 py-2 px-3"
+                  >
+                    <div className='flex justify-between items-center'>
+                      <div className=''>
+                        {au.user_name} ({au.user_email})
                       </div>
-                      <div>
-                        <strong>Email:</strong> {au.user_email}
-                      </div>
-                      <div>
-                        <strong>Role:</strong> {au.role}
+                      <div className=''>
+                        {au.role}
                       </div>
                     </div>
-                  );
-                })}
-              </ul> 
-            </>
+                  </div>
+                );
+              })}
+            </ul> 
           ) : (
             <h2 key={task.id} className="text-sm font-medium text-gray-700">
               There is no assigned users for {task.title}

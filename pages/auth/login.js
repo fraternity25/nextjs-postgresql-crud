@@ -38,6 +38,7 @@ export default function LoginPage() {
           value={form.email}
           onChange={handleChange}
           placeholder="Email"
+          autoComplete="on"
           className="w-full px-3 py-2 border rounded"
         />
         <input
@@ -46,6 +47,7 @@ export default function LoginPage() {
           value={form.password}
           onChange={handleChange}
           placeholder="Password"
+          autoComplete="on"
           className="w-full px-3 py-2 border rounded"
         />
 
