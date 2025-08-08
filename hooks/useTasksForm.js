@@ -33,11 +33,19 @@ export default function useTasksForm({
     if(mode === "edit" && tasks.length == 1)
     {
       const t = tasks[0];
-      setSelectedTaskId(t?.id);
-      setTitle(t?.title);
-      setDescription(t?.description);
+      if(t){
+        setSelectedTaskId(t.id);
+        setTitle(t.title);
+        setDescription(t.description);
+        const au = t.assigned_users.find((au) => au.user_id == userId);
+        setRolesMap(prev => {
+          const newMap = new Map(prev);
+          newMap.set(userId, au.role); 
+          return newMap;
+        });
+      }
     }
-  }, [form, tasks])
+  }, [form, tasks, userId])
 
   //Handlers
   const handleSubmit = async (e) => {
