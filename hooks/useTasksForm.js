@@ -33,7 +33,7 @@ export default function useTasksForm({
     if(isAssignForm && tasks.length == 1)
     {
       const t = tasks[0];
-      setSelectedTaskId(t.id);
+      setSelectedTaskId(t?.id);
     }
   }, [form, tasks])
 

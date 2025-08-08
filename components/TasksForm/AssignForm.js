@@ -32,9 +32,9 @@ export default function AssignForm({
   const isEdit = mode === "edit";
   const isNew = mode === "new";
 
-  console.log("selectedUserIdList = ", selectedUserIdList);
+  /*console.log("selectedUserIdList = ", selectedUserIdList);
   console.log("rolesMap = ", rolesMap);
-  console.log("tasks = ", tasks);
+  console.log("tasks = ", tasks);*/
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
