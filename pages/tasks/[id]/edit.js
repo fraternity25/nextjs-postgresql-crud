@@ -78,7 +78,7 @@ export default function EditTask() {
   };
 
   const form = useTasksForm({ mode: "edit" , tasks: [task], userId:userId, form:"create", onSubmit:onSubmit});
-  const {states: { setUsers } } = form;
+  const {states: { setUsers, title } } = form;
 
   if (status === 'loading' || loading) {
     return (
@@ -96,10 +96,10 @@ export default function EditTask() {
     );
   }
 
-  if (!task) {
+  if (!task && !title) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Task not found</div>
+        <div className="text-gray-600">Loading Task info..</div>
       </div>
     );
   }

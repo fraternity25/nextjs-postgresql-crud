@@ -79,9 +79,7 @@ export default function useTasksForm({
     
     // Update map if user doesn't exist
     const task = tasks.find((task) => task.id === selectedTaskId);
-    console.log("task in handler: ", task);
     const au = task.assigned_users.find((au) => au.user_id == userId);
-    console.log("au: ", au);
     if(!au && !rolesMap.has(userId)){
       setRolesMap(prev => {
         const newMap = new Map(prev);
