@@ -38,6 +38,42 @@ export default function AssignForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {tasks.length !== 1 ? renderTasks(true, tasks, isView) : 
+        <>
+          <div className="space-y-2">
+            <h2 className="text-sm font-medium text-gray-700">
+              Task info
+            </h2>
+            <div
+              className="text-sm text-gray-700 border border-gray-200 rounded px-3 py-2"
+            >
+              <div>
+                <strong>Title:</strong> {tasks[0].title}
+              </div>
+              <div>
+                <strong>Description:</strong> {tasks[0].description}
+              </div>
+              <div>
+                <strong>Deadline:</strong> 
+                {new Date(tasks[0].deadline)
+                  .toLocaleString('en-US', {
+                    hour12: false,
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })
+                }
+              </div>
+              <div>
+                <strong>Status:</strong> {tasks[0].status}
+              </div>
+            </div>
+          </div>
+        </>
+      }
+      
       {renderAssignedUsers(isNew, tasks)}
       <div>
         <label
@@ -60,7 +96,6 @@ export default function AssignForm({
             </option>
           ))}
         </select>
-        {renderTasks(true, tasks, isView)}
       </div>
 
       {

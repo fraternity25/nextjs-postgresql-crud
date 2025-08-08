@@ -139,7 +139,7 @@ export default function CreateForm({
             disabled={loading}
             className="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm disabled:opacity-50"
           >
-            {loading ? "Saving..." : isEdit ? "Update" : "Assign"}
+            {loading ? "Saving..." : isEdit ? "Update" : "Create"}
           </button>
         )}
       </div>

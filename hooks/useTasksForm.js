@@ -30,10 +30,12 @@ export default function useTasksForm({
   const isCreateForm = form === "create"
 
   useEffect(() => {
-    if(isAssignForm && tasks.length == 1)
+    if(mode === "edit" && tasks.length == 1)
     {
       const t = tasks[0];
       setSelectedTaskId(t?.id);
+      setTitle(t?.title);
+      setDescription(t?.description);
     }
   }, [form, tasks])
 
