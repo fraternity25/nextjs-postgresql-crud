@@ -22,6 +22,7 @@ export default function EditTask() {
   useEffect(() => {
     if (id) {
       fetchTask();
+      fetchUsers();
     }
   }, [id]);
 
@@ -33,6 +34,21 @@ export default function EditTask() {
       }
       const data = await res.json();
       setTask(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("/api/users");
+      if (!response.ok) {
+        throw new Error("Failed to fetch users");
+      }
+      const data = await response.json();
+      setUsers(data);
     } catch (err) {
       setError(err.message);
     } finally {

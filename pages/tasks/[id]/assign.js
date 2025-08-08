@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 
 export default function assign() {
   const router = useRouter();
-  const [task, setTask] = useState([]);
+  const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { data: session, status } = useSession();
@@ -23,13 +23,13 @@ export default function assign() {
       if (id && users) {
         setUsers(JSON.parse(users));
         //setSelectedTaskId(id);
-        fetchTask();
+        fetchTask(id);
       }
       setLoading(false);
     }
   }, [router.isReady, router.query]);
 
-  const fetchTask = async () => {
+  const fetchTask = async (id) => {
     try {
       const res = await fetch(`/api/tasks/${id}`);
       if (!res.ok) {

@@ -34,6 +34,7 @@ export default function AssignForm({
 
   console.log("selectedUserIdList = ", selectedUserIdList);
   console.log("rolesMap = ", rolesMap);
+  console.log("tasks = ", tasks);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
