@@ -83,7 +83,7 @@ export default function EditTask() {
     tasks: task ? [task] : [],
     userId,
     form: "create",
-    onSubmit
+    onSubmit:onSubmit
   });
 
   const { states: { setUsers, title, rolesMap } } = form;
@@ -104,7 +104,7 @@ export default function EditTask() {
     );
   }
 
-  if (!task || !title || rolesMap.size === 0) {
+  if (!task || !title || (userId && rolesMap.size === 0)) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Loading Task info..</div>
@@ -117,7 +117,6 @@ export default function EditTask() {
       <div className="max-w-md mx-auto">
         <div className="bg-white shadow rounded-lg px-6 py-4">
           <CreateForm
-            mode={"edit"}
             tasks={memoTasks}
             {...form}
           />

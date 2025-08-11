@@ -1,7 +1,6 @@
 import useTasksForm from '@/hooks/useTasksForm';
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import AssignForm from './AssignForm';
 import CreateForm from './CreateForm'
 
 export default function TasksForm({
@@ -10,7 +9,7 @@ export default function TasksForm({
   userId = "",
   onSubmit,
 }) {
-  const { states, handlers, renderers }= useTasksForm(mode, tasks, userId, onSubmit);
+  const { states, handlers, renderers, controls }= useTasksForm({mode:mode, tasks:tasks, userId:userId, onSubmit:onSubmit});
 
   const {
     users, setUsers,
@@ -21,7 +20,7 @@ export default function TasksForm({
     setStatus,
     selectedUserIdList, 
     setSelectedTaskId,
-    showTasks, setShowTasks,
+    showTasks, 
     loading, setLoading,
     error, setError
   } = states;
@@ -31,6 +30,7 @@ export default function TasksForm({
     handleUserChange, 
     handleTitleChange, 
     handleDescriptionChange, 
+    handleShowTasksChange,
     handleRoleChange
   } = handlers;
 
@@ -40,12 +40,14 @@ export default function TasksForm({
     renderTasks
   } = renderers;
 
+  const {
+    isView,
+    isEdit,
+    isNew
+   } = controls;
+
   const { data: session } = useSession();
   const isAdmin = session?.user?.roles?.includes("admin");
-
-  const isView = mode === "view";
-  const isEdit = mode === "edit";
-  const isNew = mode === "new";
 
   useEffect(() => {
     if (isNew) {
@@ -103,63 +105,36 @@ export default function TasksForm({
             </div>
           )}
 
-          {isNew && (
-            <div className="flex space-x-3 mb-4">
-              <button
-                  type="button"
-                  onClick={() => setShowTasks(!showTasks)}
-                  className={`px-3 py-1 border rounded bg-indigo-600 text-white`}
-              >
-                {!showTasks ? "Assign Existing Task" : "Assign New Task"}
-              </button>
-            </div>
-          )}
-
-          {(!showTasks || tasks?.length == 0) ? (
-            <CreateForm 
-              mode={mode} 
-              tasks={tasks}
-              states={{
-                users, 
-                rolesMap, 
-                title,
-                description,
-                selectedUserIdList,
-                loading, 
-              }}
-              handlers={{
-                handleSubmit,
-                handleUserChange,
-                handleTitleChange,
-                handleDescriptionChange,
-                handleRoleChange
-              }}
-              renderers={{
-                renderAssignedUsers,
-                renderDeadlineAndStatus
-              }}
-            />
-          ) : showTasks && tasks?.length > 0 && (
-            <AssignForm 
-              mode={mode} 
-              tasks={tasks}
-              states={{
-                users,
-                rolesMap,
-                selectedUserIdList,
-                loading, 
-              }}
-              handlers={{
-                handleSubmit,
-                handleUserChange,
-                handleRoleChange
-              }}
-              renderers={{
-                renderAssignedUsers,
-                renderTasks
-              }}
-            />
-          )}
+          <CreateForm 
+            tasks={tasks}
+            states={{
+              users, 
+              rolesMap, 
+              title,
+              description,
+              selectedUserIdList,
+              showTasks,
+              loading, 
+            }}
+            handlers={{
+              handleSubmit,
+              handleUserChange,
+              handleTitleChange,
+              handleDescriptionChange,
+              handleShowTasksChange,
+              handleRoleChange
+            }}
+            renderers={{
+              renderAssignedUsers,
+              renderDeadlineAndStatus,
+              renderTasks
+            }}
+            controls={{
+              isView,
+              isEdit,
+              isAdmin
+            }}
+          />
         </div>
       </div>
     </div>

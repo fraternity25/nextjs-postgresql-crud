@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router';
 
 export default function CreateForm({ 
-  mode = "edit", 
   tasks,
   states,
   handlers,
-  renderers
+  renderers,
+  controls
 })
 {
   const {
@@ -14,6 +14,7 @@ export default function CreateForm({
     title,
     description,
     selectedUserIdList,
+    showTasks,
     loading, 
   } = states;
 
@@ -22,27 +23,44 @@ export default function CreateForm({
     handleUserChange,
     handleTitleChange,
     handleDescriptionChange,
+    handleShowTasksChange,
     handleRoleChange
   } = handlers;
 
   const {
     renderAssignedUsers,
-    renderDeadlineAndStatus
+    renderDeadlineAndStatus,
+    renderTasks
   } = renderers;
 
-  const router = useRouter();
+  const {
+    isView,
+    isEdit,
+    isNew
+   } = controls;
 
-  const isView = mode === "view";
-  const isEdit = mode === "edit";
-  const isNew = mode === "new";
+  const router = useRouter();
 
   /*console.log("selectedUserIdList = ", selectedUserIdList);
   console.log("rolesMap = ", rolesMap);
   console.log("tasks = ", tasks);*/
+  /*required if assigned*/
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {renderAssignedUsers(isNew, tasks)}
+      {isNew && (
+        <div className="flex space-x-3 mb-4">
+          <button
+              type="button"
+              onClick={handleShowTasksChange}
+              className={`px-3 py-1 border rounded bg-indigo-600 text-white`}
+          >
+            {!showTasks ? "Assign Existing Task" : "Assign New Task"}
+          </button>
+        </div>
+      )}
+
+      {renderAssignedUsers(tasks)}
       <div>
         <label
           htmlFor="user"
@@ -54,6 +72,7 @@ export default function CreateForm({
           id="user"
           value={selectedUserIdList.at(-1)}
           onChange={handleUserChange}
+          required
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
         >
           <option value="">Select user</option>
@@ -63,44 +82,49 @@ export default function CreateForm({
             </option>
           ))}
         </select>
-        {renderDeadlineAndStatus(false, tasks, isView)}
+        {renderDeadlineAndStatus(showTasks, tasks)}
       </div>
 
-      <div>
-        <label
-          htmlFor="title"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Title
-        </label>
-        <input
-          type="text"
-          id="title"
-          value={title}
-          onChange={handleTitleChange}
-          disabled={isView}
-          required
-          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
-        />
-      </div>
+      {showTasks && tasks.length !== 1 ? 
+        renderTasks(showTasks, tasks) :
+        <>
+          <div>
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              value={title}
+              onChange={handleTitleChange}
+              disabled={isView}
+              required
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+            />
+          </div>
 
-      <div>
-        <label
-          htmlFor="description"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Description
-        </label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={handleDescriptionChange}
-          disabled={isView}
-          rows={4}
-          required
-          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
-        />
-      </div>
+          <div>
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Description
+            </label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={handleDescriptionChange}
+              disabled={isView}
+              rows={4}
+              required
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+            />
+          </div>
+        </>
+      }
 
       {
         /*(isNew || isEdit) && isAdmin && */ 

@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 
 export default function useTasksForm({
-  mode = "edit",
+  mode,
   tasks = [],
   userId = "",
   form = "tasks",
@@ -26,16 +26,21 @@ export default function useTasksForm({
   const { data: session } = useSession();
   const isAdmin = session?.user?.roles?.includes("admin");
 
-  const isAssignForm = form === "assign"
   const isCreateForm = form === "create"
 
+  const isView = useMemo(() => mode === "view", [mode]);
+  const isEdit = useMemo(() => mode === "edit", [mode]);
+  const isNew = useMemo(() => mode === "new", [mode]);
+
   useEffect(() => {
-    if (mode === "edit" && tasks.length === 1) {
+    if (isEdit && tasks.length === 1) {
       const t = tasks[0];
       if (t) {
         setSelectedTaskId(prev => prev !== t.id ? t.id : prev);
         setTitle(prev => prev !== t.title ? t.title : prev);
         setDescription(prev => prev !== t.description ? t.description : prev);
+      }
+      if(userId){
         const au = t.assigned_users.find(au => au.user_id == userId);
         setRolesMap(prev => {
           if (prev.get(userId) !== au?.role) {
@@ -47,25 +52,7 @@ export default function useTasksForm({
         });
       }
     }
-  }, [mode, tasks, userId]);
-
-  /*useEffect(() => {
-    if(mode === "edit" && tasks.length == 1)
-    {
-      const t = tasks[0];
-      if(t){
-        setSelectedTaskId(t.id);
-        setTitle(t.title);
-        setDescription(t.description);
-        const au = t.assigned_users.find((au) => au.user_id == userId);
-        setRolesMap(prev => {
-          const newMap = new Map(prev);
-          newMap.set(userId, au.role); 
-          return newMap;
-        });
-      }
-    }
-  }, [mode, tasks, userId])*/
+  }, [isEdit, tasks, userId]);
 
   //Handlers
   const handleSubmit = async (e) => {
@@ -132,6 +119,7 @@ export default function useTasksForm({
 
   const handleTitleChange = (e) => setTitle(e.target.value)
   const handleDescriptionChange = (e) => setDescription(e.target.value)
+  const handleShowTasksChange = () => setShowTasks(!showTasks)
 
   const handleRoleChange = (e) => {
     const newRole = e.target.value;
@@ -145,7 +133,7 @@ export default function useTasksForm({
   };
 
   //Renderers
-  const renderAssignedUsers = (isNew, tasks) =>
+  const renderAssignedUsers = (tasks) =>
   {
     if(!isNew && tasks?.length > 0)  
     {
@@ -186,7 +174,7 @@ export default function useTasksForm({
     }
   }
 
-  const renderDeadlineAndStatus = (showTasks, tasks, isView) =>
+  const renderDeadlineAndStatus = (showTasks, tasks) =>
     (!showTasks || tasks?.length == 0) && (
       <>
         <label
@@ -259,18 +247,18 @@ export default function useTasksForm({
     states: {
       users, setUsers,
       rolesMap, setRolesMap,
-      ...(!isAssignForm && !isCreateForm
+      ...(isCreateForm
         ? { 
+            title, setTitle,
+            description, setDescription,
+          }
+        : {
             title, setTitle,
             description, setDescription,
             setDeadline,
             setStatus, 
             setSelectedTaskId,
             showTasks, setShowTasks,
-          }
-        : isCreateForm && {
-            title, setTitle,
-            description, setDescription,
           }
         ),
       selectedUserIdList,
@@ -280,28 +268,20 @@ export default function useTasksForm({
     handlers: {
       handleSubmit,
       handleUserChange, 
-      ...(!isAssignForm &&
-          { 
-            handleTitleChange, 
-            handleDescriptionChange, 
-          }
-         ),
+      handleTitleChange, 
+      handleDescriptionChange, 
+      handleShowTasksChange,
       handleRoleChange
     },
     renderers: {
       renderAssignedUsers,
-      ...(!isAssignForm && !isCreateForm
-        ? { 
-            renderDeadlineAndStatus,
-            renderTasks
-          }
-        : isCreateForm ? {
-            renderDeadlineAndStatus
-          }
-        : isAssignForm && {
-            renderTasks
-          } 
-        )
+      renderDeadlineAndStatus,
+      renderTasks
+    },
+    controls: {
+      isView,
+      isEdit,
+      isAdmin
     }
   };
 }

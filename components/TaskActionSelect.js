@@ -8,13 +8,7 @@ export default function TaskActionSelect({ task, users = [] }) {
     if (!value) return;
 
     if (value === 'assign') {
-      router.push({
-        pathname: `/tasks/${task.id}/assign`,
-        query: {
-          task: JSON.stringify(task),
-          users: JSON.stringify(users),
-        },
-      });
+      router.push(`/tasks/${task.id}/edit`);
     } else if (value === 'edit-users') {
       router.push({
         pathname: `/tasks/${task.id}/edit`,
