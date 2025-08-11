@@ -30,6 +30,26 @@ export default function useTasksForm({
   const isCreateForm = form === "create"
 
   useEffect(() => {
+    if (mode === "edit" && tasks.length === 1) {
+      const t = tasks[0];
+      if (t) {
+        setSelectedTaskId(prev => prev !== t.id ? t.id : prev);
+        setTitle(prev => prev !== t.title ? t.title : prev);
+        setDescription(prev => prev !== t.description ? t.description : prev);
+        const au = t.assigned_users.find(au => au.user_id == userId);
+        setRolesMap(prev => {
+          if (prev.get(userId) !== au?.role) {
+            const newMap = new Map(prev);
+            newMap.set(userId, au?.role);
+            return newMap;
+          }
+          return prev;
+        });
+      }
+    }
+  }, [mode, tasks, userId]);
+
+  /*useEffect(() => {
     if(mode === "edit" && tasks.length == 1)
     {
       const t = tasks[0];
@@ -45,7 +65,7 @@ export default function useTasksForm({
         });
       }
     }
-  }, [form, tasks, userId])
+  }, [mode, tasks, userId])*/
 
   //Handlers
   const handleSubmit = async (e) => {

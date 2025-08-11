@@ -38,6 +38,29 @@ export default function AssignForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {renderAssignedUsers(isNew, tasks)}
+      <div>
+        <label
+          htmlFor="user"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Assign To
+        </label>
+        <select
+          id="user"
+          value={selectedUserIdList.at(-1)}
+          onChange={handleUserChange}
+          required
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+        >
+          <option value="">Select user</option>
+          {users.map((u) => (
+            <option key={u.id} value={u.id}>
+              {u.name} ({u.email})
+            </option>
+          ))}
+        </select>
+      </div>
       {tasks.length !== 1 ? renderTasks(true, tasks, isView) : 
         <>
           <div className="space-y-2">
@@ -73,30 +96,6 @@ export default function AssignForm({
           </div>
         </>
       }
-
-      {renderAssignedUsers(isNew, tasks)}
-      <div>
-        <label
-          htmlFor="user"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Assign To
-        </label>
-        <select
-          id="user"
-          value={selectedUserIdList.at(-1)}
-          onChange={handleUserChange}
-          required
-          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
-        >
-          <option value="">Select user</option>
-          {users.map((u) => (
-            <option key={u.id} value={u.id}>
-              {u.name} ({u.email})
-            </option>
-          ))}
-        </select>
-      </div>
 
       {
         /*(isNew || isEdit) && isAdmin && */ 

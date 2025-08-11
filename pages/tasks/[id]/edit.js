@@ -2,7 +2,7 @@ import useTasksForm from "@/hooks/useTasksForm";
 import CreateForm from "@/components/TasksForm/CreateForm";
 import { useRouter } from "next/router";
 import { useSession } from 'next-auth/react';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 export default function EditTask() {
   const router = useRouter();
@@ -10,6 +10,7 @@ export default function EditTask() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { data: session, status } = useSession();
+  const memoTasks = useMemo(() => [task], [task]);
 
   const { id, userId } = router.query;
 
@@ -77,8 +78,15 @@ export default function EditTask() {
     return await res.json();
   };
 
-  const form = useTasksForm({ mode: "edit" , tasks: [task], userId:userId, form:"create", onSubmit:onSubmit});
-  const {states: { setUsers, title } } = form;
+  const form = useTasksForm({
+    mode: "edit",
+    tasks: task ? [task] : [],
+    userId,
+    form: "create",
+    onSubmit
+  });
+
+  const { states: { setUsers, title, rolesMap } } = form;
 
   if (status === 'loading' || loading) {
     return (
@@ -96,7 +104,7 @@ export default function EditTask() {
     );
   }
 
-  if (!task && !title) {
+  if (!task || !title || rolesMap.size === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Loading Task info..</div>
@@ -110,7 +118,7 @@ export default function EditTask() {
         <div className="bg-white shadow rounded-lg px-6 py-4">
           <CreateForm
             mode={"edit"}
-            tasks={[task]}
+            tasks={memoTasks}
             {...form}
           />
         </div>

@@ -105,24 +105,13 @@ export default function TasksForm({
 
           {isNew && (
             <div className="flex space-x-3 mb-4">
-            <button
-                type="button"
-                onClick={() => setShowTasks(false)}
-                className={`px-3 py-1 border rounded ${
-                !showTasks ? "bg-indigo-600 text-white" : "bg-white"
-                }`}
-            >
-                Create New Task
-            </button>
-            <button
-                type="button"
-                onClick={() => setShowTasks(true)}
-                className={`px-3 py-1 border rounded ${
-                showTasks ? "bg-indigo-600 text-white" : "bg-white"
-                }`}
-            >
-                Assign Existing Task
-            </button>
+              <button
+                  type="button"
+                  onClick={() => setShowTasks(!showTasks)}
+                  className={`px-3 py-1 border rounded bg-indigo-600 text-white`}
+              >
+                {!showTasks ? "Assign Existing Task" : "Assign New Task"}
+              </button>
             </div>
           )}
 
