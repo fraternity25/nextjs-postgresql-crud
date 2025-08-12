@@ -137,13 +137,13 @@ export default function TaskPage() {
                         Status
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                        Deadline
+                        Created By
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
                         Created At
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                        Created By
+                        Deadline
                       </th>
                       <th className="relative px-6 py-3">
                         <span className="sr-only">Actions</span>
@@ -160,14 +160,7 @@ export default function TaskPage() {
                           {task.status}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {new Date(task.deadline).toLocaleString("en-US", {
-                            hour12: false,
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                          {task.creater_name}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {new Date(task.created_at).toLocaleString("en-US", {
@@ -180,7 +173,14 @@ export default function TaskPage() {
                           })}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {task.creater_name}
+                          {new Date(task.deadline).toLocaleString("en-US", {
+                            hour12: false,
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
                         </td>
                         {/*
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

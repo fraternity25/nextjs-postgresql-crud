@@ -1,6 +1,7 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
+import UserList from '@/components/UserList';
 
 export default function useTasksForm({
   mode,
@@ -142,36 +143,7 @@ export default function useTasksForm({
       const task = tasks.find((task) => task.id == selectedTaskId)
       return (
         <div className="space-y-2">
-        {
-          task.assigned_users.length > 0 ? (
-            <ul key={task.id}>
-              <h2 className="text-sm font-medium text-gray-700">
-                Assigned users for {task.title}
-              </h2>
-              {task.assigned_users.map((au) => {
-                return (
-                  <div
-                    key={au.user_id}
-                    className="w-full text-sm text-gray-700 border border-gray-300 rounded-md shadow-sm mt-1 py-2 px-3"
-                  >
-                    <div className='flex justify-between items-center'>
-                      <div className=''>
-                        {au.user_name} ({au.user_email})
-                      </div>
-                      <div className=''>
-                        {au.role}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </ul> 
-          ) : (
-            <h2 key={task.id} className="text-sm font-medium text-gray-700">
-              There is no assigned users for {task.title}
-            </h2>
-          )
-        }
+          {UserList(task)}
         </div>
       );
     }

@@ -10,12 +10,7 @@ export default function TaskActionSelect({ task, users = [] }) {
     if (value === 'edit') {
       router.push(`/tasks/${task.id}/edit`);
     } else if (value === 'edit-users') {
-      router.push({
-        pathname: `/tasks/${task.id}/users`,
-        query: {
-          task: JSON.stringify(task),
-        },
-      });
+      router.push(`/tasks/${task.id}/users`);
     }
 
     e.target.selectedIndex = 0;

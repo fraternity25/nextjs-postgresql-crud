@@ -2,7 +2,7 @@ import useTasksForm from "@/hooks/useTasksForm";
 import CreateForm from "@/components/TasksForm/CreateForm";
 import { useRouter } from "next/router";
 import { useSession } from 'next-auth/react';
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 
 export default function EditTask() {
   const router = useRouter();
@@ -10,7 +10,6 @@ export default function EditTask() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { data: session, status } = useSession();
-  /* const memoTasks = useMemo(() => [task], [task]); */
 
   const { id, userId } = router.query;
 
