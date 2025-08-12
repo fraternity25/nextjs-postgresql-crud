@@ -20,10 +20,10 @@ export default function EditUser() {
 
   useEffect(() => {
     if (router.isReady) {
-      const { mode, userTasks, user } = router.query;
+      const { id, userTasks, mode} = router.query;
       try {
-        if (user && userTasks && mode) {
-          setUser(JSON.parse(user));
+        if (id && userTasks && mode) {
+          fetchUser();
           setUserTasks(JSON.parse(userTasks));
           setMode(mode); 
         }
@@ -32,11 +32,23 @@ export default function EditUser() {
         console.error("Failed to parse user, tasks or mode:", err);
         setError(err.message);
       } 
-      finally {
-        setLoading(false);
-      }
     }
   }, [router.isReady, router.query]);
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetch(`/api/users/${id}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch user");
+      }
+      const data = await response.json();
+      setUser(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (userData) => {
     const response = await fetch(`/api/users/${router.query.id}`, {

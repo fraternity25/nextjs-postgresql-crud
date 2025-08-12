@@ -14,26 +14,38 @@ export default function UserDetailPage() {
   const { data: session } = useSession();
   const router = useRouter();
   
+  const isAdmin = session?.user?.roles?.includes('admin');
+
   useEffect(() => {
     if (router.isReady) {
-      const { userTasks, user } = router.query;
+      const { id, userTasks } = router.query;
       try {
-        if (user && userTasks) {
-          setUser(JSON.parse(user));
+        if (id && userTasks) {
+          fetchUser();
           setUserTasks(JSON.parse(userTasks));
         }
       } 
       catch (err) {
         console.error("Failed to parse user or tasks:", err);
         setError(err.message);
-      } 
-      finally {
-        setLoading(false);
       }
     }
   }, [router.isReady, router.query]);
 
-  const isAdmin = session?.user?.roles?.includes('admin');
+  const fetchUser = async () => {
+    try {
+      const response = await fetch(`/api/users/${id}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch user");
+      }
+      const data = await response.json();
+      setUser(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (

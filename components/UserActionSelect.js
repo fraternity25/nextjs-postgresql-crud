@@ -15,7 +15,6 @@ export default function UserActionSelect({ user, tasks = [], mode = 'edit' }) {
       router.push({
         pathname: `/users/${user.id}/tasks`,
         query: {
-          user: JSON.stringify(user),
           userTasks: JSON.stringify(userTasks),
         },
       });
@@ -24,7 +23,6 @@ export default function UserActionSelect({ user, tasks = [], mode = 'edit' }) {
         pathname: `/users/${user.id}/edit`,
         query: {
           mode: 'role-only',
-          user: JSON.stringify(user),
           userTasks: JSON.stringify(userTasks),
         },
       });

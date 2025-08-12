@@ -7,14 +7,13 @@ export default function TaskActionSelect({ task, users = [] }) {
     const value = e.target.value;
     if (!value) return;
 
-    if (value === 'assign') {
+    if (value === 'edit') {
       router.push(`/tasks/${task.id}/edit`);
     } else if (value === 'edit-users') {
       router.push({
-        pathname: `/tasks/${task.id}/edit`,
+        pathname: `/tasks/${task.id}/users`,
         query: {
           task: JSON.stringify(task),
-          users: JSON.stringify(users),
         },
       });
     }
@@ -32,7 +31,7 @@ export default function TaskActionSelect({ task, users = [] }) {
       <option value="" disabled hidden>
         Actions
       </option>
-      <option value="assign">Assign</option>
+      <option value="edit">edit</option>
       <option value="edit-users">Edit Users</option>
     </select>
   );

@@ -10,7 +10,7 @@ export default function EditTask() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { data: session, status } = useSession();
-  const memoTasks = useMemo(() => [task], [task]);
+  /* const memoTasks = useMemo(() => [task], [task]); */
 
   const { id, userId } = router.query;
 
@@ -117,7 +117,6 @@ export default function EditTask() {
       <div className="max-w-md mx-auto">
         <div className="bg-white shadow rounded-lg px-6 py-4">
           <CreateForm
-            tasks={memoTasks}
             {...form}
           />
         </div>

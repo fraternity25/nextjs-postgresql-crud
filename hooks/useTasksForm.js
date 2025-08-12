@@ -26,11 +26,11 @@ export default function useTasksForm({
   const { data: session } = useSession();
   const isAdmin = session?.user?.roles?.includes("admin");
 
-  const isCreateForm = form === "create"
+  const isCreateForm = form === "create" 
 
-  const isView = useMemo(() => mode === "view", [mode]);
-  const isEdit = useMemo(() => mode === "edit", [mode]);
-  const isNew = useMemo(() => mode === "new", [mode]);
+  const isView = mode === "view";
+  const isEdit = mode === "edit";
+  const isNew = mode === "new";
 
   useEffect(() => {
     if (isEdit && tasks.length === 1) {
@@ -93,8 +93,10 @@ export default function useTasksForm({
     );
     
     // Update map if user doesn't exist
-    const task = tasks.find((task) => task.id === selectedTaskId);
-    const au = task.assigned_users.find((au) => au.user_id == userId);
+    const task = tasks.find((task) => task.id == selectedTaskId);
+    const au = task?.assigned_users.find((au) => au.user_id == userId);
+    console.log("task = ", task);
+    console.log("au = ",au);
     if(!au && !rolesMap.has(userId)){
       setRolesMap(prev => {
         const newMap = new Map(prev);
@@ -133,13 +135,14 @@ export default function useTasksForm({
   };
 
   //Renderers
-  const renderAssignedUsers = (tasks) =>
+  const renderAssignedUsers = () =>
   {
-    if(!isNew && tasks?.length > 0)  
+    if(showTasks && selectedTaskId)  
     {
+      const task = tasks.find((task) => task.id == selectedTaskId)
       return (
         <div className="space-y-2">
-        {tasks.map((task) => (
+        {
           task.assigned_users.length > 0 ? (
             <ul key={task.id}>
               <h2 className="text-sm font-medium text-gray-700">
@@ -168,13 +171,13 @@ export default function useTasksForm({
               There is no assigned users for {task.title}
             </h2>
           )
-        ))}
+        }
         </div>
       );
     }
   }
 
-  const renderDeadlineAndStatus = (showTasks, tasks) =>
+  const renderDeadlineAndStatus = () =>
     (!showTasks || tasks?.length == 0) && (
       <>
         <label
@@ -214,9 +217,11 @@ export default function useTasksForm({
       </>
     );
 
-  const renderTasks = (showTasks, tasks) =>
-    showTasks &&
-    tasks?.length > 0 && (
+  const renderTasks = () => {
+    console.log("selectedTaskId = ", selectedTaskId);
+    return (
+      showTasks &&
+      tasks?.length > 0 && (
       <>
         <div className="space-y-2 mt-6">
           <label
@@ -241,7 +246,8 @@ export default function useTasksForm({
           </select>
         </div>
       </>
-    );
+    ));
+  }
 
   return {
     states: {
@@ -281,7 +287,7 @@ export default function useTasksForm({
     controls: {
       isView,
       isEdit,
-      isAdmin
+      isNew
     }
   };
 }

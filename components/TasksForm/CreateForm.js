@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 
 export default function CreateForm({ 
-  tasks,
   states,
   handlers,
   renderers,
@@ -41,9 +40,8 @@ export default function CreateForm({
 
   const router = useRouter();
 
-  /*console.log("selectedUserIdList = ", selectedUserIdList);
+  console.log("selectedUserIdList = ", selectedUserIdList);
   console.log("rolesMap = ", rolesMap);
-  console.log("tasks = ", tasks);*/
   /*required if assigned*/
 
   return (
@@ -60,7 +58,7 @@ export default function CreateForm({
         </div>
       )}
 
-      {renderAssignedUsers(tasks)}
+      {renderAssignedUsers()}
       <div>
         <label
           htmlFor="user"
@@ -72,7 +70,7 @@ export default function CreateForm({
           id="user"
           value={selectedUserIdList.at(-1)}
           onChange={handleUserChange}
-          required
+          required={showTasks}
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
         >
           <option value="">Select user</option>
@@ -82,11 +80,11 @@ export default function CreateForm({
             </option>
           ))}
         </select>
-        {renderDeadlineAndStatus(showTasks, tasks)}
+        {renderDeadlineAndStatus()}
       </div>
 
-      {showTasks && tasks.length !== 1 ? 
-        renderTasks(showTasks, tasks) :
+      {showTasks ? 
+        renderTasks() :
         <>
           <div>
             <label

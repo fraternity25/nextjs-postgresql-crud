@@ -9,13 +9,28 @@ export default function UserTasksPage() {
 
   useEffect(() => {
     if (router.isReady) {
-      const { user, userTasks } = router.query;
-      if (user && userTasks) {
-        setUser(JSON.parse(user));
+      const { id, userTasks } = router.query;
+      if (id && userTasks) {
+        fetchUser();
         setUserTasks(JSON.parse(userTasks));
       }
     }
   }, [router.isReady, router.query]);
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetch(`/api/users/${id}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch user");
+      }
+      const data = await response.json();
+      setUser(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (!user) return <p className="p-6">Loading...</p>;
 

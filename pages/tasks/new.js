@@ -9,23 +9,35 @@ export default function AssignTask() {
   const router = useRouter();
 
   useEffect(() => {
-    if (router.isReady) {
-      const { tasks } = router.query;
-      if (tasks) {
-        setTasks(JSON.parse(tasks));
-      }
-    }
-  }, [router.isReady, router.query]);
+    fetchTasks();
+  }, []);
 
   if (!session || !session.user.roles.includes('admin')) {
     router.push('/');
     return null;
   }
 
+  const fetchTasks = async () => {
+    try {
+      const res = await fetch('/api/tasks');
+      if (!res.ok) {
+        throw new Error('Failed to fetch tasks');
+      }
+      const data = await res.json();
+      setTasks(data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   if (tasks.length === 0 || status === 'loading') return <p className="p-6">Loading...</p>;
 
-  const handleSubmit = async (formData) => {
+  const onSubmit = async (formData) => {
     const isExistingTask = !!formData.task_id;
+    const body = JSON.stringify({
+                    ...formData,
+                    rolesMap: Array.from(formData.rolesMap.entries()) // [[key1,val1],[key2,val2]]
+                  });
 
     const response = await fetch(
       isExistingTask ? `/api/tasks/${formData.task_id}` : '/api/tasks',
@@ -34,7 +46,7 @@ export default function AssignTask() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: body,
       }
     );
 
@@ -48,7 +60,7 @@ export default function AssignTask() {
 
   return (
     <TasksForm
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
       tasks={tasks}
       mode='new'
     />

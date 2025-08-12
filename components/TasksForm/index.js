@@ -106,7 +106,6 @@ export default function TasksForm({
           )}
 
           <CreateForm 
-            tasks={tasks}
             states={{
               users, 
               rolesMap, 
@@ -132,7 +131,7 @@ export default function TasksForm({
             controls={{
               isView,
               isEdit,
-              isAdmin
+              isNew
             }}
           />
         </div>
