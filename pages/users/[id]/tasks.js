@@ -7,15 +7,14 @@ export default function UserTasksPage() {
   const [user, setUser] = useState(null);
   const [userTasks, setUserTasks] = useState([]);
 
+  const { id, userTasks:tasksQuery } = router.query;
+
   useEffect(() => {
-    if (router.isReady) {
-      const { id, userTasks } = router.query;
-      if (id && userTasks) {
-        fetchUser();
-        setUserTasks(JSON.parse(userTasks));
-      }
+    if (id && tasksQuery) {
+      fetchUser();
+      setUserTasks(JSON.parse(tasksQuery));
     }
-  }, [router.isReady, router.query]);
+  }, [id, tasksQuery]);
 
   const fetchUser = async () => {
     try {
@@ -27,8 +26,6 @@ export default function UserTasksPage() {
       setUser(data);
     } catch (err) {
       setError(err.message);
-    } finally {
-      setLoading(false);
     }
   };
 

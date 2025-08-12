@@ -16,21 +16,20 @@ export default function UserDetailPage() {
   
   const isAdmin = session?.user?.roles?.includes('admin');
 
+  const { id, userTasks:tasksQuery } = router.query;
+
   useEffect(() => {
-    if (router.isReady) {
-      const { id, userTasks } = router.query;
-      try {
-        if (id && userTasks) {
-          fetchUser();
-          setUserTasks(JSON.parse(userTasks));
-        }
-      } 
-      catch (err) {
-        console.error("Failed to parse user or tasks:", err);
-        setError(err.message);
+    try {
+      if (id && tasksQuery) {
+        fetchUser();
+        setUserTasks(JSON.parse(tasksQuery));
       }
-    }
-  }, [router.isReady, router.query]);
+    } 
+    catch (err) {
+      console.error("Failed to parse user, tasks or mode:", err);
+      setError(err.message);
+    } 
+  }, [id, tasksQuery]);
 
   const fetchUser = async () => {
     try {

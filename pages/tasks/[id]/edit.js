@@ -86,7 +86,7 @@ export default function EditTask() {
     onSubmit:onSubmit
   });
 
-  const { states: { setUsers, title, rolesMap } } = form;
+  const { states: { setUsers, title, rolesMap }, controls: {isView, isEdit} } = form;
 
   if (status === 'loading' || loading) {
     return (
@@ -116,6 +116,9 @@ export default function EditTask() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-md mx-auto">
         <div className="bg-white shadow rounded-lg px-6 py-4">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            {isView ? "View Task" : isEdit ? "Edit Task" : "Assign Task"}
+          </h1>
           <CreateForm
             {...form}
           />

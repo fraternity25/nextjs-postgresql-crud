@@ -31,7 +31,7 @@ export default function TaskActionSelect({ task, users = [] }) {
       <option value="" disabled hidden>
         Actions
       </option>
-      <option value="edit">edit</option>
+      <option value="edit">Edit</option>
       <option value="edit-users">Edit Users</option>
     </select>
   );

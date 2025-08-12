@@ -137,7 +137,7 @@ export default function useTasksForm({
   //Renderers
   const renderAssignedUsers = () =>
   {
-    if(showTasks && selectedTaskId)  
+    if((showTasks || isEdit) && selectedTaskId)  
     {
       const task = tasks.find((task) => task.id == selectedTaskId)
       return (
@@ -211,7 +211,7 @@ export default function useTasksForm({
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
         >
           <option value="pending">Pending</option>
-          <option value="in_progress">In Progress</option>
+          <option value="in progress">In Progress</option>
           <option value="completed">Completed</option>
         </select>
       </>

@@ -18,22 +18,21 @@ export default function EditUser() {
     }
   }, [status, session]);
 
+  const { id, userTasks:tasksQuery, mode:modeQuery} = router.query;
+
   useEffect(() => {
-    if (router.isReady) {
-      const { id, userTasks, mode} = router.query;
-      try {
-        if (id && userTasks && mode) {
-          fetchUser();
-          setUserTasks(JSON.parse(userTasks));
-          setMode(mode); 
-        }
-      } 
-      catch (err) {
-        console.error("Failed to parse user, tasks or mode:", err);
-        setError(err.message);
-      } 
-    }
-  }, [router.isReady, router.query]);
+    try {
+      if (id && tasksQuery && modeQuery) {
+        fetchUser();
+        setUserTasks(JSON.parse(tasksQuery));
+        setMode(modeQuery); 
+      }
+    } 
+    catch (err) {
+      console.error("Failed to parse user, tasks or mode:", err);
+      setError(err.message);
+    } 
+  }, [id, tasksQuery, modeQuery]);
 
   const fetchUser = async () => {
     try {

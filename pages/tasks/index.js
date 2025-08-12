@@ -202,7 +202,9 @@ export default function TaskPage() {
                                 setSelectedTaskId(task.id);
                                 setShowConfirmModal(true);
                               }}
-                              className="text-red-600 hover:text-red-900 ml-4"
+                              className="inline-flex items-center ml-4 px-4 py-2 border border-transparent 
+                              rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 
+                              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                             >
                               Delete
                             </button>

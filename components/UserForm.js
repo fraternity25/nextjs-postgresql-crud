@@ -146,7 +146,7 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
             {editRole || isEdit ? 'Edit User' : isView ? 'User Details' : 'Sign Up'}
           </h1>
           
-          {isAdmin && (
+          {/*isAdmin && (
             <div className="flex justify-end space-x-3 mb-2">
               {editRole || isEdit ? (
                 <button
@@ -192,7 +192,7 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
                 />
               )}
             </div>
-          )}
+          )*/}
         </div>
 
         {error && (
