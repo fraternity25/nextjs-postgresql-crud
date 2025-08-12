@@ -140,7 +140,7 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
   
   return (
     <div className="max-w-md mx-auto mt-6">
-      <div className="bg-white shadow rounded-lg px-6 py-2">
+      <div className="bg-white shadow rounded-lg px-3 py-2">
         <div className="flex items-center justify-between mb-2">
           <h1 className="text-2xl font-bold text-center text-gray-900 mb-2">
             {editRole || isEdit ? 'Edit User' : isView ? 'User Details' : 'Sign Up'}
