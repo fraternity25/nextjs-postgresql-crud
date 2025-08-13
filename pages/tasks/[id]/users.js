@@ -60,7 +60,7 @@ export default function TaskUsersPage() {
 
   return (
     <div className="max-w-lg mx-auto p-6">
-      {UserList(task)}
+      <UserList task={task} mode="edit" rolesMap={null} />
     </div>
   );
 }

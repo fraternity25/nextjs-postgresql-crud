@@ -143,7 +143,7 @@ export default function useTasksForm({
       const task = tasks.find((task) => task.id == selectedTaskId)
       return (
         <div className="space-y-2">
-          {UserList(task)}
+          <UserList task={task} mode="view" rolesMap={rolesMap} />
         </div>
       );
     }
