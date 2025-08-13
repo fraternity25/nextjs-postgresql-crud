@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-export default function TaskActionSelect({ task, users = [] }) {
+export default function TaskActionSelect({ taskId }) {
   const router = useRouter();
 
   const handleAction = (e) => {
@@ -8,9 +8,9 @@ export default function TaskActionSelect({ task, users = [] }) {
     if (!value) return;
 
     if (value === 'edit') {
-      router.push(`/tasks/${task.id}/edit`);
+      router.push(`/tasks/${taskId}/edit`);
     } else if (value === 'edit-users') {
-      router.push(`/tasks/${task.id}/users`);
+      router.push(`/tasks/${taskId}/users`);
     }
 
     e.target.selectedIndex = 0;
@@ -18,7 +18,7 @@ export default function TaskActionSelect({ task, users = [] }) {
 
   return (
     <select
-      id={`TaskActionSelect${task.id}`}
+      id={`TaskActionSelect${taskId}`}
       onChange={handleAction}
       defaultValue=""
       className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
