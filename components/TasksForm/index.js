@@ -4,12 +4,11 @@ import { useSession } from 'next-auth/react';
 import CreateForm from './CreateForm'
 
 export default function TasksForm({
-  mode = "new",
   tasks = [],
   userId = "",
   onSubmit,
 }) {
-  const { states, handlers, renderers, controls }= useTasksForm({mode:mode, tasks:tasks, userId:userId, onSubmit:onSubmit});
+  const { states, handlers, renderers, controls }= useTasksForm({mode:"new", tasks:tasks, userId:userId, onSubmit:onSubmit});
 
   const {
     users, setUsers,

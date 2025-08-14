@@ -1,9 +1,9 @@
 import TasksLayout from '@/components/TasksLayout';
 import TasksContext from '@/contexts/TasksContext';
+import TasksForm from '@/components/TasksForm';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEffect, useContext } from 'react';
-import TasksForm from '@/components/TasksForm';
 
 function NewTaskContent() {
   const { tasks } = useContext(TasksContext); 
@@ -48,7 +48,6 @@ function NewTaskContent() {
     <TasksForm
       onSubmit={onSubmit}
       tasks={tasks}
-      mode='new'
     />
   );
 }

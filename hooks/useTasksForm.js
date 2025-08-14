@@ -40,6 +40,8 @@ export default function useTasksForm({
         setSelectedTaskId(prev => prev !== t.id ? t.id : prev);
         setTitle(prev => prev !== t.title ? t.title : prev);
         setDescription(prev => prev !== t.description ? t.description : prev);
+        setStatus(prev => prev !== t.status ? (t.status || "pending") : prev);
+        setDeadline(prev => prev !== (t.deadline?.split("T")[0] || new Date().toISOString().split("T")[0]) ? (t.deadline?.split("T")[0] || new Date().toISOString().split("T")[0]) : prev);
       }
       if(userId){
         const au = t.assigned_users.find(au => au.user_id == userId);
