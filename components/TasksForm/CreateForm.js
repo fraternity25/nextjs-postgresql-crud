@@ -9,7 +9,8 @@ export default function CreateForm({
   controls
 })
 {
-  const { users, error, loading } = useContext(UsersContext); 
+  const router = useRouter();
+  const { users, error, setError, loading, setLoading } = useContext(UsersContext); 
   const {
     rolesMap, 
     title,
@@ -37,9 +38,21 @@ export default function CreateForm({
     isView,
     isEdit,
     isNew
-   } = controls;
+  } = controls;
 
-  const router = useRouter();
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      handleSubmit(e);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   console.log("selectedUserIdList = ", selectedUserIdList);
   console.log("rolesMap = ", rolesMap);
@@ -52,7 +65,7 @@ export default function CreateForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={onSubmit} className="space-y-4">
       {isNew && (
         <div className="flex space-x-3 mb-4">
           <button

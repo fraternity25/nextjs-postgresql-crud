@@ -2,6 +2,7 @@ import useTasksForm from '@/hooks/useTasksForm';
 import UsersLayout from '@/components/UsersLayout';
 import CreateForm from './CreateForm'
 import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 
 export default function TasksForm({
   tasks = [],
@@ -26,7 +27,7 @@ export default function TasksForm({
         <div className="max-w-md mx-auto">
           <div className="bg-white shadow rounded-lg px-6 py-4">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">
-              {isView ? "View Task" : isEdit ? "Edit Task" : "Assign Task"}
+              Assign Task
             </h1>
             <CreateForm 
               states={states}

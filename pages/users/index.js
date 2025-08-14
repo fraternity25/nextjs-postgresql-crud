@@ -1,16 +1,19 @@
-import { useSession, signOut } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import UsersLayout from "@/components/UsersLayout";
+import TasksLayout from "@/components/TasksLayout";
+import UsersContext from "@/contexts/UsersContext";
+import TasksContext from "@/contexts/TasksContext";
 import UserActionSelect from "@/components/UserActionSelect";
 import ConfirmModal from "@/components/ConfirmModal";
 import Toast from "@/components/Toast";
+import { useState, useEffect, useContext } from "react";
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
-export default function UsersPage() {
+function UsersPageContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [users, setUsers] = useState([]);
-  const [tasks, setTasks] = useState([]);
-  const [error, setError] = useState(null);
+  const { users, setUsers, error, setError } = useContext(UsersContext); 
+  const { tasks } = useContext(TasksContext); 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [toastMessages, setToastMessages] = useState([]);
@@ -22,37 +25,8 @@ export default function UsersPage() {
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/auth");
-    } else if (status === "authenticated") {
-      fetchUsers();
-      fetchTasks();
-    }
+    } 
   }, [status]);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch("/api/users");
-      if (!response.ok) {
-        throw new Error("Failed to fetch users");
-      }
-      const data = await response.json();
-      setUsers(data);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const fetchTasks = async () => {
-    try {
-      const response = await fetch("/api/tasks");
-      if (!response.ok) {
-        throw new Error("Failed to fetch tasks");
-      }
-      const data = await response.json();
-      setTasks(data);
-    } catch (err) {
-      console.error("Task fetch error:", err);
-    }
-  };
 
   const deleteUser = async (id) => {
     try {
@@ -253,5 +227,15 @@ export default function UsersPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function UsersPage() {
+  return (
+    <UsersLayout>
+      <TasksLayout>
+        <UsersPageContent />
+      </TasksLayout>
+    </UsersLayout>
   );
 }

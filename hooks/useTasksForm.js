@@ -21,6 +21,7 @@ export default function useTasksForm({
   const [selectedTaskId, setSelectedTaskId] = useState('');
   const [showTasks, setShowTasks] = useState(form !== "create");
 
+
   const { data: session } = useSession();
   const isAdmin = session?.user?.roles?.includes("admin");
 
@@ -33,12 +34,13 @@ export default function useTasksForm({
   useEffect(() => {
     if (isEdit && tasks.length === 1) {
       const t = tasks[0];
+      const now = new Date();
       if (t) {
         setSelectedTaskId(prev => prev !== t.id ? t.id : prev);
         setTitle(prev => prev !== t.title ? t.title : prev);
         setDescription(prev => prev !== t.description ? t.description : prev);
         setStatus(prev => prev !== t.status ? t.status : prev);
-        setDeadline(prev => prev !== t.deadline?.split("T")[0] ? t.deadline?.split("T")[0] : prev);
+        setDeadline(prev => prev !== t.deadline?.split("T")[0] && now < new Date(t.deadline) ? t.deadline?.split("T")[0] : prev);
       }
       if(userId){
         const au = t.assigned_users.find(au => au.user_id == userId);
@@ -57,31 +59,22 @@ export default function useTasksForm({
   //Handlers
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      if (onSubmit) {
-        await onSubmit({
-          ...(showTasks
-            ? { task_id: selectedTaskId }
-            : {
-                title,
-                description,
-                deadline,
-                status,
-              }),
-          userIdList: selectedUserIdList,
-          rolesMap: rolesMap,
-          created_by: session?.user?.id,
-        });
-      }
-      router.push("/tasks");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    if (onSubmit) {
+      await onSubmit({
+        ...(showTasks
+          ? { task_id: selectedTaskId }
+          : {
+              title,
+              description,
+              deadline,
+              status,
+            }),
+        userIdList: selectedUserIdList,
+        rolesMap: rolesMap,
+        created_by: session?.user?.id,
+      });
     }
+    router.push("/tasks");
   };
 
   const handleUserChange = (e) => {
@@ -142,7 +135,7 @@ export default function useTasksForm({
       const task = tasks.find((task) => task.id == selectedTaskId)
       return (
         <div className="space-y-2">
-          <UserList task={task} mode="view" rolesMap={rolesMap} />
+          <UserList task={task} mode="view" />
         </div>
       );
     }

@@ -6,6 +6,7 @@ import UserList from "@/components/UserList";
 export default function TaskUsersPage() {
   const router = useRouter();
   const [task, setTask] = useState(null);
+  const [rolesMap, setRolesMap] = useState(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { data: session, status } = useSession();
@@ -17,6 +18,16 @@ export default function TaskUsersPage() {
       fetchTask();
     }
   }, [id]);
+
+  useEffect(() => {
+    if(task){
+      const map = new Map();
+      task.assigned_users.forEach(u => {
+        map.set(u.user_id, u.role);
+      });
+      setRolesMap(map);
+    }
+  }, [task]);
 
   const fetchTask = async () => {
     try {
@@ -49,7 +60,7 @@ export default function TaskUsersPage() {
     );
   }
 
-  if (!task) {
+  if (!task || rolesMap.size === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Loading Task info..</div>
@@ -60,7 +71,7 @@ export default function TaskUsersPage() {
 
   return (
     <div className="max-w-lg mx-auto p-6">
-      <UserList task={task} mode="edit" rolesMap={null} />
+      <UserList task={task} mode="edit" rolesMap={rolesMap} />
     </div>
   );
 }

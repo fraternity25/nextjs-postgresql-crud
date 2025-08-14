@@ -3,24 +3,12 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { userIcons } from '@/components/icons';
 
-export default function UserList({ task, mode, rolesMap: externalRolesMap }) {
+export default function UserList({ task, mode, rolesMap }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const [isRoleChange, setIsRoleChange] = useState(false);
   const [selectedUserIdList, setSelectedUserIdList] = useState([]);
-  const [rolesMap, setRolesMap] = useState(externalRolesMap || {});
-  const [roleChanges, setRoleChanges] = useState({});
-
-  // Initialize rolesMap in edit mode if not provided
-  useEffect(() => {
-    if (mode === 'edit') {
-      const initialMap = {};
-      task.assigned_users.forEach(u => {
-        initialMap[u.user_id] = u.role;
-      });
-      setRolesMap(initialMap);
-    }
-  }, [mode, task]);
+  const [changedRolesMap, setChangedRolesMap] = useState(new Map());
 
   const toggleUserSelection = (id) => {
     setSelectedUserIdList(prev =>
@@ -29,14 +17,15 @@ export default function UserList({ task, mode, rolesMap: externalRolesMap }) {
   };
 
   const toggleRoleChange = (id, newRole) => {
-    setRoleChanges(prev => {
-      const originalRole = rolesMap[id];
-      const updated = { ...prev, [id]: newRole };
+    setChangedRolesMap(prev => {
+      const newMap = new Map(prev);
+      const originalRole = rolesMap.get(id);
 
-      if (newRole === originalRole) {
-        delete updated[id];
+      if (newRole !== originalRole) {
+        newMap.set(id, newRole);
       }
-      return updated;
+
+      return newMap;
     });
   };
 
@@ -111,7 +100,7 @@ export default function UserList({ task, mode, rolesMap: externalRolesMap }) {
                 {isRoleChange ? (
                   <select
                     id={au.user_id}
-                    value={roleChanges[au.user_id] ?? rolesMap[au.user_id]}
+                    value={changedRolesMap.get(au.user_id) ?? rolesMap.get(au.user_id)}
                     onChange={(e) => toggleRoleChange(au.user_id, e.target.value)}
                   >
                     <option value="viewer">Viewer</option>
@@ -125,8 +114,8 @@ export default function UserList({ task, mode, rolesMap: externalRolesMap }) {
             </li>
           ))}
         </ol>
-      
-        {/* is buttons */}
+
+        {/* Action buttons */}
         {isDelete && (
           <button
             className={`mt-4 px-4 py-2 rounded ${
@@ -142,9 +131,9 @@ export default function UserList({ task, mode, rolesMap: externalRolesMap }) {
         {isRoleChange && (
           <button
             className={`mt-4 px-4 py-2 rounded ${
-              Object.keys(roleChanges).length > 0 ? 'bg-purple-500' : 'bg-purple-300'
+              changedRolesMap.size > 0 ? 'bg-purple-500' : 'bg-purple-300'
             } text-white`}
-            disabled={Object.keys(roleChanges).length === 0}
+            disabled={changedRolesMap.size === 0}
             onClick={() => {/* call role update here */}}
           >
             Update
