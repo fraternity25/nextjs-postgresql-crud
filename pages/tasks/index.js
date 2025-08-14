@@ -1,17 +1,17 @@
-import { useSession, signOut } from 'next-auth/react';
-import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import TasksLayout from '@/components/TasksLayout';
+import TasksContext from '@/contexts/TasksContext';
 import TaskActionSelect from '@/components/TaskActionSelect';
 import ConfirmModal from '@/components/ConfirmModal';
 import Toast from '@/components/Toast';
+import Link from 'next/link';
+import { useState, useEffect, useContext } from 'react';
+import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
-export default function TaskPage() {
+function TasksPageContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [tasks, setTasks] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [error, setError] = useState(null);
+  const { tasks, setTasks, error, setError } = useContext(TasksContext); 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [toastMessages, setToastMessages] = useState([]);
@@ -24,37 +24,7 @@ export default function TaskPage() {
     if (status === 'unauthenticated') {
       router.push('/auth');
     } 
-    else if (status === 'authenticated') {
-      fetchTasks();
-      fetchUsers();
-    }
   }, [status]);
-
-  const fetchTasks = async () => {
-    try {
-      const res = await fetch('/api/tasks');
-      if (!res.ok) {
-        throw new Error('Failed to fetch tasks');
-      }
-      const data = await res.json();
-      setTasks(data);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const fetchUsers = async () => {
-    try {
-      const res = await fetch('/api/users');
-      if (!res.ok) {
-        throw new Error('Failed to fetch users');
-      }
-      const data = await res.json();
-      setUsers(data);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
 
   const deleteTask = async (id) => {
     try {
@@ -242,5 +212,13 @@ export default function TaskPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function TasksPage() {
+  return (
+    <TasksLayout>
+      <TasksPageContent />
+    </TasksLayout>
   );
 }

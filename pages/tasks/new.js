@@ -1,34 +1,20 @@
+import TasksLayout from '@/components/TasksLayout';
+import TasksContext from '@/contexts/TasksContext';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import TasksForm from '@/components/TasksForm';
 
-export default function AssignTask() {
-  const [tasks, setTasks] = useState([]);
+function NewTaskContent() {
+  const { tasks } = useContext(TasksContext); 
   const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    fetchTasks();
-  }, []);
-
-  if (!session || !session.user.roles.includes('admin')) {
-    router.push('/');
-    return null;
-  }
-
-  const fetchTasks = async () => {
-    try {
-      const res = await fetch('/api/tasks');
-      if (!res.ok) {
-        throw new Error('Failed to fetch tasks');
-      }
-      const data = await res.json();
-      setTasks(data);
-    } catch (err) {
-      setError(err.message);
+    if (status !== 'loading' && (!session || !session.user.roles.includes('admin'))) {
+      router.push('/');
     }
-  };
+  }, [status, session]);
 
   if (tasks.length === 0 || status === 'loading') return <p className="p-6">Loading...</p>;
 
@@ -64,5 +50,13 @@ export default function AssignTask() {
       tasks={tasks}
       mode='new'
     />
+  );
+}
+
+export default function NewTask() {
+  return (
+    <TasksLayout>
+      <NewTaskContent />
+    </TasksLayout>
   );
 }
