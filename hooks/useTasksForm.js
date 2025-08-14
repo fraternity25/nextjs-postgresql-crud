@@ -12,7 +12,6 @@ export default function useTasksForm({
 }) {
   const router = useRouter();
   //States
-  const [users, setUsers] = useState([]);
   const [rolesMap, setRolesMap] = useState(new Map());
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -21,8 +20,6 @@ export default function useTasksForm({
   const [selectedUserIdList, setSelectedUserIdList] = useState(userId ? [userId] : []);
   const [selectedTaskId, setSelectedTaskId] = useState('');
   const [showTasks, setShowTasks] = useState(form !== "create");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const { data: session } = useSession();
   const isAdmin = session?.user?.roles?.includes("admin");
@@ -40,8 +37,8 @@ export default function useTasksForm({
         setSelectedTaskId(prev => prev !== t.id ? t.id : prev);
         setTitle(prev => prev !== t.title ? t.title : prev);
         setDescription(prev => prev !== t.description ? t.description : prev);
-        setStatus(prev => prev !== t.status ? (t.status || "pending") : prev);
-        setDeadline(prev => prev !== (t.deadline?.split("T")[0] || new Date().toISOString().split("T")[0]) ? (t.deadline?.split("T")[0] || new Date().toISOString().split("T")[0]) : prev);
+        setStatus(prev => prev !== t.status ? t.status : prev);
+        setDeadline(prev => prev !== t.deadline?.split("T")[0] ? t.deadline?.split("T")[0] : prev);
       }
       if(userId){
         const au = t.assigned_users.find(au => au.user_id == userId);
@@ -225,7 +222,6 @@ export default function useTasksForm({
 
   return {
     states: {
-      users, setUsers,
       rolesMap, setRolesMap,
       ...(isCreateForm
         ? { 
@@ -242,8 +238,6 @@ export default function useTasksForm({
           }
         ),
       selectedUserIdList,
-      loading, setLoading,
-      error, setError
     },
     handlers: {
       handleSubmit,

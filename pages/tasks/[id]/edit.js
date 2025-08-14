@@ -1,4 +1,5 @@
 import useTasksForm from "@/hooks/useTasksForm";
+import UsersLayout from '@/components/UsersLayout';
 import CreateForm from "@/components/TasksForm/CreateForm";
 import { useRouter } from "next/router";
 import { useSession } from 'next-auth/react';
@@ -22,7 +23,6 @@ export default function EditTask() {
   useEffect(() => {
     if (id) {
       fetchTask();
-      fetchUsers();
     }
   }, [id]);
 
@@ -34,21 +34,6 @@ export default function EditTask() {
       }
       const data = await res.json();
       setTask(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch("/api/users");
-      if (!response.ok) {
-        throw new Error("Failed to fetch users");
-      }
-      const data = await response.json();
-      setUsers(data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -85,7 +70,7 @@ export default function EditTask() {
     onSubmit:onSubmit
   });
 
-  const { states: { setUsers, title, rolesMap }, controls: {isView, isEdit} } = form;
+  const { states: { title, rolesMap }, controls: {isView, isEdit} } = form;
 
   if (status === 'loading' || loading) {
     return (
@@ -112,17 +97,19 @@ export default function EditTask() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-md mx-auto">
-        <div className="bg-white shadow rounded-lg px-6 py-4">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            {isView ? "View Task" : isEdit ? "Edit Task" : "Assign Task"}
-          </h1>
-          <CreateForm
-            {...form}
-          />
+    <UsersLayout>
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-md mx-auto">
+          <div className="bg-white shadow rounded-lg px-6 py-4">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              {isView ? "View Task" : isEdit ? "Edit Task" : "Assign Task"}
+            </h1>
+            <CreateForm
+              {...form}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </UsersLayout>
   );
 }

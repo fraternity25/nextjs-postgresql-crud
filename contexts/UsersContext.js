@@ -5,6 +5,7 @@ const UsersContext = createContext();
 export function UsersProvider({ children }) {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     fetchUsers();
@@ -20,10 +21,18 @@ export function UsersProvider({ children }) {
       setUsers(data);
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const value = { users, setUsers, error, setError, fetchUsers };
+  const value = { 
+    users, setUsers, 
+    error, setError, 
+    loading, setLoading,
+    fetchUsers 
+  };
+
   return (
     <UsersContext.Provider value={value}>
       {children}

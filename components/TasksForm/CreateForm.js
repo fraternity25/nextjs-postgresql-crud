@@ -1,4 +1,6 @@
+import UsersContext from '@/contexts/UsersContext';
 import { useRouter } from 'next/router';
+import { useContext } from 'react';
 
 export default function CreateForm({ 
   states,
@@ -7,14 +9,13 @@ export default function CreateForm({
   controls
 })
 {
+  const { users, error, loading } = useContext(UsersContext); 
   const {
-    users, 
     rolesMap, 
     title,
     description,
     selectedUserIdList,
     showTasks,
-    loading, 
   } = states;
 
   const {
@@ -43,6 +44,12 @@ export default function CreateForm({
   console.log("selectedUserIdList = ", selectedUserIdList);
   console.log("rolesMap = ", rolesMap);
   /*required if assigned*/
+
+  if(error) {
+    <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
+      <div className="text-sm text-red-600">{error}</div>
+    </div>
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
