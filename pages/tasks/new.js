@@ -16,7 +16,7 @@ function NewTaskContent() {
     }
   }, [status, session]);
 
-  if (tasks.length === 0 || status === 'loading') return <p className="p-6">Loading...</p>;
+  if (status === 'loading') return <p className="p-6">Loading...</p>;
 
   const onSubmit = async (formData) => {
     const isExistingTask = !!formData.task_id;

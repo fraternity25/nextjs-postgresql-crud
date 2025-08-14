@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { userIcons } from '@/components/icons';
+import { useState  } from 'react';
 
 export default function UserList({ task, mode, rolesMap }) {
   const [menuOpen, setMenuOpen] = useState(false);
