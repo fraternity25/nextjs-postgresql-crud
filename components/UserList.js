@@ -114,31 +114,33 @@ export default function UserList({ task, mode, rolesMap }) {
             </li>
           ))}
         </ol>
+        
+        <div className="flex justify-end">
+          {/* Action buttons */}
+          {isDelete && (
+            <button
+              className={`mt-4 px-4 py-2 rounded ${
+                selectedUserIdList.length > 0 ? 'bg-red-500' : 'bg-red-300'
+              } text-white`}
+              disabled={selectedUserIdList.length === 0}
+              onClick={() => {/* call deleteAssignedUsers here */}}
+            >
+              Delete
+            </button>
+          )}
 
-        {/* Action buttons */}
-        {isDelete && (
-          <button
-            className={`mt-4 px-4 py-2 rounded ${
-              selectedUserIdList.length > 0 ? 'bg-red-500' : 'bg-red-300'
-            } text-white`}
-            disabled={selectedUserIdList.length === 0}
-            onClick={() => {/* call deleteAssignedUsers here */}}
-          >
-            Delete
-          </button>
-        )}
-
-        {isRoleChange && (
-          <button
-            className={`mt-4 px-4 py-2 rounded ${
-              changedRolesMap.size > 0 ? 'bg-purple-500' : 'bg-purple-300'
-            } text-white`}
-            disabled={changedRolesMap.size === 0}
-            onClick={() => {/* call role update here */}}
-          >
-            Update
-          </button>
-        )}
+          {isRoleChange && (
+            <button
+              className={`mt-4 px-4 py-2 rounded ${
+                changedRolesMap.size > 0 ? 'bg-purple-500' : 'bg-purple-300'
+              } text-white`}
+              disabled={changedRolesMap.size === 0}
+              onClick={() => {/* call role update here */}}
+            >
+              Update
+            </button>
+          )}
+        </div>
       </>
     ) : (
       <h2 key={task.id} className="text-sm font-medium text-gray-700">
