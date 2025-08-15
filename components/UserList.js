@@ -59,15 +59,20 @@ export default function UserList({ task, mode, rolesMap }) {
                 onClick={() => setMenuOpen(!menuOpen)}
               />
               {menuOpen && (
-                <div className="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 text-sm z-10">
+                <div 
+                  className="absolute top-2 left-4 rounded-md 
+                  border border-transparent bg-indigo-600 p-2 
+                  text-sm z-10 font-medium text-white shadow-lg hover:bg-indigo-700 
+                  focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
                   <div
-                    className="cursor-pointer hover:bg-gray-100 p-1"
+                    className="cursor-pointer hover:bg-blue-100 p-1"
                     onClick={() => { setIsDelete(true); setIsRoleChange(false); setMenuOpen(false); }}
                   >
                     Delete
                   </div>
                   <div
-                    className="cursor-pointer hover:bg-gray-100 p-1"
+                    className="cursor-pointer hover:bg-blue-100 p-1"
                     onClick={() => { setIsRoleChange(true); setIsDelete(false); setMenuOpen(false); }}
                   >
                     Change Roles

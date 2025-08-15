@@ -40,12 +40,14 @@ export default function UserActionSelect({ user, tasks = [], mode = 'edit' }) {
       },
     });
   };
-  //className="text-indigo-600 hover:text-indigo-900 ml-4"
+
   if (mode === 'view') {
     return (
       <button
         onClick={handleView}
-        className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1 ml-4 text-sm text-gray-700 shadow-sm hover:bg-gray-50"
+        className="inline-flex items-center rounded-md 
+        border border-gray-300 bg-white px-3 py-1 ml-4 
+        text-sm text-gray-700 shadow-sm hover:bg-gray-50"
       >
         View
       </button>
@@ -58,7 +60,10 @@ export default function UserActionSelect({ user, tasks = [], mode = 'edit' }) {
         id={`UserActionSelect${user.id}`}
         onChange={handleAction}
         defaultValue="" // This controls the initial selected value
-        className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className="inline-flex items-center rounded-md 
+        border border-transparent bg-indigo-600 px-3 py-2 
+        text-sm font-medium text-white shadow-sm hover:bg-indigo-700 
+        focus:outline-none focus:ring-2 focus:ring-indigo-500"
       >
         <option value="" disabled hidden>
           Actions
