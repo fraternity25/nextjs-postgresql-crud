@@ -100,7 +100,7 @@ export default function EditTask() {
     <UsersLayout>
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-md mx-auto">
-          <div className="bg-white shadow rounded-lg px-6 py-4">
+          <div className="bg-white shadow rounded-lg px-4 py-4">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">
               {isView ? "View Task" : isEdit ? "Edit Task" : "Assign Task"}
             </h1>

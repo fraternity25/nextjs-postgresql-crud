@@ -10,6 +10,9 @@ export default function UserList({ task, mode, rolesMap }) {
   const [selectedUserIdList, setSelectedUserIdList] = useState([]);
   const [changedRolesMap, setChangedRolesMap] = useState(new Map());
 
+  console.log("selectedUserIdList = ", selectedUserIdList);
+  console.log("changedRolesMap = ", changedRolesMap);
+
   const toggleUserSelection = (id) => {
     setSelectedUserIdList(prev =>
       prev.includes(id) ? prev.filter(uid => uid !== id) : [...prev, id]
@@ -24,6 +27,9 @@ export default function UserList({ task, mode, rolesMap }) {
       if (newRole !== originalRole) {
         newMap.set(id, newRole);
       }
+      else {
+        newMap.delete(id);
+      }
 
       return newMap;
     });
@@ -33,7 +39,7 @@ export default function UserList({ task, mode, rolesMap }) {
     task.assigned_users.length > 0 ? (
       <>
         {/* Header */}
-        <div className="flex justify-between items-center mb-2">
+        <div className="flex justify-between items-center mb-1">
           <h2 className="text-sm font-medium text-gray-700">
             Assigned users for {task.title}
           </h2>
@@ -55,27 +61,31 @@ export default function UserList({ task, mode, rolesMap }) {
             <div className="relative">
               <FontAwesomeIcon
                 icon={userIcons.settings}
-                className="w-4 h-4 cursor-pointer"
+                className="cursor-pointer text-2xl bg-gray-100 rounded-full hover:text-gray-700 transition duration-75"
                 onClick={() => setMenuOpen(!menuOpen)}
               />
               {menuOpen && (
                 <div 
-                  className="absolute top-2 left-4 rounded-md 
-                  border border-transparent bg-indigo-600 p-2 
-                  text-sm z-10 font-medium text-white shadow-lg hover:bg-indigo-700 
+                  className="absolute top-2 left-6 rounded-md 
+                  border border-gray-300 bg-indigo-600
+                  text-sm z-10 font-medium text-white shadow-lg
                   focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
                   <div
-                    className="cursor-pointer hover:bg-blue-100 p-1"
-                    onClick={() => { setIsDelete(true); setIsRoleChange(false); setMenuOpen(false); }}
-                  >
-                    Delete
-                  </div>
-                  <div
-                    className="cursor-pointer hover:bg-blue-100 p-1"
+                    className="inline-flex items-center p-1 rounded-md cursor-pointer border border-transparent 
+                              shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-800
+                              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     onClick={() => { setIsRoleChange(true); setIsDelete(false); setMenuOpen(false); }}
                   >
                     Change Roles
+                  </div>
+                  <div
+                    className="inline-flex items-center p-2 rounded-md cursor-pointer border border-transparent 
+                              shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 
+                              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    onClick={() => { setIsDelete(true); setIsRoleChange(false); setMenuOpen(false); }}
+                  >
+                    Delete
                   </div>
                 </div>
               )}
@@ -88,7 +98,7 @@ export default function UserList({ task, mode, rolesMap }) {
           {task.assigned_users.map((au) => (
             <li
               key={au.user_id}
-              className="w-full text-sm text-gray-700 border border-gray-300 rounded-md shadow-sm mt-1 py-2 px-3"
+              className={`w-full text-sm text-gray-700 ${isDelete && selectedUserIdList.includes(au.user_id) ? 'bg-red-500' : ''} border border-gray-300 rounded-md shadow-sm mt-1 py-2 px-3`}
             >
               <div className='flex justify-between items-center'>
                 <div className="flex items-center gap-2">
@@ -108,9 +118,9 @@ export default function UserList({ task, mode, rolesMap }) {
                     value={changedRolesMap.get(au.user_id) ?? rolesMap.get(au.user_id)}
                     onChange={(e) => toggleRoleChange(au.user_id, e.target.value)}
                   >
-                    <option value="viewer">Viewer</option>
-                    <option value="editor">Editor</option>
                     <option value="admin">Admin</option>
+                    <option value="editor">Editor</option>
+                    <option value="viewer">Viewer</option>
                   </select>
                 ) : (
                   <div>{au.role}</div>
@@ -125,7 +135,7 @@ export default function UserList({ task, mode, rolesMap }) {
           {isDelete && (
             <button
               className={`mt-4 px-4 py-2 rounded ${
-                selectedUserIdList.length > 0 ? 'bg-red-500' : 'bg-red-300'
+                selectedUserIdList.length > 0 ? 'bg-red-600' : 'bg-red-400 opacity-90'
               } text-white`}
               disabled={selectedUserIdList.length === 0}
               onClick={() => {/* call deleteAssignedUsers here */}}
@@ -137,7 +147,7 @@ export default function UserList({ task, mode, rolesMap }) {
           {isRoleChange && (
             <button
               className={`mt-4 px-4 py-2 rounded ${
-                changedRolesMap.size > 0 ? 'bg-purple-500' : 'bg-purple-300'
+                changedRolesMap.size > 0 ? 'bg-indigo-600' : 'bg-indigo-400 opacity-90'
               } text-white`}
               disabled={changedRolesMap.size === 0}
               onClick={() => {/* call role update here */}}

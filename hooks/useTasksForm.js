@@ -1,7 +1,7 @@
+import UserList from '@/components/UserList';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
-import UserList from '@/components/UserList';
 
 export default function useTasksForm({
   mode,
@@ -139,6 +139,29 @@ export default function useTasksForm({
         </div>
       );
     }
+  }
+
+  const renderUserSelection = () =>
+  {
+    return (
+      <div className="space-y-2">
+        <ol className="w-full text-sm text-gray-700">
+          {Array.from(rolesMap.entries()).map(([user_id, role]) => (
+            <li
+              key={user_id}
+              className={`w-full text-sm text-gray-700 border border-gray-300 rounded-md shadow-sm mt-1 py-2 px-3`}
+            >
+              <div className='flex justify-between items-center'>
+                {au.user_name} ({au.user_email})
+                <div>
+                  {role}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    );
   }
 
   const renderDeadlineAndStatus = () =>
