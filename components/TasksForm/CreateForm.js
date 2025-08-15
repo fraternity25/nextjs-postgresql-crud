@@ -15,7 +15,8 @@ export default function CreateForm({
     rolesMap, 
     title,
     description,
-    selectedUserIdList,
+    selectedUserId,
+    selectedRoleId,
     showTasks,
     loading,
     error
@@ -27,7 +28,8 @@ export default function CreateForm({
     handleTitleChange,
     handleDescriptionChange,
     handleShowTasksChange,
-    handleRoleChange
+    handleRoleChange,
+    handleAddUser
   } = handlers;
 
   const {
@@ -43,7 +45,7 @@ export default function CreateForm({
     isNew
   } = controls;
 
-  console.log("selectedUserIdList = ", selectedUserIdList);
+  console.log("selectedUserId = ", selectedUserId);
   console.log("rolesMap = ", rolesMap);
 
   if(error) {
@@ -77,7 +79,7 @@ export default function CreateForm({
         <span className="flex justify-between items-center mb-2">
           <select
             id="user"
-            value={selectedUserIdList.at(-1)}
+            value={selectedUserId}
             onChange={handleUserChange}
             required={showTasks}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
@@ -92,7 +94,7 @@ export default function CreateForm({
           <FontAwesomeIcon 
             icon={sidebarIcons.create} 
             className="flex items-center cursor-pointer text-2xl bg-green-600 ml-2 p-1 text-white" 
-            onClick={() => {}}
+            onClick={handleAddUser}
           />
         </span>
         {renderUserSelection()}
@@ -108,7 +110,7 @@ export default function CreateForm({
             <select
               disabled={isView}
               id="role"
-              value={rolesMap.get(selectedUserIdList.at(-1)) || "viewer"}
+              value={selectedRoleId || "viewer"}
               onChange={handleRoleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
             >
