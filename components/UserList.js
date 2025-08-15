@@ -39,7 +39,7 @@ export default function UserList({ task, mode, rolesMap }) {
     task.assigned_users.length > 0 ? (
       <>
         {/* Header */}
-        <div className="flex justify-between items-center mb-1">
+        <div className="flex justify-between items-center">
           <h2 className="text-sm font-medium text-gray-700">
             Assigned users for {task.title}
           </h2>
@@ -47,12 +47,12 @@ export default function UserList({ task, mode, rolesMap }) {
           {mode === 'view' && (
             <Link
               href={`/tasks/${task.id}/users`}
-              className="flex items-center p-1 rounded-lg hover:bg-gray-100"
+              className="flex items-center rounded-lg hover:bg-gray-100"
               title="Edit assigned users"
             >
               <FontAwesomeIcon
                 icon={userIcons.edit}
-                className="w-4 h-4 text-gray-500 hover:text-gray-700 transition duration-75"
+                className="text-2xl text-gray-700 hover:text-black transition duration-75"
               />
             </Link>
           )}

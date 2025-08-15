@@ -1,15 +1,15 @@
+import UsersContext from "@/contexts/UsersContext";
 import useTasksForm from "@/hooks/useTasksForm";
 import UsersLayout from '@/components/UsersLayout';
 import CreateForm from "@/components/TasksForm/CreateForm";
+import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { useSession } from 'next-auth/react';
-import { useState, useEffect } from "react";
 
-export default function EditTask() {
+function EditTaskContent() {
   const router = useRouter();
+  const context = useContext(UsersContext); 
   const [task, setTask] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const { data: session, status } = useSession();
 
   const { id, userId } = router.query;
@@ -64,13 +64,17 @@ export default function EditTask() {
 
   const form = useTasksForm({
     mode: "edit",
+    context,
     tasks: task ? [task] : [],
     userId,
     form: "create",
     onSubmit:onSubmit
   });
 
-  const { states: { title, rolesMap }, controls: {isView, isEdit} } = form;
+  const { 
+    states: { title, rolesMap, loading, setLoading, error, setError}, 
+    controls: {isView, isEdit} 
+  } = form;
 
   if (status === 'loading' || loading) {
     return (
@@ -97,19 +101,25 @@ export default function EditTask() {
   }
 
   return (
-    <UsersLayout>
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-md mx-auto">
-          <div className="bg-white shadow rounded-lg px-4 py-4">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
-              {isView ? "View Task" : isEdit ? "Edit Task" : "Assign Task"}
-            </h1>
-            <CreateForm
-              {...form}
-            />
-          </div>
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-md mx-auto">
+        <div className="bg-white shadow rounded-lg px-4 py-4">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            {isView ? "View Task" : isEdit ? "Edit Task" : "Assign Task"}
+          </h1>
+          <CreateForm
+            {...form}
+          />
         </div>
       </div>
+    </div>
+  );
+}
+
+export default function EditTask() {
+  return (
+    <UsersLayout>
+      <EditTaskContent />
     </UsersLayout>
   );
 }

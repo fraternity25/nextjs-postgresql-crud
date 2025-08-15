@@ -1,8 +1,6 @@
-import UsersContext from '@/contexts/UsersContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sidebarIcons } from '@/components/icons';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
 
 export default function CreateForm({ 
   states,
@@ -12,13 +10,15 @@ export default function CreateForm({
 })
 {
   const router = useRouter();
-  const { users, error, setError, loading, setLoading } = useContext(UsersContext); 
   const {
+    users,
     rolesMap, 
     title,
     description,
     selectedUserIdList,
     showTasks,
+    loading,
+    error
   } = states;
 
   const {
@@ -32,6 +32,7 @@ export default function CreateForm({
 
   const {
     renderAssignedUsers,
+    renderUserSelection,
     renderDeadlineAndStatus,
     renderTasks
   } = renderers;
@@ -41,20 +42,6 @@ export default function CreateForm({
     isEdit,
     isNew
   } = controls;
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      handleSubmit(e);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   console.log("selectedUserIdList = ", selectedUserIdList);
   console.log("rolesMap = ", rolesMap);
@@ -66,7 +53,7 @@ export default function CreateForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-1">
       {isNew && (
         <div className="flex space-x-3 mb-4">
           <button
@@ -87,7 +74,7 @@ export default function CreateForm({
         >
           Assign To
         </label>
-        <span className="flex justify-between items-center">
+        <span className="flex justify-between items-center mb-2">
           <select
             id="user"
             value={selectedUserIdList.at(-1)}
@@ -104,10 +91,33 @@ export default function CreateForm({
           </select>
           <FontAwesomeIcon 
             icon={sidebarIcons.create} 
-            className="flex items-center cursor-pointer text-2xl bg-green-700 ml-2 p-1 text-white" 
+            className="flex items-center cursor-pointer text-2xl bg-green-600 ml-2 p-1 text-white" 
             onClick={() => {}}
           />
         </span>
+        {renderUserSelection()}
+        {
+          /*(isNew || isEdit) && isAdmin && */ 
+          <div>
+            <label
+              htmlFor="role"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Role
+            </label>
+            <select
+              disabled={isView}
+              id="role"
+              value={rolesMap.get(selectedUserIdList.at(-1)) || "viewer"}
+              onChange={handleRoleChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
+            >
+              <option value="admin">Admin</option>
+              <option value="editor">Editor</option>
+              <option value="viewer">Viewer</option>
+            </select>
+          </div>
+        }
         {renderDeadlineAndStatus()}
       </div>
 
@@ -150,29 +160,6 @@ export default function CreateForm({
             />
           </div>
         </>
-      }
-
-      {
-        /*(isNew || isEdit) && isAdmin && */ 
-        <div>
-          <label
-            htmlFor="role"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Role
-          </label>
-          <select
-            disabled={isView}
-            id="role"
-            value={rolesMap.get(selectedUserIdList.at(-1)) || "viewer"}
-            onChange={handleRoleChange}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
-          >
-            <option value="admin">Admin</option>
-            <option value="editor">Editor</option>
-            <option value="viewer">Viewer</option>
-          </select>
-        </div>
       }
 
       <div className="flex justify-end space-x-3">

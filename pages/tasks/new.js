@@ -1,4 +1,5 @@
 import TasksLayout from '@/components/TasksLayout';
+import UsersLayout from '@/components/UsersLayout';
 import TasksContext from '@/contexts/TasksContext';
 import TasksForm from '@/components/TasksForm';
 import { useSession } from 'next-auth/react';
@@ -45,10 +46,12 @@ function NewTaskContent() {
   };
 
   return (
-    <TasksForm
-      onSubmit={onSubmit}
-      tasks={tasks}
-    />
+    <UsersLayout>
+      <TasksForm
+        onSubmit={onSubmit}
+        tasks={tasks}
+      />
+    </UsersLayout>
   );
 }
 

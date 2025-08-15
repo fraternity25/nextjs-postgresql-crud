@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 
 export default function useTasksForm({
   mode,
+  context,
   tasks = [],
   userId = "",
   form = "tasks",
@@ -12,6 +13,7 @@ export default function useTasksForm({
 }) {
   const router = useRouter();
   //States
+  const { users, error, setError, loading, setLoading } = context;
   const [rolesMap, setRolesMap] = useState(new Map());
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -59,26 +61,39 @@ export default function useTasksForm({
   //Handlers
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (onSubmit) {
-      await onSubmit({
-        ...(showTasks
-          ? { task_id: selectedTaskId }
-          : {
-              title,
-              description,
-              deadline,
-              status,
-            }),
-        userIdList: selectedUserIdList,
-        rolesMap: rolesMap,
-        created_by: session?.user?.id,
-      });
+    setLoading(true);
+    setError("");
+
+    try {
+      if (onSubmit) {
+        await onSubmit({
+          ...(showTasks
+            ? { task_id: selectedTaskId }
+            : {
+                title,
+                description,
+                deadline,
+                status,
+              }),
+          userIdList: selectedUserIdList,
+          rolesMap: rolesMap,
+          created_by: session?.user?.id,
+        });
+      }
+      router.push("/tasks");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-    router.push("/tasks");
   };
 
   const handleUserChange = (e) => {
     const userId = e.target.value;
+    if(!userId) {
+      setSelectedUserIdList([]);
+      return;
+    }
     const last = selectedUserIdList.at(-1);
     setSelectedUserIdList(prev => 
       [...prev.slice(0, -1), userId]
@@ -134,9 +149,7 @@ export default function useTasksForm({
     {
       const task = tasks.find((task) => task.id == selectedTaskId)
       return (
-        <div className="space-y-2">
-          <UserList task={task} mode="view" />
-        </div>
+        <UserList task={task} mode="view" />
       );
     }
   }
@@ -146,19 +159,21 @@ export default function useTasksForm({
     return (
       <div className="space-y-2">
         <ol className="w-full text-sm text-gray-700">
-          {Array.from(rolesMap.entries()).map(([user_id, role]) => (
-            <li
-              key={user_id}
-              className={`w-full text-sm text-gray-700 border border-gray-300 rounded-md shadow-sm mt-1 py-2 px-3`}
-            >
-              <div className='flex justify-between items-center'>
-                {au.user_name} ({au.user_email})
-                <div>
-                  {role}
+          {rolesMap.size > 0 &&
+            Array.from(rolesMap.entries()).map(([user_id, role]) => (
+              <li
+                key={user_id}
+                className={`w-full text-sm text-gray-700 border border-gray-300 rounded-md shadow-sm mt-1 mb-2 py-2 px-3`}
+              >
+                <div className='flex justify-between items-center'>
+                  {users.find(u => u.id == user_id)?.name} ({users.find(u => u.id == user_id)?.email})
+                  <div>
+                    {role}
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))}
+              </li>
+            ))
+          }
         </ol>
       </div>
     );
@@ -169,7 +184,7 @@ export default function useTasksForm({
       <>
         <label
           htmlFor="deadline"
-          className="block text-sm font-medium text-gray-700"
+          className="mt-1 block text-sm font-medium text-gray-700"
         >
           Deadline
         </label>
@@ -186,7 +201,7 @@ export default function useTasksForm({
 
         <label
           htmlFor="status"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-gray-700 mt-1"
         >
           Status
         </label>
@@ -238,6 +253,7 @@ export default function useTasksForm({
 
   return {
     states: {
+      users,
       rolesMap, setRolesMap,
       ...(isCreateForm
         ? { 
@@ -254,6 +270,8 @@ export default function useTasksForm({
           }
         ),
       selectedUserIdList,
+      loading, setLoading,
+      error, setError,
     },
     handlers: {
       handleSubmit,
@@ -265,6 +283,7 @@ export default function useTasksForm({
     },
     renderers: {
       renderAssignedUsers,
+      renderUserSelection,
       renderDeadlineAndStatus,
       renderTasks
     },
