@@ -6,7 +6,7 @@ import UserList from "@/components/UserList";
 export default function TaskUsersPage() {
   const router = useRouter();
   const [task, setTask] = useState(null);
-  const [rolesMap, setRolesMap] = useState(new Map());
+  const [rolesMap, setRolesMap] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { data: session, status } = useSession();
@@ -60,7 +60,7 @@ export default function TaskUsersPage() {
     );
   }
 
-  if (!task || rolesMap.size === 0) {
+  if (!task || !rolesMap) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Loading Task info..</div>
