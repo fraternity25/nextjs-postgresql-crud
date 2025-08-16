@@ -19,10 +19,10 @@ export default function useTasksForm({
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState(new Date().toISOString().split("T")[0]);
   const [status, setStatus] = useState('pending');
-  const [selectedUserId, setSelectedUserId] = useState(userId ? [userId] : []);
+  const [selectedUserId, setSelectedUserId] = useState(userId ?? "");
   const [selectedRoleId, setSelectedRoleId] = useState("");
   const [selectedTaskId, setSelectedTaskId] = useState('');
-  const [showTasks, setShowTasks] = useState(form !== "create");
+  const [showTasks, setShowTasks] = useState(form !== "create" && tasks.length > 0);
 
 
   const { data: session } = useSession();
@@ -33,6 +33,7 @@ export default function useTasksForm({
   const isView = mode === "view";
   const isEdit = mode === "edit";
   const isNew = mode === "new";
+  const isFirst = tasks.length === 0 && isNew;
 
   useEffect(() => {
     if (isEdit && tasks.length === 1) {
@@ -48,14 +49,6 @@ export default function useTasksForm({
       if(userId){
         const au = t.assigned_users.find(au => au.user_id == userId);
         setSelectedRoleId(prev => prev !== au.role ? au.role : prev);
-        /* setRolesMap(prev => {
-          if (prev.get(userId) !== au?.role) {
-            const newMap = new Map(prev);
-            newMap.set(userId, au?.role);
-            return newMap;
-          }
-          return prev;
-        }); */
       }
     }
   }, [isEdit, tasks, userId]);
@@ -239,21 +232,10 @@ export default function useTasksForm({
   return {
     states: {
       users,
-      rolesMap, setRolesMap,
-      ...(isCreateForm
-        ? { 
-            title, setTitle,
-            description, setDescription,
-          }
-        : {
-            title, setTitle,
-            description, setDescription,
-            setDeadline,
-            setStatus, 
-            setSelectedTaskId,
-            showTasks, setShowTasks,
-          }
-        ),
+      rolesMap,
+      title, 
+      description, 
+      showTasks, 
       selectedUserId,
       selectedRoleId,
       loading, setLoading,
@@ -277,7 +259,8 @@ export default function useTasksForm({
     controls: {
       isView,
       isEdit,
-      isNew
+      isNew,
+      isFirst
     }
   };
 }

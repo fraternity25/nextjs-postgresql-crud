@@ -42,7 +42,8 @@ export default function CreateForm({
   const {
     isView,
     isEdit,
-    isNew
+    isNew,
+    isFirst
   } = controls;
 
   console.log("selectedUserId = ", selectedUserId);
@@ -56,7 +57,7 @@ export default function CreateForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-1">
-      {isNew && (
+      {isNew && !isFirst && (
         <div className="flex space-x-3 mb-4">
           <button
               type="button"

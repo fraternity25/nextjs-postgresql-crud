@@ -29,7 +29,7 @@ export default async function handler(req, res) {
 
     case 'PUT':
       try {
-        const { title, description, deadline, status, created_by, userIdList, rolesMap: rolesMapEntries } = req.body;
+        const { title, description, deadline, status, created_by, rolesMap: rolesMapEntries } = req.body;
         const rolesMap = new Map(rolesMapEntries);
 
         if (!title || !description ||!deadline)
@@ -41,7 +41,6 @@ export default async function handler(req, res) {
           deadline,
           status,
           created_by,
-          userIdList,
           rolesMap,
         });
 
@@ -55,13 +54,11 @@ export default async function handler(req, res) {
 
     case 'PATCH':
       try {
-        const { userIdList, rolesMap: rolesMapEntries } = req.body;
+        const { rolesMap: rolesMapEntries } = req.body;
         const rolesMap = new Map(rolesMapEntries);
-        console.log("api/tasks/id-patch:")
-        console.log("userIdList:")
-        console.log(userIdList)
-        console.log("rolesMap:")
-        console.log(rolesMap)
+        console.log("api/tasks/id-patch:");
+        console.log("rolesMap:");
+        console.log(rolesMap);
         console.log(Object.prototype.toString.call(rolesMap));
 
         if (!userIdList || !rolesMap) {
@@ -69,9 +66,9 @@ export default async function handler(req, res) {
         }
 
         // task_assignments tablosuna insert
-        assignUserToTask(id, userIdList, rolesMap);
+        assignUserToTask(id, rolesMap);
 
-        res.status(200).json({ id, userIdList, rolesMap });
+        res.status(200).json({ id, rolesMap });
       } catch (error) {
         console.error(error);
         res.status(500).json({ error: error.message });
