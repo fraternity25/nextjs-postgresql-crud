@@ -40,7 +40,7 @@ export default function UserList({ task, mode, rolesMap }) {
 
   return (
     task.assigned_users.length > 0 ? (
-      <>
+      <div className="max-w-lg p-6 mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center">
           <h2 className="text-sm font-medium text-gray-700">
@@ -159,20 +159,20 @@ export default function UserList({ task, mode, rolesMap }) {
             </button>
           )}
         </div>
-      </>
+      </div>
     ) : (
-      <div className="@container flex items-center justify-center">
-        <div
-          key={task.id}
-          className="relative p-6 w-96 bg-yellow-800/20 rounded-xl shadow-lg border-2 border-yellow-500 overflow-hidden"
-        >
-          {/* Glow effect */}
-          <div className="absolute -inset-2 bg-yellow-500 rounded-xl blur-lg"></div>
-
-          {/* Content */}
-          <h2 className="relative text-xl @md:text-4xl font-bold text-white text-center leading-snug">
-            There are no assigned users for {task.title}
-          </h2>
+      <div className="flex items-center justify-center h-full w-full">
+        <div className="max-w-lg w-full p-6">
+          <div className={`@container flex items-center justify-center`}>
+            <div
+              key={task.id}
+              className="p-2 bg-blue-100 rounded-md shadow-sm"
+            >
+              <h2 className="text-xl @md:text-6xl font-semibold text-gray-700 text-center">
+                There are no assigned users for {task.title}
+              </h2>
+            </div>
+          </div>
         </div>
       </div>
     )

@@ -70,10 +70,6 @@ export default function TaskUsersPage() {
   
 
   return (
-    <div className="flex items-center justify-center h-full w-full">
-      <div className="max-w-lg w-full p-6">
-        <UserList task={task} mode="edit" rolesMap={rolesMap} />
-      </div>
-    </div>
+    <UserList task={task} mode="edit" rolesMap={rolesMap} />
   );
 }
