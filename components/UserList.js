@@ -10,6 +10,9 @@ export default function UserList({ task, mode, rolesMap }) {
   const [selectedUserIdList, setSelectedUserIdList] = useState([]);
   const [changedRolesMap, setChangedRolesMap] = useState(new Map());
 
+  const isView = mode === "view";
+  const isEdit = mode === "edit";
+
   console.log("selectedUserIdList = ", selectedUserIdList);
   console.log("changedRolesMap = ", changedRolesMap);
 
@@ -44,7 +47,7 @@ export default function UserList({ task, mode, rolesMap }) {
             Assigned users for {task.title}
           </h2>
 
-          {mode === 'view' && (
+          {isView && (
             <Link
               href={`/tasks/${task.id}/users`}
               className="flex items-center rounded-lg hover:bg-gray-100"
@@ -57,7 +60,7 @@ export default function UserList({ task, mode, rolesMap }) {
             </Link>
           )}
 
-          {mode === 'edit' && (
+          {isEdit && (
             <div className="relative">
               <FontAwesomeIcon
                 icon={userIcons.settings}
@@ -158,9 +161,20 @@ export default function UserList({ task, mode, rolesMap }) {
         </div>
       </>
     ) : (
-      <h2 key={task.id} className="text-sm font-medium text-gray-700">
-        There is no assigned users for {task.title}
-      </h2>
+      <div className="@container flex items-center justify-center">
+        <div
+          key={task.id}
+          className="relative p-6 w-96 bg-yellow-800/20 rounded-xl shadow-lg border-2 border-yellow-500 overflow-hidden"
+        >
+          {/* Glow effect */}
+          <div className="absolute -inset-2 bg-yellow-500 rounded-xl blur-lg"></div>
+
+          {/* Content */}
+          <h2 className="relative text-xl @md:text-4xl font-bold text-white text-center leading-snug">
+            There are no assigned users for {task.title}
+          </h2>
+        </div>
+      </div>
     )
   );
 }

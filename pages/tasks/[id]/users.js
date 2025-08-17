@@ -46,7 +46,7 @@ export default function TaskUsersPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
       </div>
     );
@@ -54,7 +54,7 @@ export default function TaskUsersPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="text-red-600">Error: {error}</div>
       </div>
     );
@@ -62,7 +62,7 @@ export default function TaskUsersPage() {
 
   if (!task || !rolesMap) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="text-gray-600">Loading Task info..</div>
       </div>
     );
@@ -70,8 +70,10 @@ export default function TaskUsersPage() {
   
 
   return (
-    <div className="max-w-lg mx-auto p-6">
-      <UserList task={task} mode="edit" rolesMap={rolesMap} />
+    <div className="flex items-center justify-center h-full w-full">
+      <div className="max-w-lg w-full p-6">
+        <UserList task={task} mode="edit" rolesMap={rolesMap} />
+      </div>
     </div>
   );
 }
