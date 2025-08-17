@@ -72,7 +72,7 @@ function EditTaskContent() {
   });
 
   const { 
-    states: { title, rolesMap, loading, setLoading, error, setError}, 
+    states: { title, selectedRoleId, loading, setLoading, error, setError}, 
     controls: {isView, isEdit} 
   } = form;
 
@@ -92,7 +92,7 @@ function EditTaskContent() {
     );
   }
 
-  if (!task || !title || (userId && rolesMap.size === 0)) {
+  if (!task || !title || (userId && !selectedRoleId)) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Loading Task info..</div>

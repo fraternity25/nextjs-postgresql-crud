@@ -28,8 +28,6 @@ export default function useTasksForm({
   const { data: session } = useSession();
   const isAdmin = session?.user?.roles?.includes("admin");
 
-  const isCreateForm = form === "create" 
-
   const isView = mode === "view";
   const isEdit = mode === "edit";
   const isNew = mode === "new";

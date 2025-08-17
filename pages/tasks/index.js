@@ -162,7 +162,7 @@ function TasksPageContent() {
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           {isAdmin && (
                             <TaskActionSelect
-                              taskId={task.id}
+                              task={task}
                             />
                           )}
                           {isAdmin && (

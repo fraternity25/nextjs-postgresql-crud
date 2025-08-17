@@ -40,7 +40,7 @@ export default function UserList({ task, mode, rolesMap }) {
 
   return (
     task.assigned_users.length > 0 ? (
-      <div className="max-w-lg p-6 mx-auto">
+      <div className={isEdit ? `max-w-lg p-6 mx-auto` : ''}>
         {/* Header */}
         <div className="flex justify-between items-center">
           <h2 className="text-sm font-medium text-gray-700">

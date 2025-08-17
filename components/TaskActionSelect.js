@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-export default function TaskActionSelect({ taskId }) {
+export default function TaskActionSelect({ task }) {
   const router = useRouter();
 
   const handleAction = (e) => {
@@ -8,9 +8,9 @@ export default function TaskActionSelect({ taskId }) {
     if (!value) return;
 
     if (value === 'edit') {
-      router.push(`/tasks/${taskId}/edit`);
+      router.push(`/tasks/${task.id}/edit`);
     } else if (value === 'edit-users') {
-      router.push(`/tasks/${taskId}/users`);
+      router.push(`/tasks/${task.id}/users`);
     }
 
     e.target.selectedIndex = 0;
@@ -18,16 +18,21 @@ export default function TaskActionSelect({ taskId }) {
 
   return (
     <select
-      id={`TaskActionSelect${taskId}`}
+      id={`TaskActionSelect${task.id}`}
       onChange={handleAction}
       defaultValue=""
-      className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      className="inline-flex items-center rounded-md 
+      border border-transparent bg-indigo-600 px-3 py-2 
+      text-sm font-medium text-white shadow-sm hover:bg-indigo-700 
+      focus:outline-none focus:ring-2 focus:ring-indigo-500"
     >
       <option value="" disabled hidden>
         Actions
       </option>
       <option value="edit">Edit</option>
-      <option value="edit-users">Edit Users</option>
+      {task.assigned_users.length > 0 && (
+        <option value="edit-users">Edit Users</option>
+      )}
     </select>
   );
 }
