@@ -108,7 +108,10 @@ function UsersPageContent() {
         </div>
       </div>
 
-      <div className="flex flex-col inline-block min-w-full align-middle py-2 mt-2 -my-2 -mx-4 overflow-x-auto sm:-mx-6 md:px-6 lg:-mx-8 lg:px-8">
+      <div 
+        className="flex flex-col inline-block min-w-full align-middle 
+        py-2 mt-2 -my-2 -mx-4 overflow-x-auto sm:-mx-6 md:px-6 lg:-mx-8 lg:px-8"
+      >
         <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
           <table className="min-w-full divide-y divide-gray-300">
             <thead className="bg-gray-50">

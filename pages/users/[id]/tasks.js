@@ -5,16 +5,14 @@ import TaskList from '@/components/TaskList';
 export default function UserTasksPage() {
   const router = useRouter();
   const [user, setUser] = useState(null);
-  const [userTasks, setUserTasks] = useState([]);
 
-  const { id, userTasks:tasksQuery } = router.query;
+  const { id } = router.query;
 
   useEffect(() => {
-    if (id && tasksQuery) {
+    if (id) {
       fetchUser();
-      setUserTasks(JSON.parse(tasksQuery));
     }
-  }, [id, tasksQuery]);
+  }, [id]);
 
   const fetchUser = async () => {
     try {
@@ -34,7 +32,7 @@ export default function UserTasksPage() {
   return (
     <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto"> {/* Centering container */}
-        <TaskList user={user} tasks={userTasks} />
+        <TaskList user={user}/>
       </div>
     </div>
   );

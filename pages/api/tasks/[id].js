@@ -61,7 +61,7 @@ export default async function handler(req, res) {
         console.log(rolesMap);
         console.log(Object.prototype.toString.call(rolesMap));
 
-        if (!userIdList || !rolesMap) {
+        if (!rolesMap) {
           return res.status(400).json({ error: "user id's and roles are required" });
         }
 

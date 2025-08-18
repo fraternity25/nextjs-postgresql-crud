@@ -8,7 +8,6 @@ import UserForm from '@/components/UserForm';
 
 export default function UserDetailPage() {
   const [user, setUser] = useState(null);
-  const [userTasks, setUserTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { data: session } = useSession();
@@ -16,20 +15,19 @@ export default function UserDetailPage() {
   
   const isAdmin = session?.user?.roles?.includes('admin');
 
-  const { id, userTasks:tasksQuery } = router.query;
+  const { id } = router.query;
 
   useEffect(() => {
     try {
-      if (id && tasksQuery) {
+      if (id) {
         fetchUser();
-        setUserTasks(JSON.parse(tasksQuery));
       }
     } 
     catch (err) {
       console.error("Failed to parse user, tasks or mode:", err);
       setError(err.message);
     } 
-  }, [id, tasksQuery]);
+  }, [id]);
 
   const fetchUser = async () => {
     try {
@@ -74,7 +72,7 @@ export default function UserDetailPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/*we are not inserting TaskList component as children since we are passing tasks prop*/}
-        <UserForm user={user} tasks={userTasks} mode="view" /> 
+        <UserForm user={user} mode="view" /> 
       </div>
     </div>
   );

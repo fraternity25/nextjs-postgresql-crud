@@ -1,17 +1,29 @@
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { userIcons } from '@/components/icons';
-import { useState  } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from "next/router";
+import { useState, useEffect  } from 'react';
 
 export default function UserList({ task, mode, rolesMap }) {
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const [isRoleChange, setIsRoleChange] = useState(false);
   const [selectedUserIdList, setSelectedUserIdList] = useState([]);
   const [changedRolesMap, setChangedRolesMap] = useState(new Map());
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { data: session, status } = useSession();
 
   const isView = mode === "view";
   const isEdit = mode === "edit";
+
+  useEffect(() => {
+    if (status !== 'loading' && (!session || !session.user.roles.includes('admin'))) {
+      router.push('/');
+    }
+  }, [status, session]);
 
   console.log("selectedUserIdList = ", selectedUserIdList);
   console.log("changedRolesMap = ", changedRolesMap);
@@ -37,6 +49,80 @@ export default function UserList({ task, mode, rolesMap }) {
       return newMap;
     });
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      if(isRoleChange) {
+        await onSubmit({
+          rolesMap: changedRolesMap,
+        });
+      }
+      else if(isDelete) {
+        await onSubmit({
+          deleteUserIds: selectedUserIdList
+        });
+      }
+      router.push("/tasks");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onSubmit = async (formData) => {
+    let url = "";
+    let options = {
+      headers: { 'Content-Type': 'application/json' },
+    };
+
+    if (isRoleChange) {
+      // Rolleri güncelle → PATCH /api/tasks/[id]
+      url = `/api/tasks/${task.id}`;
+      options.method = "PATCH";
+      options.body = JSON.stringify({
+        ...formData,
+        rolesMap: Array.from(formData.rolesMap.entries()), // [[key1,val1],[key2,val2]]
+      });
+    } 
+    else if (isDelete) {
+      // Kullanıcı sil → DELETE /api/tasks/[id]/users
+      url = `/api/tasks/${task.id}/users`;
+      options.method = "DELETE";
+      options.body = JSON.stringify({
+        userIdList: formData.deleteUserIds
+      });
+    }
+
+    const response = await fetch(url, options);
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to assign task');
+    }
+
+    return response.json();
+  };
+
+  if (status === 'loading' || loading) {
+    return (
+      <div className="flex items-center justify-center text-gray-600">
+        Loading...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center text-red-600">
+        Error: {error}
+      </div>
+    );
+  }
 
   return (
     task.assigned_users.length > 0 ? (
@@ -141,7 +227,7 @@ export default function UserList({ task, mode, rolesMap }) {
                 selectedUserIdList.length > 0 ? 'bg-red-600' : 'bg-red-400 opacity-90'
               } text-white`}
               disabled={selectedUserIdList.length === 0}
-              onClick={() => {/* call deleteAssignedUsers here */}}
+              onClick={handleSubmit}
             >
               Delete
             </button>
@@ -153,7 +239,7 @@ export default function UserList({ task, mode, rolesMap }) {
                 changedRolesMap.size > 0 ? 'bg-indigo-600' : 'bg-indigo-400 opacity-90'
               } text-white`}
               disabled={changedRolesMap.size === 0}
-              onClick={() => {/* call role update here */}}
+              onClick={handleSubmit}
             >
               Update
             </button>

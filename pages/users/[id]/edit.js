@@ -5,7 +5,6 @@ import UserForm from '@/components/UserForm';
 
 export default function EditUser() {
   const [user, setUser] = useState(null);
-  const [userTasks, setUserTasks] = useState([]);
   const [mode, setMode] = useState('edit'); // Default mode
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,13 +17,12 @@ export default function EditUser() {
     }
   }, [status, session]);
 
-  const { id, userTasks:tasksQuery, mode:modeQuery} = router.query;
+  const { id, mode:modeQuery} = router.query;
 
   useEffect(() => {
     try {
-      if (id && tasksQuery && modeQuery) {
+      if (id && modeQuery) {
         fetchUser();
-        setUserTasks(JSON.parse(tasksQuery));
         setMode(modeQuery); 
       }
     } 
@@ -32,7 +30,7 @@ export default function EditUser() {
       console.error("Failed to parse user, tasks or mode:", err);
       setError(err.message);
     } 
-  }, [id, tasksQuery, modeQuery]);
+  }, [id, modeQuery]);
 
   const fetchUser = async () => {
     try {
@@ -50,7 +48,7 @@ export default function EditUser() {
   };
 
   const handleSubmit = async (userData) => {
-    const response = await fetch(`/api/users/${router.query.id}`, {
+    const response = await fetch(`/api/users/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -94,7 +92,7 @@ export default function EditUser() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/*we are not inserting TaskList component as children since we are passing tasks prop*/}
-        <UserForm onSubmit={handleSubmit} user={user} tasks={userTasks} mode={mode === 'role-only' ? "view+edit:role" : "edit"} /> 
+        <UserForm onSubmit={handleSubmit} user={user} mode={mode === 'role-only' ? "view+edit:role" : "edit"} /> 
       </div>
     </div>
   );

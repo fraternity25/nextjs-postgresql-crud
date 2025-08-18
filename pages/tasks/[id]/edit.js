@@ -2,7 +2,7 @@ import UsersContext from "@/contexts/UsersContext";
 import useTasksForm from "@/hooks/useTasksForm";
 import UsersLayout from '@/components/UsersLayout';
 import CreateForm from "@/components/TasksForm/CreateForm";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import { useRouter } from "next/router";
 import { useSession } from 'next-auth/react';
 
@@ -11,6 +11,7 @@ function EditTaskContent() {
   const context = useContext(UsersContext); 
   const [task, setTask] = useState(null);
   const { data: session, status } = useSession();
+  const tasks = useMemo(() => (task ? [task] : []), [task]);
 
   const { id, userId } = router.query;
 
@@ -62,10 +63,12 @@ function EditTaskContent() {
     return await res.json();
   };
 
+  console.log("rendered edit");
+
   const form = useTasksForm({
     mode: "edit",
     context,
-    tasks: task ? [task] : [],
+    tasks: tasks,
     userId,
     form: "create",
     onSubmit:onSubmit
@@ -78,39 +81,37 @@ function EditTaskContent() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="flex items-center justify-center text-gray-600">
+        Loading...
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-red-600">Error: {error}</div>
+      <div className="flex items-center justify-center text-red-600">
+        Error: {error}
       </div>
     );
   }
 
   if (!task || !title || (userId && !selectedRoleId)) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading Task info..</div>
+      <div className="flex items-center justify-center text-gray-600">
+        Loading Task info..
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-md mx-auto">
-        <div className="bg-white shadow rounded-lg px-4 py-4">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            {isView ? "View Task" : isEdit ? "Edit Task" : "Assign Task"}
-          </h1>
-          <CreateForm
-            {...form}
-          />
-        </div>
+    <div className="max-w-md mx-auto py-8">
+      <div className="bg-white shadow rounded-lg px-4 py-4">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          {isView ? "View Task" : isEdit ? "Edit Task" : "Assign Task"}
+        </h1>
+        <CreateForm
+          {...form}
+        />
       </div>
     </div>
   );

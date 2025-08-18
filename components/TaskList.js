@@ -1,29 +1,29 @@
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 
-export default function TaskList({ user, tasks }) {
+export default function TaskList({ user }) {
   const { data: session } = useSession();
   const isAdmin = session?.user?.roles?.includes('admin');
 
-  if (!user || !tasks) return <p className="p-6">Loading...</p>;
+  if (!user) return <p className="p-6">Loading...</p>;
 
   return (
     <div className="space-y-2 w-full">
     {
-      tasks.length > 0 ? (
+      user.assigned_tasks.length > 0 ? (
         <>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
             Assigned Tasks for {user.name}
           </h2>
           <ol className="@container">
-            {tasks.map((task) => (
+            {user.assigned_tasks.map((task) => (
               <li 
-                key={task.id}
+                key={task.task_id}
                 className="text-sm text-gray-700 border border-gray-300 rounded-md shadow-sm m-1"  
               >
                 <Link
                   href={{
-                    pathname: isAdmin ? `/tasks/${task.id}/edit` : '#',
+                    pathname: isAdmin ? `/tasks/${task.task_id}/edit` : '#',
                     query: isAdmin ? { userId: user.id } : null
                   }}
                   className={`flex flex-col @md:flex-row @md:justify-between @md:items-center 

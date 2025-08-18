@@ -1,29 +1,21 @@
 import { useRouter } from 'next/router';
 
-export default function UserActionSelect({ user, tasks = [], mode = 'edit' }) {
+export default function UserActionSelect({ user, mode = 'edit' }) {
   const router = useRouter();
 
-  const userTasks = tasks.filter((task) =>
-    task.assigned_users?.some((u) => u.user_id === user.id)
-  );
+  console.log(user);
 
   const handleAction = (e) => {
     const value = e.target.value;
     if (!value) return;
 
     if (value === 'edit-tasks') {
-      router.push({
-        pathname: `/users/${user.id}/tasks`,
-        query: {
-          userTasks: JSON.stringify(userTasks),
-        },
-      });
+      router.push(`/users/${user.id}/tasks`);
     } else if (value === 'change-role') {
       router.push({
         pathname: `/users/${user.id}/edit`,
         query: {
           mode: 'role-only',
-          userTasks: JSON.stringify(userTasks),
         },
       });
     }
@@ -36,7 +28,7 @@ export default function UserActionSelect({ user, tasks = [], mode = 'edit' }) {
       pathname: `/users/${user.id}`,
       query: {
         user: JSON.stringify(user),
-        userTasks: JSON.stringify(userTasks),
+        userTasks: JSON.stringify(user.assigned_tasks),
       },
     });
   };
@@ -69,7 +61,7 @@ export default function UserActionSelect({ user, tasks = [], mode = 'edit' }) {
           Actions
         </option>
         <option value="change-role">Change Role</option>
-        {userTasks.length > 0 && (
+        {user.assigned_tasks.length > 0 && (
           <option value="edit-tasks">Edit Tasks</option>
         )}
       </select>

@@ -86,7 +86,6 @@ export default function useTasksForm({
       setSelectedUserId(null);
       return;
     }
-    const last = selectedUserId;
     setSelectedUserId(userId);
     
     // Update map if user doesn't exist

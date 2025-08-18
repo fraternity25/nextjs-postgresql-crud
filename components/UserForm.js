@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import TaskList from '@/components/TaskList';
 import ConfirmModal from '@/components/ConfirmModal';
 
-export default function UserForm({  mode = 'view', user = null, tasks=null, onSubmit = null, children}) {
+export default function UserForm({  mode = 'view', user = null, onSubmit = null, children}) {
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
   const [role, setRole] = useState(user?.role || 'viewer');
@@ -285,9 +285,9 @@ export default function UserForm({  mode = 'view', user = null, tasks=null, onSu
             </>
           )}
 
-          {tasks !== null ? (
+          {user.assigned_tasks.length > 0 ? (
             <div className="flex items-center justify-between mt-4">
-              <TaskList user={user} tasks={tasks} />
+              <TaskList user={user} />
             </div>
             ) : children
           }
