@@ -1,6 +1,6 @@
 import {
   faHome, faPlus, faHeadset, faCircleExclamation, faChevronLeft, faChevronRight, // Sidebar General icons
-  faUsers, faUser, faUserPlus, faUserGear, faUserShield, faUserPen, // User icons
+  faUsers, faUser, faUserPlus, faUserGear, faUserShield, faUserPen, faRightFromBracket, // User icons
   faTasks, faCheckCircle, faClipboardList, faPlusSquare, faCalendarCheck, faListCheck, // Task icons
   faBell, faBellSlash, faEnvelope, faExclamationTriangle, faCircleInfo, faCheckDouble  // Notification icons
 } from '@fortawesome/free-solid-svg-icons';
@@ -20,7 +20,8 @@ const userIcons = {
   add: faUserPlus,
   settings: faUserGear,
   admin: faUserShield,
-  edit: faUserPen
+  edit: faUserPen,
+  logout: faRightFromBracket
 };
 
 const taskIcons = {

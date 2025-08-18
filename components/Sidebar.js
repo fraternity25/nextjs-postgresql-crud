@@ -22,7 +22,7 @@ const Sidebar = () => {
       tooltip: 'Tasks page'
     },
     {
-      icon: notificationIcons.info,
+      icon: notificationIcons.bell,
       label: 'Notifications',
       href: '/notifications',
       tooltip: 'Notifications page'
