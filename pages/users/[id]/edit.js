@@ -5,7 +5,6 @@ import UserForm from '@/components/UserForm';
 
 export default function EditUser() {
   const [user, setUser] = useState(null);
-  const [mode, setMode] = useState('edit'); // Default mode
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { data: session, status } = useSession();
@@ -17,20 +16,13 @@ export default function EditUser() {
     }
   }, [status, session]);
 
-  const { id, mode:modeQuery} = router.query;
+  const { id } = router.query;
 
   useEffect(() => {
-    try {
-      if (id && modeQuery) {
-        fetchUser();
-        setMode(modeQuery); 
-      }
-    } 
-    catch (err) {
-      console.error("Failed to parse user, tasks or mode:", err);
-      setError(err.message);
-    } 
-  }, [id, modeQuery]);
+    if (id) {
+      fetchUser();
+    }
+  }, [id]);
 
   const fetchUser = async () => {
     try {
@@ -66,34 +58,32 @@ export default function EditUser() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="flex items-center justify-center text-gray-600">
+        Loading...
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-red-600">Error: {error}</div>
+      <div className="flex items-center justify-center text-red-600">
+        Error: {error}
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">User not found</div>
+      <div className="flex items-center justify-center text-gray-600">
+        User not found
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/*we are not inserting TaskList component as children since we are passing tasks prop*/}
-        <UserForm onSubmit={handleSubmit} user={user} mode={mode === 'role-only' ? "view+edit:role" : "edit"} /> 
-      </div>
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/*we are not inserting TaskList component as children since we are passing tasks prop*/}
+      <UserForm onSubmit={handleSubmit} user={user} mode="view+edit:role" /> 
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import {
   getUserById,
+  getUserWithFields,
   updateUser,
   deleteUser,
 } from '@/lib/dataService';
@@ -11,7 +12,15 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const user = await getUserById(id);
+        const { fields } = query;
+        let action;
+        if (fields) {
+          const fieldArray = fields.split(',').map(f => f.trim());
+          action = () => getUserWithFields(id, fieldArray);
+        } else {
+          action = () => getUserById(id);
+        }
+        const user = await action();
         if (!user) return res.status(404).json({ error: 'User not found' });
         res.status(200).json(user);
       } catch (error) {

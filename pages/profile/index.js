@@ -1,8 +1,6 @@
+import UserForm from '@/components/UserForm';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
-import useSWR from 'swr';
-import UserForm from '@/components/UserForm';
 
 //const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -10,32 +8,21 @@ export default function UserDetailPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { data: session } = useSession();
-  const router = useRouter();
-  
-  const isAdmin = session?.user?.roles?.includes('admin');
-
-  const { id } = router.query;
+  const { data: session, status } = useSession();
 
   useEffect(() => {
-    try {
-      if (id) {
-        fetchUser();
-      }
-    } 
-    catch (err) {
-      console.error("Failed to parse user, tasks or mode:", err);
-      setError(err.message);
-    } 
-  }, [id]);
+    if (status !== 'loading' && session) {
+      fetchUserInfo();
+    }
+  }, [status, session]);
 
-  const fetchUser = async () => {
+  const fetchUserInfo = async () => {
     try {
-      const response = await fetch(`/api/users/${id}`);
+      const response = await fetch(`/api/users/${session.user.id}?fields=created_at,updated_at,assigned_tasks`);
       if (!response.ok) {
         throw new Error("Failed to fetch user");
       }
-      const data = await response.json();
+      const data = { ...session.user , ...await response.json() };
       setUser(data);
     } catch (err) {
       setError(err.message);
@@ -44,7 +31,7 @@ export default function UserDetailPage() {
     }
   };
 
-  if (loading) {
+  if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
@@ -72,7 +59,7 @@ export default function UserDetailPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/*we are not inserting TaskList component as children since we are passing tasks prop*/}
-        <UserForm user={user} mode="view" /> 
+        <UserForm user={user} mode="edit:exclude:role+view:role" />
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import TaskList from '@/components/TaskList';
+import { splitFirst } from '@/lib/utils';
 import ConfirmModal from '@/components/ConfirmModal';
 
 export default function UserForm({  mode = 'view', user = null, onSubmit = null, children}) {
@@ -53,10 +54,10 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
         return;
       }
 
-      const [action, params] = op.split(':');
+      const [action, params] = splitFirst(op, ':');
       if (!['view', 'edit'].includes(action)) return;
 
-      //console.log(`action = ${action} and params = ${params}\n`)
+      console.log(`action = ${action} and params = ${params}\n`)
 
       if (!params) {
         // No parameters means all fields
@@ -143,7 +144,7 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
       <div className="bg-white shadow rounded-lg px-3 py-2">
         <div className="flex items-center justify-between mb-2">
           <h1 className="text-2xl font-bold text-center text-gray-900 mb-2">
-            {editRole || isEdit ? 'Edit User' : isView ? 'User Details' : 'Sign Up'}
+            {editRole ? 'Edit User' : (isEdit || isView) ? 'Profile' : 'Sign Up'}
           </h1>
           
           {/*isAdmin && (
@@ -241,7 +242,7 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
               <div>
                 <label htmlFor="role" className="block text-sm font-medium text-gray-700">Role</label>
                 <select
-                  disabled={!isAdmin || (isView && !editRole)}
+                  disabled={!isAdmin || !editRole}
                   id="role"
                   name="role"
                   value={role}
@@ -270,7 +271,7 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
                 </div>
                 <div className="inline text-sm font-medium text-gray-700">
                   <span className="mt-1 text-sm text-gray-900">
-                    {"Updated At:  "}
+                    {"Last update:  "}
                     {new Date(user.updated_at).toLocaleString('en-US', {
                       hour12: false,
                       year: 'numeric',
