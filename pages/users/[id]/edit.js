@@ -39,7 +39,7 @@ export default function EditUser() {
     }
   };
 
-  const handleSubmit = async (userData) => {
+  const onSubmit = async (userData) => {
     const response = await fetch(`/api/users/${id}`, {
       method: 'PUT',
       headers: {
@@ -82,8 +82,8 @@ export default function EditUser() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/*we are not inserting TaskList component as children since we are passing tasks prop*/}
-      <UserForm onSubmit={handleSubmit} user={user} mode="view+edit:role" /> 
+      {/*we are not inserting TaskList component as children since we are passing user prop*/}
+      <UserForm onSubmit={onSubmit} user={user} mode="view+edit:role" /> 
     </div>
   );
 }

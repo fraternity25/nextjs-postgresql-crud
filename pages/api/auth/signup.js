@@ -16,7 +16,7 @@ export default async function handler(req, res) {
       name,
       email,
       password,
-      roles: ['viewer'] // yeni kullanıcıya varsayılan role
+      role: 'viewer' // Default role for newly created users
     });
 
     return res.status(201).json({ message: 'User created' });

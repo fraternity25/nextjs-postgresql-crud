@@ -10,8 +10,8 @@ const ProfileMenu = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  console.log(`session = `);
-  console.log(session);
+  /* console.log(`session = `);
+  console.log(session); */
 
   // Giriş yapılmamışsa auth sayfasına yönlendir
   useEffect(() => {

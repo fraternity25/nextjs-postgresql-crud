@@ -14,6 +14,8 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const router = useRouter();
 
+  console.log("user = ", user);
+
   const { data: session } = useSession();
   const isAdmin = session?.user?.roles?.includes('admin');
 
@@ -57,7 +59,7 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
       const [action, params] = splitFirst(op, ':');
       if (!['view', 'edit'].includes(action)) return;
 
-      console.log(`action = ${action} and params = ${params}\n`)
+      //console.log(`action = ${action} and params = ${params}\n`)
 
       if (!params) {
         // No parameters means all fields

@@ -31,6 +31,23 @@ export default function UserDetailPage() {
     }
   };
 
+  const onSubmit = async (userData) => {
+    const response = await fetch(`/api/users/${session.user.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to update user');
+    }
+
+    return response.json();
+  };
+
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -59,7 +76,7 @@ export default function UserDetailPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/*we are not inserting TaskList component as children since we are passing tasks prop*/}
-        <UserForm user={user} mode="edit:exclude:role+view:role" />
+        <UserForm onSubmit={onSubmit} user={user} mode="edit:exclude:role" />
       </div>
     </div>
   );
