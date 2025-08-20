@@ -18,12 +18,11 @@ function UsersPageContent() {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [toastMessages, setToastMessages] = useState([]);
 
-  const role = session?.user?.role || "viewer";
-  const isAdmin = role === "admin";
+  const isAdmin = session?.user?.role === "admin";
 
   // Giriş yapılmamışsa auth sayfasına yönlendir
   useEffect(() => {
-    if (status === "unauthenticated") {
+    if (status === "unauthenticated" && !session) {
       router.push("/auth");
     } 
   }, [status]);
@@ -38,11 +37,11 @@ function UsersPageContent() {
         throw new Error("Failed to delete user");
       }
 
-      const idleTasks = tasks.filter(
-        (task) =>
-          task.assigned_users?.length === 1 &&
-          task.assigned_users[0].user_id === id
-      );
+      const idleTasks = tasks.filter((task) => {
+        const res = (task.owner.id == id && !task.reviewer.id) || 
+          (task.reviewer.id == id && !task.owner.id)
+        return res;
+      });
 
       if (idleTasks.length > 0) {
         setToastMessages([
@@ -74,8 +73,6 @@ function UsersPageContent() {
       </div>
     );
   }
-
-  if (!session) return null;
 
   if (error) {
     return (
@@ -126,7 +123,7 @@ function UsersPageContent() {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wide"
                 >
-                  Roles
+                  Role
                 </th>
                 <th scope="col" className="relative px-6 py-3">
                   <span className="sr-only">Actions</span>
@@ -159,8 +156,6 @@ function UsersPageContent() {
                     {isAdmin && (
                       <UserActionSelect
                         user={user}
-                        tasks={tasks}
-                        mode="edit"
                       />
                     )}
                     {/*

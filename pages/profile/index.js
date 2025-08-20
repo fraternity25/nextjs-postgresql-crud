@@ -1,4 +1,5 @@
 import UserForm from '@/components/UserForm';
+import Toast from '@/components/Toast';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 
@@ -8,7 +9,7 @@ export default function UserDetailPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { data: session, status } = useSession();
+  const { data: session, status, update} = useSession();
 
   useEffect(() => {
     if (status !== 'loading' && session) {
@@ -45,39 +46,49 @@ export default function UserDetailPage() {
       throw new Error(error.error || 'Failed to update user');
     }
 
+    // Force session refresh to get updated data
+    <Toast
+      messages={[
+        {
+          type: "h1",
+          content: "Profile updated successfully!",
+        },
+      ]}
+      time={5000}
+    />
+
+    await update();
     return response.json();
   };
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="flex items-center justify-center text-gray-600">
+        Loading...
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-red-600">Eror while loading user: {error}</div>
+      <div className="flex items-center justify-center text-red-600">
+        Eror while loading user: {error}
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="flex items-center justify-center text-gray-600">
+        Loading...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/*we are not inserting TaskList component as children since we are passing tasks prop*/}
-        <UserForm onSubmit={onSubmit} user={user} mode="edit:exclude:role" />
-      </div>
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/*we are not inserting TaskList component as children since we are passing tasks prop*/}
+      <UserForm onSubmit={onSubmit} user={user} mode="edit:exclude:role" />
     </div>
   );
 }

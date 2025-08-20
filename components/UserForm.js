@@ -1,9 +1,9 @@
+import ConfirmModal from '@/components/ConfirmModal';
+import TaskList from '@/components/TaskList';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
-import TaskList from '@/components/TaskList';
 import { splitFirst } from '@/lib/utils';
-import ConfirmModal from '@/components/ConfirmModal';
 
 export default function UserForm({  mode = 'view', user = null, onSubmit = null, children}) {
   const [name, setName] = useState(user?.name || '');
@@ -17,7 +17,7 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
   console.log("user = ", user);
 
   const { data: session } = useSession();
-  const isAdmin = session?.user?.roles?.includes('admin');
+  const isAdmin = session?.user?.role === 'admin';
 
   // Parse the mode string into permission flags
   const parseMode = (modeString) => {
@@ -59,7 +59,7 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
       const [action, params] = splitFirst(op, ':');
       if (!['view', 'edit'].includes(action)) return;
 
-      //console.log(`action = ${action} and params = ${params}\n`)
+      console.log(`action = ${action} and params = ${params}\n`)
 
       if (!params) {
         // No parameters means all fields

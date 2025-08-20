@@ -1,4 +1,4 @@
-import { getUsers, createUser } from '../../lib/dataService';
+import { getUsers } from '../../lib/dataService';
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -13,23 +13,24 @@ export default async function handler(req, res) {
         res.status(500).json({ error: 'Failed to fetch users' });
       }
       break;
+    /* case 'POST':
+      const { name, email, role, password} = req.body;
 
-    case 'POST':
-      try {
-        const { name, email, role} = req.body;
-
-        if (!name || !email || !role) {
-          return res.status(400).json({ error: 'Name, email and role are required' });
-        }
-
-        const newUser = await createUser({ name, email, role});
-        res.status(201).json(newUser);
-      } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: error.message });
+      if (!name || !email || !role || !password) {
+        return res.status(400).json({ error: 'Name, email, role and password are required' });
       }
-      break;
 
+      try {
+        const newUser = await createUser({ name, email, role, password });
+        res.status(201).json(newUser);
+      } catch (err) {
+        console.error(err);
+        if (err.message.includes('already exists')) {
+          return res.status(409).json({ error: err.message });
+        }
+        res.status(500).json({ error: err.message });
+      }
+      break; */
     default:
       res.setHeader('Allow', ['GET', 'POST']);
       res.status(405).end(`Method ${method} Not Allowed`);

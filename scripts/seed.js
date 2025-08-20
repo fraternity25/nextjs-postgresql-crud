@@ -9,18 +9,6 @@ async function seed() {
   try {
     await client.query('BEGIN');
 
-    // 1. Create tables in correct order
-    await client.query(`
-      CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        email VARCHAR(255) NOT NULL UNIQUE,
-        password VARCHAR(255) NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-    `);
-
     await client.query(`
       CREATE TABLE IF NOT EXISTS roles (
         id SERIAL PRIMARY KEY,
@@ -29,10 +17,14 @@ async function seed() {
     `);
 
     await client.query(`
-      CREATE TABLE IF NOT EXISTS user_roles (
-        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-        role_id INTEGER REFERENCES roles(id) ON DELETE CASCADE,
-        PRIMARY KEY (user_id, role_id)
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL,
+        role_id INTEGER REFERENCES roles(id),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
 
@@ -44,16 +36,9 @@ async function seed() {
         deadline DATE,
         created_at TIMESTAMP DEFAULT NOW(),
         created_by INTEGER REFERENCES users(id),
+        owner_id INTEGER REFERENCES users(id),
+        reviewer_id INTEGER REFERENCES users(id),
         status TEXT DEFAULT 'pending'
-      );
-    `);
-
-    await client.query(`
-      CREATE TABLE IF NOT EXISTS task_assignments (
-        task_id INTEGER REFERENCES tasks(id) ON DELETE CASCADE,
-        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-        role_id INTEGER REFERENCES roles(id),
-        PRIMARY KEY (task_id, user_id)
       );
     `);
 
@@ -67,29 +52,24 @@ async function seed() {
       );
     `);
 
-    // 2. Insert initial data
-    const password = '123a';
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await client.query(`
-      INSERT INTO users (name, email, password)
-      VALUES ($1, $2, $3)
-      ON CONFLICT (email) DO NOTHING;
-    `, ['Admin', 'admin@example.com', hashedPassword]);
-
+    // Insert initial data
     await client.query(`
       INSERT INTO roles (name)
       VALUES ('admin'), ('editor'), ('viewer')
       ON CONFLICT (name) DO NOTHING;
     `);
 
+    const password = '123a';
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     await client.query(`
-      INSERT INTO user_roles (user_id, role_id)
-      SELECT u.id, r.id
-      FROM users u, roles r
-      WHERE u.email = $1 AND r.name = $2
-      ON CONFLICT DO NOTHING;
-    `, ['admin@example.com', 'admin']);
+      INSERT INTO users (name, email, password, role_id)
+      SELECT $1, $2, $3, r.id
+      FROM roles r
+      WHERE r.name = $4
+      ON CONFLICT (email) DO NOTHING;
+    `, ['Admin', 'admin@example.com', hashedPassword, 'admin']
+    );
 
     await client.query('COMMIT');
     console.log('✅ Database seeded successfully');

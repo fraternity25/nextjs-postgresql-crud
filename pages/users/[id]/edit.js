@@ -11,7 +11,7 @@ export default function EditUser() {
   const router = useRouter();
   
   useEffect(() => {
-    if (status !== 'loading' && (!session || !session.user.roles.includes('admin'))) {
+    if (status !== 'loading' && (!session || session.user.role !== "admin")) {
       router.push('/');
     }
   }, [status, session]);
