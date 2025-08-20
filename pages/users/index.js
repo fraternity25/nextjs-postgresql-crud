@@ -6,7 +6,7 @@ import UserActionSelect from "@/components/UserActionSelect";
 import ConfirmModal from "@/components/ConfirmModal";
 import Toast from "@/components/Toast";
 import { useState, useEffect, useContext } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 function UsersPageContent() {
@@ -18,8 +18,8 @@ function UsersPageContent() {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [toastMessages, setToastMessages] = useState([]);
 
-  const roles = session?.user?.roles || [];
-  const isAdmin = roles.includes("admin");
+  const role = session?.user?.role || "viewer";
+  const isAdmin = role === "admin";
 
   // Giriş yapılmamışsa auth sayfasına yönlendir
   useEffect(() => {
@@ -153,7 +153,7 @@ function UsersPageContent() {
                     })}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                    {(user.roles || []).join(", ")}
+                    {user.role}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     {isAdmin && (
