@@ -3,6 +3,7 @@ import useTasksForm from '@/hooks/useTasksForm';
 import CreateForm from './CreateForm'
 import { useSession } from 'next-auth/react';
 import { useEffect, useContext } from 'react';
+import { useRouter } from 'next/router';
 
 export default function TasksForm({
   tasks = [],
@@ -12,7 +13,9 @@ export default function TasksForm({
   const context = useContext(UsersContext); 
   const { states, handlers, renderers, controls }= useTasksForm({mode:"new", context, tasks:tasks, userId:userId, onSubmit:onSubmit});
   const { data: session, status} = useSession();
-  const isAdmin = session?.user?.roles?.includes("admin");
+  const router = useRouter();
+  
+  const isAdmin = session?.user?.role === "admin";
 
   useEffect(() => {
     if (status !== 'loading' && (!session || !isAdmin)) {

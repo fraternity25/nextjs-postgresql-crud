@@ -133,7 +133,9 @@ function UsersPageContent() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {users.map((user) => (
+              {users
+                .filter((user) => user.id !== session?.user?.id)
+                .map((user) => (
                 <tr key={user.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     {user.name}
@@ -160,13 +162,6 @@ function UsersPageContent() {
                         user={user}
                       />
                     )}
-                    {/*
-                      <UserActionSelect
-                        user={user}
-                        tasks={tasks}
-                        mode="view"
-                      />
-                    */}
                     {isAdmin && (
                       <button
                         onClick={() => {

@@ -5,7 +5,7 @@ import ConfirmModal from '@/components/ConfirmModal';
 import Toast from '@/components/Toast';
 import Link from 'next/link';
 import { useState, useEffect, useContext } from 'react';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
 function TasksPageContent() {
@@ -16,8 +16,7 @@ function TasksPageContent() {
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [toastMessages, setToastMessages] = useState([]);
 
-  const roles = session?.user?.roles || [];
-  const isAdmin = roles.includes('admin');
+  const isAdmin = session?.user?.role === "admin";
 
   // Giriş yapılmamışsa auth sayfasına yönlendir
   useEffect(() => {
