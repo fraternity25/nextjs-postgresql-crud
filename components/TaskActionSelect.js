@@ -30,7 +30,7 @@ export default function TaskActionSelect({ task }) {
         Actions
       </option>
       <option value="edit">Edit</option>
-      {task.assigned_users.length > 0 && (
+      {task.owner.id && task.reviewer.id && (
         <option value="edit-users">Edit Users</option>
       )}
     </select>

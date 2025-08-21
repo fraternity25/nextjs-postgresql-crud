@@ -1,5 +1,5 @@
 import UserList from '@/components/UserList';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 
@@ -19,37 +19,39 @@ export default function useTasksForm({
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState(new Date().toISOString().split("T")[0]);
   const [status, setStatus] = useState('pending');
-  const [selectedUserId, setSelectedUserId] = useState(userId ?? "");
-  const [selectedRoleId, setSelectedRoleId] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState(Number(userId) ?? 0);
+  const [selectedRole, setSelectedRole] = useState("");
   const [selectedTaskId, setSelectedTaskId] = useState('');
   const [showTasks, setShowTasks] = useState(form !== "create" && tasks.length > 0);
 
-
   const { data: session } = useSession();
-  const isAdmin = session?.user?.roles?.includes("admin");
+  const isAdmin = session?.user?.role === "admin";
 
   const isView = mode === "view";
   const isEdit = mode === "edit";
   const isNew = mode === "new";
   const isFirst = tasks.length === 0 && isNew;
+  const singleTask = useMemo(() => (isEdit && tasks.length === 1 ? tasks[0] : null), [isEdit, tasks]);
 
   useEffect(() => {
-    if (isEdit && tasks.length === 1) {
-      const t = tasks[0];
+    if (singleTask) {
       const now = new Date();
-      if (t) {
-        setSelectedTaskId(prev => prev !== t.id ? t.id : prev);
-        setTitle(prev => prev !== t.title ? t.title : prev);
-        setDescription(prev => prev !== t.description ? t.description : prev);
-        setStatus(prev => prev !== t.status ? t.status : prev);
-        setDeadline(prev => prev !== t.deadline?.split("T")[0] && now < new Date(t.deadline) ? t.deadline?.split("T")[0] : prev);
-      }
+      setSelectedTaskId(singleTask.id);
+      setTitle(singleTask.title);
+      setDescription(singleTask.description);
+      setStatus(singleTask.status);
+      setDeadline(now < new Date(singleTask.deadline) ? 
+        singleTask.deadline?.split("T")[0] : 
+        now.toISOString().split("T")[0]
+      );
       if(userId){
-        const au = t.assigned_users.find(au => au.user_id == userId);
-        setSelectedRoleId(prev => prev !== au.role ? au.role : prev);
+        const role = singleTask.owner.id == userId ? 
+          "owner" : singleTask.reviewer.id == userId ? 
+          "reviewer" : null;
+        setSelectedRole(role);
       }
     }
-  }, [isEdit, tasks, userId]);
+  }, [singleTask, userId]);
 
   //Handlers
   const handleSubmit = async (e) => {
@@ -81,38 +83,71 @@ export default function useTasksForm({
   };
 
   const handleUserChange = (e) => {
-    const userId = e.target.value;
+    const userId = Number(e.target.value);
     if(!userId) {
       setSelectedUserId(null);
       return;
     }
     setSelectedUserId(userId);
     
-    // Update map if user doesn't exist
-    const task = tasks.find((task) => task.id == selectedTaskId);
-    const au = task?.assigned_users.find((au) => au.user_id == userId);
+    const task = singleTask || tasks.find((task) => task.id == selectedTaskId);
+    const role = task ? 
+      (
+        task.owner.id == userId ? 
+        "owner" : task.reviewer.id == userId ? 
+        "reviewer" : null
+      ) 
+      : null;
     console.log("task = ", task);
-    console.log("au = ",au);
-    if(!rolesMap.has(userId) && !au){
-      setSelectedRoleId("viewer");
+    if(!rolesMap.has(userId) && !role){
+      setSelectedRole("");
     }
     else if(rolesMap.has(userId)) {
-      setSelectedRoleId(rolesMap.get(userId));
+      setSelectedRole(rolesMap.get(userId));
     }
-    else if (au) {
-      setSelectedRoleId(au.role);
+    else if (role) {
+      setSelectedRole(role);
     }
   };
 
-  const handleRoleChange = (e) => setSelectedRoleId(e.target.value)
+  const handleRoleChange = (e) => setSelectedRole(e.target.value)
   const handleTitleChange = (e) => setTitle(e.target.value)
   const handleDescriptionChange = (e) => setDescription(e.target.value)
   const handleShowTasksChange = () => setShowTasks(!showTasks)
 
   const handleAddUser = () => {
+    const task = singleTask || tasks.find((task) => task.id == selectedTaskId);
+    const role = task?.owner.id == selectedUserId ? 
+      "owner" : task?.reviewer.id == selectedUserId ? 
+      "reviewer" : null;
+    const otherId = role === "owner" ? task?.reviewer.id : task?.owner.id;
+    console.log("role = ", role);
+
     setRolesMap(prev => {
       const newMap = new Map(prev);
-      newMap.set(selectedUserId, selectedRoleId);
+      if(!role) {
+        for (const [userId, role] of newMap.entries()) {
+          if (role === selectedRole) {
+            newMap.delete(userId);
+          }
+        }
+        newMap.set(selectedUserId, selectedRole);
+      }
+      else if(selectedRole === role) {
+        newMap.delete(selectedUserId);
+        newMap.delete(otherId);
+        /* Array.from(newMap.entries())
+          .filter(([userId, role]) => role === selectedRole)
+          .forEach(([userId]) => newMap.delete(userId)); */
+      }
+      else if(selectedRole === "owner") {
+        newMap.set(selectedUserId, "owner");
+        newMap.set(task.owner.id, "reviewer");
+      } 
+      else if(selectedRole === "reviewer") {
+        newMap.set(selectedUserId, "reviewer");
+        newMap.set(task.reviewer.id, "owner");
+      } 
       return newMap;
     });
   };
@@ -234,7 +269,7 @@ export default function useTasksForm({
       description, 
       showTasks, 
       selectedUserId,
-      selectedRoleId,
+      selectedRole,
       loading, setLoading,
       error, setError,
     },

@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/react';
 
 export default function TaskList({ user }) {
   const { data: session } = useSession();
-  const isAdmin = session?.user?.roles?.includes('admin');
+  const isAdmin = session?.user?.role === 'admin';
 
   if (!user) return <p className="p-6">Loading...</p>;
 

@@ -2,7 +2,7 @@ import UsersContext from "@/contexts/UsersContext";
 import useTasksForm from "@/hooks/useTasksForm";
 import UsersLayout from '@/components/UsersLayout';
 import CreateForm from "@/components/TasksForm/CreateForm";
-import { useState, useEffect, useContext, useMemo } from "react";
+import { useState, useEffect, useContext} from "react";
 import { useRouter } from "next/router";
 import { useSession } from 'next-auth/react';
 
@@ -11,12 +11,11 @@ function EditTaskContent() {
   const context = useContext(UsersContext); 
   const [task, setTask] = useState(null);
   const { data: session, status } = useSession();
-  const tasks = useMemo(() => (task ? [task] : []), [task]);
 
   const { id, userId } = router.query;
 
   useEffect(() => {
-    if (status !== 'loading' && (!session || !session.user.roles.includes('admin'))) {
+    if (status !== 'loading' && (!session || session.user.role !== "admin")) {
       router.push('/');
     }
   }, [status, session]);
@@ -45,7 +44,7 @@ function EditTaskContent() {
   const onSubmit = async (updatedData) => {
     const body = JSON.stringify({
                     ...updatedData,
-                    rolesMap: Array.from(updatedData.rolesMap.entries()) // [[key1,val1],[key2,val2]]
+                    rolesMap: Array.from(updatedData.rolesMap.entries()) 
                   });
     const res = await fetch(`/api/tasks/${id}`, {
       method: 'PUT',
@@ -63,19 +62,17 @@ function EditTaskContent() {
     return await res.json();
   };
 
-  console.log("rendered edit");
-
   const form = useTasksForm({
     mode: "edit",
     context,
-    tasks: tasks,
+    tasks: task ? [task] : [],
     userId,
     form: "create",
     onSubmit:onSubmit
   });
 
   const { 
-    states: { title, selectedRoleId, loading, setLoading, error, setError}, 
+    states: { title, selectedRole, loading, setLoading, error, setError}, 
     controls: {isView, isEdit} 
   } = form;
 
@@ -95,7 +92,7 @@ function EditTaskContent() {
     );
   }
 
-  if (!task || !title || (userId && !selectedRoleId)) {
+  if (!task || !title || (userId && !selectedRole)) {
     return (
       <div className="flex items-center justify-center text-gray-600">
         Loading Task info..
@@ -104,9 +101,9 @@ function EditTaskContent() {
   }
 
   return (
-    <div className="max-w-md mx-auto py-8">
-      <div className="bg-white shadow rounded-lg px-4 py-4">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">
+    <div className="max-w-md mx-auto py-16">
+      <div className="bg-white shadow rounded-lg px-4 py-2">
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">
           {isView ? "View Task" : isEdit ? "Edit Task" : "Assign Task"}
         </h1>
         <CreateForm

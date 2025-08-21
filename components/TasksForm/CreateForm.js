@@ -16,7 +16,7 @@ export default function CreateForm({
     title,
     description,
     selectedUserId,
-    selectedRoleId,
+    selectedRole,
     showTasks,
     loading,
     error
@@ -86,11 +86,13 @@ export default function CreateForm({
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
           >
             <option value="">Select user</option>
-            {users.map((u) => (
-              <option key={u.id} value={u.id}>
-                {u.name} ({u.email})
-              </option>
-            ))}
+            {users.map((u) => {
+              return (
+                <option key={u.id} value={u.id}>
+                  {u.name} ({u.email})
+                </option>
+              );
+            })}
           </select>
           <FontAwesomeIcon 
             icon={sidebarIcons.create} 
@@ -111,10 +113,11 @@ export default function CreateForm({
             <select
               disabled={isView}
               id="role"
-              value={selectedRoleId || "viewer"}
+              value={selectedRole || ""}
               onChange={handleRoleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
             >
+              <option value="">Select role</option>
               <option value="owner">Owner</option>
               <option value="reviewer">Reviewer</option>
             </select>

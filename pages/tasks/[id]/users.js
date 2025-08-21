@@ -22,9 +22,8 @@ export default function TaskUsersPage() {
   useEffect(() => {
     if(task){
       const map = new Map();
-      task.assigned_users.forEach(u => {
-        map.set(u.user_id, u.role);
-      });
+      map.set(task.owner.id, "owner");
+      map.set(task.reviewer.id, "reviewer");
       setRolesMap(map);
     }
   }, [task]);

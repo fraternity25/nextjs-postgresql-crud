@@ -18,9 +18,11 @@ export default function UserList({ task, mode, rolesMap }) {
 
   const isView = mode === "view";
   const isEdit = mode === "edit";
+  const owner = { ...task.owner, role:"owner"};
+  const reviewer = { ...task.reviewer, role:"reviewer"};
 
   useEffect(() => {
-    if (status !== 'loading' && (!session || !session.user.roles.includes('admin'))) {
+    if (status !== 'loading' && (!session || session.user.role !== "admin")) {
       router.push('/');
     }
   }, [status, session]);
@@ -34,16 +36,18 @@ export default function UserList({ task, mode, rolesMap }) {
     );
   };
 
-  const toggleRoleChange = (id, newRole) => {
+  const toggleRoleChange = (id, otherId, newRole) => {
     setChangedRolesMap(prev => {
       const newMap = new Map(prev);
       const originalRole = rolesMap.get(id);
 
       if (newRole !== originalRole) {
         newMap.set(id, newRole);
+        newMap.set(otherId, originalRole);
       }
       else {
         newMap.delete(id);
+        newMap.delete(otherId);
       }
 
       return newMap;
@@ -81,16 +85,14 @@ export default function UserList({ task, mode, rolesMap }) {
     };
 
     if (isRoleChange) {
-      // Rolleri güncelle → PATCH /api/tasks/[id]
       url = `/api/tasks/${task.id}`;
       options.method = "PATCH";
       options.body = JSON.stringify({
         ...formData,
-        rolesMap: Array.from(formData.rolesMap.entries()), // [[key1,val1],[key2,val2]]
+        rolesMap: Array.from(formData.rolesMap.entries()), 
       });
     } 
     else if (isDelete) {
-      // Kullanıcı sil → DELETE /api/tasks/[id]/users
       url = `/api/tasks/${task.id}/users`;
       options.method = "DELETE";
       options.body = JSON.stringify({
@@ -125,7 +127,7 @@ export default function UserList({ task, mode, rolesMap }) {
   }
 
   return (
-    task.assigned_users.length > 0 ? (
+    owner.id && reviewer.id ? (
       <div className={isEdit ? `max-w-lg p-6 mx-auto` : ''}>
         {/* Header */}
         <div className="flex justify-between items-center">
@@ -181,42 +183,44 @@ export default function UserList({ task, mode, rolesMap }) {
             </div>
           )}
         </div>
-
+        
+        {/* User list */}
         <ol key={task.id}>
-          {/* User list */}
-          {task.assigned_users.map((au) => (
-            <li
-              key={au.user_id}
-              className={`w-full text-sm text-gray-700 ${isDelete && selectedUserIdList.includes(au.user_id) ? 'bg-red-500' : ''} border border-gray-300 rounded-md shadow-sm mt-1 py-2 px-3`}
-            >
-              <div className='flex justify-between items-center'>
-                <div className="flex items-center gap-2">
-                  {isDelete && (
-                    <input
-                      type="checkbox"
-                      checked={selectedUserIdList.includes(au.user_id)}
-                      onChange={() => toggleUserSelection(au.user_id)}
-                    />
-                  )}
-                  {au.user_name} ({au.user_email})
-                </div>
+          {[owner, reviewer].map((user, i, array) => {
+            const otherId = array[i === 0 ? 1 : 0].id;
+            return (
+              <li
+                key={user.id}
+                className={`w-full text-sm text-gray-700 ${isDelete && selectedUserIdList.includes(user.id) ? 'bg-red-500' : ''} border border-gray-300 rounded-md shadow-sm mt-1 py-2 px-3`}
+              >
+                <div className='flex justify-between items-center'>
+                  <div className="flex items-center gap-2">
+                    {isDelete && (
+                      <input
+                        type="checkbox"
+                        checked={selectedUserIdList.includes(user.id)}
+                        onChange={() => toggleUserSelection(user.id)}
+                      />
+                    )}
+                    {user.name} ({user.email})
+                  </div>
 
-                {isRoleChange ? (
-                  <select
-                    id={au.user_id}
-                    value={changedRolesMap.get(au.user_id) ?? rolesMap.get(au.user_id)}
-                    onChange={(e) => toggleRoleChange(au.user_id, e.target.value)}
-                  >
-                    <option value="admin">Admin</option>
-                    <option value="editor">Editor</option>
-                    <option value="viewer">Viewer</option>
-                  </select>
-                ) : (
-                  <div>{au.role}</div>
-                )}
-              </div>
-            </li>
-          ))}
+                  {isRoleChange ? (
+                    <select
+                      id={user.id}
+                      value={changedRolesMap.get(user.id) ?? rolesMap.get(user.id)}
+                      onChange={(e) => toggleRoleChange(user.id, otherId, e.target.value)}
+                    >
+                      <option value="owner">Owner</option>
+                      <option value="reviewer">Reviewer</option>
+                    </select>
+                  ) : (
+                    <div>{user.role}</div>
+                  )}
+                </div>
+              </li>
+            )
+          })}
         </ol>
         
         <div className="flex justify-end">
@@ -248,7 +252,7 @@ export default function UserList({ task, mode, rolesMap }) {
       </div>
     ) : (
       <div className="flex items-center justify-center h-full w-full">
-        <div className="max-w-lg w-full p-6">
+        <div className="max-w-lg w-full">
           <div className={`@container flex items-center justify-center`}>
             <div
               key={task.id}
