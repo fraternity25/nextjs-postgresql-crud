@@ -17,13 +17,21 @@ export default async function handler(req, res) {
     case 'POST':
       try {
         const { title, description, deadline, status, created_by, rolesMap: rolesMapEntries } = req.body;
-        const rolesMap = new Map(rolesMapEntries);
+        let ownerId, reviewerId;
+
+        for (const [key, value] of rolesMapEntries) {
+          if (value === "owner") {
+            ownerId = key;
+          } else if (value === "reviewer") {
+            reviewerId = key;
+          }
+        }
 
         if (!title || !description || !deadline) {
           return res.status(400).json({ error: 'Title, description and deadline are required' });
         }
 
-        const task = await createTask({ title, description, deadline, status, created_by, rolesMap });
+        const task = await createTask({ title, description, deadline, status, created_by, ownerId, reviewerId });
         res.status(201).json(task);
       } catch (error) {
         console.error(error);

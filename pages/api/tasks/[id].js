@@ -30,10 +30,18 @@ export default async function handler(req, res) {
     case 'PUT':
       try {
         const { title, description, deadline, status, created_by, rolesMap: rolesMapEntries } = req.body;
-        const rolesMap = new Map(rolesMapEntries);
-
-        if (!title || !description ||!deadline)
+        if (!title || !description ||!deadline) {
           return res.status(400).json({ error: 'Title, description and deadline are required' });
+        }
+        let ownerId, reviewerId;
+
+        for (const [key, value] of rolesMapEntries) {
+          if (value === "owner") {
+            ownerId = key;
+          } else if (value === "reviewer") {
+            reviewerId = key;
+          }
+        }
 
         const updatedTask = await updateTask(id, {
           title,
@@ -41,7 +49,8 @@ export default async function handler(req, res) {
           deadline,
           status,
           created_by,
-          rolesMap,
+          ownerId,
+          reviewerId
         });
 
         res.status(200).json(updatedTask);
@@ -55,20 +64,23 @@ export default async function handler(req, res) {
     case 'PATCH':
       try {
         const { rolesMap: rolesMapEntries } = req.body;
-        const rolesMap = new Map(rolesMapEntries);
-        console.log("api/tasks/id-patch:");
-        console.log("rolesMap:");
-        console.log(rolesMap);
-        console.log(Object.prototype.toString.call(rolesMap));
+        let ownerId, reviewerId;
 
-        if (!rolesMap) {
+        for (const [key, value] of rolesMapEntries) {
+          if (value === "owner") {
+            ownerId = key;
+          } else if (value === "reviewer") {
+            reviewerId = key;
+          }
+        }
+
+        if (!ownerId || !reviewerId) {
           return res.status(400).json({ error: "user id's and roles are required" });
         }
 
-        // task_assignments tablosuna insert
-        assignUserToTask(id, rolesMap);
+        await assignUserToTask(id, ownerId, reviewerId);
 
-        res.status(200).json({ id, rolesMap });
+        res.status(200).json({ id, ownerId, reviewerId });
       } catch (error) {
         console.error(error);
         res.status(500).json({ error: error.message });

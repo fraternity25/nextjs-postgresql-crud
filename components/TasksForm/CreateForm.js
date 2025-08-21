@@ -115,9 +115,8 @@ export default function CreateForm({
               onChange={handleRoleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3"
             >
-              <option value="admin">Admin</option>
-              <option value="editor">Editor</option>
-              <option value="viewer">Viewer</option>
+              <option value="owner">Owner</option>
+              <option value="reviewer">Reviewer</option>
             </select>
           </div>
         }
