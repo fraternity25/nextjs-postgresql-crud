@@ -125,20 +125,18 @@ export default function useTasksForm({
 
     setRolesMap(prev => {
       const newMap = new Map(prev);
-      if(!role) {
-        for (const [userId, role] of newMap.entries()) {
-          if (role === selectedRole) {
-            newMap.delete(userId);
-          }
+      for (const [userId, role] of newMap.entries()) {
+        if (role === selectedRole) {
+          newMap.delete(userId);
         }
+      }
+
+      if(!role) {
         newMap.set(selectedUserId, selectedRole);
       }
       else if(selectedRole === role) {
         newMap.delete(selectedUserId);
         newMap.delete(otherId);
-        /* Array.from(newMap.entries())
-          .filter(([userId, role]) => role === selectedRole)
-          .forEach(([userId]) => newMap.delete(userId)); */
       }
       else if(selectedRole === "owner") {
         newMap.set(selectedUserId, "owner");
