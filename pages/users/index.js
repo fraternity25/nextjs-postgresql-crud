@@ -20,6 +20,8 @@ function UsersPageContent() {
 
   const isAdmin = session?.user?.role === "admin";
 
+  console.log("session = ", session);
+
   // Giriş yapılmamışsa auth sayfasına yönlendir
   useEffect(() => {
     if (status === "unauthenticated" && !session) {

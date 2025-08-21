@@ -9,7 +9,7 @@ export default function UserDetailPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { data: session, status, update} = useSession();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     if (status !== 'loading' && session) {
@@ -57,7 +57,6 @@ export default function UserDetailPage() {
       time={5000}
     />
 
-    await update();
     return response.json();
   };
 

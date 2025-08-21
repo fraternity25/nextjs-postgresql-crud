@@ -16,7 +16,7 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
 
   console.log("user = ", user);
 
-  const { data: session } = useSession();
+  const { data: session, status, update } = useSession();
   const isAdmin = session?.user?.role === 'admin';
 
   // Parse the mode string into permission flags
@@ -59,7 +59,7 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
       const [action, params] = splitFirst(op, ':');
       if (!['view', 'edit'].includes(action)) return;
 
-      console.log(`action = ${action} and params = ${params}\n`)
+      //console.log(`action = ${action} and params = ${params}\n`)
 
       if (!params) {
         // No parameters means all fields
@@ -113,9 +113,9 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
     try {
       if (onSubmit) {
         await onSubmit({ name, email, role });
-        setLoading(true);
       }
-      router.push('/');
+      await update();
+      router.push('/users');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -299,10 +299,13 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
             {(!isView || editRole) && ( 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || status === 'loading'}
                 className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
               >
-                {loading ? 'Saving...' : editRole || isEdit ? 'Update' : 'Sign Up'}
+                {loading || status === 'loading' ? 
+                  'Loading...' : editRole || isEdit ? 
+                  'Update' : 'Sign Up'
+                }
               </button>
             )}
             <button
