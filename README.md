@@ -15,12 +15,10 @@ This is a full-stack CRUD application built with [Next.js](https://nextjs.org) a
     <li>✅ Environment-based configuration</li>
   </ul>
 </details>
-
 <details>
   <summary class="cursor-pointer font-semibold text-lg">
    <h2>Getting Started</h2>
   </summary>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Prerequisites</h3>
@@ -31,7 +29,6 @@ This is a full-stack CRUD application built with [Next.js](https://nextjs.org) a
       <li>PostgreSQL (version 12 or higher)</li>
     </ul>
   </details>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Installation</h3>
@@ -69,7 +66,6 @@ DB_POOL_MAX=10</code></pre>
     </ol>
   </details>
 </details>
-
 <details>
   <summary class="cursor-pointer font-semibold text-lg">
    <h2>Database Setup</h2>
@@ -79,7 +75,6 @@ DB_POOL_MAX=10</code></pre>
 CREATE INDEX idx_users_email ON users(email);
 </code></pre>
 </details>
-
 <details>
    <summary class="cursor-pointer font-semibold text-lg">
       <h2>Project Structure</h2>
@@ -255,12 +250,10 @@ CREATE INDEX idx_users_email ON users(email);
       <li>README.md</li>
    </ul>
 </details>
-
 <details>
   <summary class="cursor-pointer font-semibold text-lg">
    <h2>API Endpoints</h2>
   </summary>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Users Collection (/api/users)</h3>
@@ -270,7 +263,6 @@ CREATE INDEX idx_users_email ON users(email);
       <li><b>POST</b>: Create a new user</li>
     </ul>
   </details>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Individual User (/api/users/[id])</h3>
@@ -281,7 +273,6 @@ CREATE INDEX idx_users_email ON users(email);
       <li><b>DELETE</b>: Delete a specific user</li>
     </ul>
   </details>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Tasks Collection (/api/tasks)</h3>
@@ -291,7 +282,6 @@ CREATE INDEX idx_users_email ON users(email);
       <li><b>POST</b>: Create a new task</li>
     </ul>
   </details>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Individual Task (/api/tasks/[id])</h3>
@@ -302,7 +292,6 @@ CREATE INDEX idx_users_email ON users(email);
       <li><b>DELETE</b>: Delete a specific task</li>
     </ul>
   </details>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Task Users (/api/tasks/[id]/users)</h3>
@@ -313,7 +302,6 @@ CREATE INDEX idx_users_email ON users(email);
       <li><b>DELETE</b>: Remove a user from a task</li>
     </ul>
   </details>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Authentication (/api/auth)</h3>
@@ -324,7 +312,6 @@ CREATE INDEX idx_users_email ON users(email);
     </ul>
   </details>
 </details>
-
 <details>
   <summary class="cursor-pointer font-semibold text-lg">
    <h3>Data Storage</h3>
@@ -337,12 +324,10 @@ CREATE INDEX idx_users_email ON users(email);
     <li><b>Email uniqueness</b> constraint</li>
   </ul>
 </details>
-
 <details>
   <summary class="cursor-pointer font-semibold text-lg">
     <h2>Development</h2>
   </summary>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Adding New Fields</h3>
@@ -355,7 +340,6 @@ CREATE INDEX idx_users_email ON users(email);
       <li>Update display components</li>
     </ol>
   </details>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Database Migrations</h3>
@@ -366,7 +350,6 @@ CREATE INDEX idx_users_email ON users(email);
       <li>Run migrations during deployment</li>
     </ol>
   </details>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Performance Optimization</h3>
@@ -378,7 +361,6 @@ CREATE INDEX idx_users_email ON users(email);
       <li>Use pagination for large datasets</li>
     </ul>
   </details>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Security Considerations</h3>
@@ -391,12 +373,10 @@ CREATE INDEX idx_users_email ON users(email);
     </ul>
   </details>
 </details>
-
 <details>
   <summary class="cursor-pointer font-semibold text-lg">
     <h2>Production Deployment</h2>
   </summary>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Database Setup</h3>
@@ -412,7 +392,6 @@ NODE_ENV=production</code></pre>
       </li>
     </ol>
   </details>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Deployment Platforms</h3>
@@ -426,12 +405,10 @@ NODE_ENV=production</code></pre>
     </ul>
   </details>
 </details>
-
 <details>
   <summary class="cursor-pointer font-semibold text-lg">
     <h2>Troubleshooting</h2>
   </summary>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Common Issues</h3>
@@ -442,7 +419,6 @@ NODE_ENV=production</code></pre>
       <li>Env issues → ensure <code>.env.local</code> exists, restart dev server</li>
     </ul>
   </details>
-
   <details>
     <summary class="cursor-pointer font-semibold text-lg">
       <h3>Development Tips</h3>
@@ -454,7 +430,6 @@ NODE_ENV=production</code></pre>
     </ul>
   </details>
 </details>
-
 <details>
   <summary class="cursor-pointer font-semibold text-lg">
     <h2>Learn More</h2>
@@ -465,7 +440,6 @@ NODE_ENV=production</code></pre>
     <li><a href="https://github.com/vercel/next.js">Next.js GitHub Repository</a></li>
   </ul>
 </details>
-
 <details>
   <summary class="cursor-pointer font-semibold text-lg">
     <h2>License</h2>
