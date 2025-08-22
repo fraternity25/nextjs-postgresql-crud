@@ -314,7 +314,7 @@ CREATE INDEX idx_users_email ON users(email);
 </details>
 <details>
   <summary class="cursor-pointer font-semibold text-lg">
-   <h3>Data Storage</h3>
+   <h2>Data Storage</h2>
   </summary>
   <ul>
     <li><b>Connection pooling</b> via pg.Pool (lib/db.js)</li>
