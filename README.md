@@ -2,7 +2,7 @@
 This is a full-stack CRUD application built with [Next.js](https://nextjs.org) and bootstrapped with [create-next-app](https://nextjs.org/docs/pages/api-reference/create-next-app). It's using the Page Router, JavaScript, Tailwind CSS and PostgreSQL as the database backend.
 
 <details class="group">
-  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
     <h2>Features</h2>
   </summary>
   <ul>
@@ -16,11 +16,11 @@ This is a full-stack CRUD application built with [Next.js](https://nextjs.org) a
   </ul>
 </details>
 <details class="group">
-  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
    <h2>Getting Started</h2>
   </summary>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Prerequisites</h3>
     </summary>
     <ul>
@@ -30,7 +30,7 @@ This is a full-stack CRUD application built with [Next.js](https://nextjs.org) a
     </ul>
   </details>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Installation</h3>
     </summary>
     <ol>
@@ -67,7 +67,7 @@ DB_POOL_MAX=10</code></pre>
   </details>
 </details>
 <details class="group">
-  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
    <h2>Database Setup</h2>
   </summary>
   <p>Tables are created and seeded using <code>scripts/seed.js</code>.</p>
@@ -76,7 +76,7 @@ CREATE INDEX idx_users_email ON users(email);
 </code></pre>
 </details>
 <details class="group">
-   <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+   <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h2>Project Structure</h2>
    </summary>
    <details class="group">
@@ -251,11 +251,11 @@ CREATE INDEX idx_users_email ON users(email);
    </ul>
 </details>
 <details class="group">
-  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
    <h2>API Endpoints</h2>
   </summary>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Users Collection (/api/users)</h3>
     </summary>
     <ul>
@@ -264,7 +264,7 @@ CREATE INDEX idx_users_email ON users(email);
     </ul>
   </details>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Individual User (/api/users/[id])</h3>
     </summary>
     <ul>
@@ -274,7 +274,7 @@ CREATE INDEX idx_users_email ON users(email);
     </ul>
   </details>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Tasks Collection (/api/tasks)</h3>
     </summary>
     <ul>
@@ -283,7 +283,7 @@ CREATE INDEX idx_users_email ON users(email);
     </ul>
   </details>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Individual Task (/api/tasks/[id])</h3>
     </summary>
     <ul>
@@ -293,7 +293,7 @@ CREATE INDEX idx_users_email ON users(email);
     </ul>
   </details>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Task Users (/api/tasks/[id]/users)</h3>
     </summary>
     <ul>
@@ -303,7 +303,7 @@ CREATE INDEX idx_users_email ON users(email);
     </ul>
   </details>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Authentication (/api/auth)</h3>
     </summary>
     <ul>
@@ -313,7 +313,7 @@ CREATE INDEX idx_users_email ON users(email);
   </details>
 </details>
 <details class="group">
-  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
    <h2>Data Storage</h2>
   </summary>
   <ul>
@@ -325,11 +325,11 @@ CREATE INDEX idx_users_email ON users(email);
   </ul>
 </details>
 <details class="group">
-  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
     <h2>Development</h2>
   </summary>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Adding New Fields</h3>
     </summary>
     <ol>
@@ -341,7 +341,7 @@ CREATE INDEX idx_users_email ON users(email);
     </ol>
   </details>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Database Migrations</h3>
     </summary>
     <ol>
@@ -351,7 +351,7 @@ CREATE INDEX idx_users_email ON users(email);
     </ol>
   </details>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Performance Optimization</h3>
     </summary>
     <ul>
@@ -362,7 +362,7 @@ CREATE INDEX idx_users_email ON users(email);
     </ul>
   </details>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Security Considerations</h3>
     </summary>
     <ul>
@@ -374,11 +374,11 @@ CREATE INDEX idx_users_email ON users(email);
   </details>
 </details>
 <details class="group">
-  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
     <h2>Production Deployment</h2>
   </summary>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Database Setup</h3>
     </summary>
     <ol>
@@ -393,7 +393,7 @@ NODE_ENV=production</code></pre>
     </ol>
   </details>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Deployment Platforms</h3>
     </summary>
     <ul>
@@ -406,11 +406,11 @@ NODE_ENV=production</code></pre>
   </details>
 </details>
 <details class="group">
-  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
     <h2>Troubleshooting</h2>
   </summary>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Common Issues</h3>
     </summary>
     <ul>
@@ -420,7 +420,7 @@ NODE_ENV=production</code></pre>
     </ul>
   </details>
   <details class="group">
-    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
       <h3>Development Tips</h3>
     </summary>
     <ul>
@@ -431,7 +431,7 @@ NODE_ENV=production</code></pre>
   </details>
 </details>
 <details class="group">
-  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
     <h2>Learn More</h2>
   </summary>
   <ul>
@@ -441,7 +441,7 @@ NODE_ENV=production</code></pre>
   </ul>
 </details>
 <details class="group">
-  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:border-l-4 group-open:border-blue-500">
     <h2>License</h2>
   </summary>
   <p>This project is open source and available under the <a href="LICENSE">MIT License</a>.</p>
