@@ -1,8 +1,8 @@
 # Next.js CRUD App with PostgreSQL
 This is a full-stack CRUD application built with [Next.js](https://nextjs.org) and bootstrapped with [create-next-app](https://nextjs.org/docs/pages/api-reference/create-next-app). It's using the Page Router, JavaScript, Tailwind CSS and PostgreSQL as the database backend.
 
-<details>
-  <summary class="cursor-pointer font-semibold text-lg">
+<details class="group">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
     <h2>Features</h2>
   </summary>
   <ul>
@@ -15,12 +15,12 @@ This is a full-stack CRUD application built with [Next.js](https://nextjs.org) a
     <li>✅ Environment-based configuration</li>
   </ul>
 </details>
-<details>
-  <summary class="cursor-pointer font-semibold text-lg">
+<details class="group">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
    <h2>Getting Started</h2>
   </summary>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Prerequisites</h3>
     </summary>
     <ul>
@@ -29,8 +29,8 @@ This is a full-stack CRUD application built with [Next.js](https://nextjs.org) a
       <li>PostgreSQL (version 12 or higher)</li>
     </ul>
   </details>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Installation</h3>
     </summary>
     <ol>
@@ -66,8 +66,8 @@ DB_POOL_MAX=10</code></pre>
     </ol>
   </details>
 </details>
-<details>
-  <summary class="cursor-pointer font-semibold text-lg">
+<details class="group">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
    <h2>Database Setup</h2>
   </summary>
   <p>Tables are created and seeded using <code>scripts/seed.js</code>.</p>
@@ -75,11 +75,11 @@ DB_POOL_MAX=10</code></pre>
 CREATE INDEX idx_users_email ON users(email);
 </code></pre>
 </details>
-<details>
-   <summary class="cursor-pointer font-semibold text-lg">
+<details class="group">
+   <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h2>Project Structure</h2>
    </summary>
-   <details>
+   <details class="group">
       <summary><strong>📁 components/</strong></summary>
       <ul>
          <li>ConfirmModal.js – Reusable confirmation dialog</li>
@@ -91,7 +91,7 @@ CREATE INDEX idx_users_email ON users(email);
          <li>TaskActionSelect.js – Dropdown for task actions</li>
          <li>TaskList.js – Task listing UI</li>
          <li>
-            <details>
+            <details class="group">
                <summary><strong>📁 TasksForm/</strong></summary>
                <ul>
                   <li>CreateForm.js – Form for creating a new task</li>
@@ -107,20 +107,20 @@ CREATE INDEX idx_users_email ON users(email);
          <li>UsersLayout.js – Layout for user-related pages</li>
       </ul>
    </details>
-   <details>
+   <details class="group">
       <summary><strong>📁 contexts/</strong></summary>
       <ul>
          <li>TasksContext.js – Context provider for tasks state</li>
          <li>UsersContext.js – Context provider for users state</li>
       </ul>
    </details>
-   <details>
+   <details class="group">
       <summary><strong>📁 hooks/</strong></summary>
       <ul>
          <li>useTasksForm.js – Custom hook for task form logic</li>
       </ul>
    </details>
-   <details>
+   <details class="group">
       <summary><strong>📁 lib/</strong></summary>
       <ul>
          <li>authOptions.js – NextAuth configuration</li>
@@ -129,15 +129,15 @@ CREATE INDEX idx_users_email ON users(email);
          <li>utils.js – Utility/helper functions</li>
       </ul>
    </details>
-   <details>
+   <details class="group">
       <summary><strong>📁 pages/</strong></summary>
       <ul>
          <li>
-            <details>
+            <details class="group">
                <summary><strong>📁 api/</strong></summary>
                <ul>
                   <li>
-                     <details>
+                     <details class="group">
                         <summary><strong>📁 auth/</strong></summary>
                         <ul>
                            <li>[...nextauth].js – NextAuth API route</li>
@@ -146,7 +146,7 @@ CREATE INDEX idx_users_email ON users(email);
                      </details>
                   </li>
                   <li>
-                     <details>
+                     <details class="group">
                         <summary><strong>📁 tasks/</strong></summary>
                         <ul>
                            <li>[id].js – Single task API route</li>
@@ -156,7 +156,7 @@ CREATE INDEX idx_users_email ON users(email);
                      </details>
                   </li>
                   <li>
-                     <details>
+                     <details class="group">
                         <summary><strong>📁 users/</strong></summary>
                         <ul>
                            <li>[id].js – Single user API route</li>
@@ -168,7 +168,7 @@ CREATE INDEX idx_users_email ON users(email);
             </details>
          </li>
          <li>
-            <details>
+            <details class="group">
                <summary><strong>📁 auth/</strong></summary>
                <ul>
                   <li>index.js – Auth landing page</li>
@@ -178,11 +178,11 @@ CREATE INDEX idx_users_email ON users(email);
             </details>
          </li>
          <li>
-            <details>
+            <details class="group">
                <summary><strong>📁 tasks/</strong></summary>
                <ul>
                   <li>
-                     <details>
+                     <details class="group">
                         <summary><strong>📁 [id]/</strong></summary>
                         <ul>
                            <li>edit.js – Edit task page</li>
@@ -196,11 +196,11 @@ CREATE INDEX idx_users_email ON users(email);
             </details>
          </li>
          <li>
-            <details>
+            <details class="group">
                <summary><strong>📁 users/</strong></summary>
                <ul>
                   <li>
-                     <details>
+                     <details class="group">
                         <summary><strong>📁 [id]/</strong></summary>
                         <ul>
                            <li>edit.js – Edit user page</li>
@@ -213,7 +213,7 @@ CREATE INDEX idx_users_email ON users(email);
             </details>
          </li>
          <li>
-            <details>
+            <details class="group">
                <summary><strong>📁 profile/</strong></summary>
                <ul>
                   <li>index.js – User profile page</li>
@@ -225,16 +225,16 @@ CREATE INDEX idx_users_email ON users(email);
          <li>index.js – Home page</li>
       </ul>
    </details>
-   <details>
+   <details class="group">
       <summary><strong>📁 public/</strong> – Static assets</summary>
    </details>
-   <details>
+   <details class="group">
       <summary><strong>📁 scripts/</strong></summary>
       <ul>
          <li>seed.js – DB seeding script</li>
       </ul>
    </details>
-   <details>
+   <details class="group">
       <summary><strong>📁 styles/</strong></summary>
       <ul>
          <li>globals.css – Global Tailwind styles</li>
@@ -250,12 +250,12 @@ CREATE INDEX idx_users_email ON users(email);
       <li>README.md</li>
    </ul>
 </details>
-<details>
-  <summary class="cursor-pointer font-semibold text-lg">
+<details class="group">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
    <h2>API Endpoints</h2>
   </summary>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Users Collection (/api/users)</h3>
     </summary>
     <ul>
@@ -263,8 +263,8 @@ CREATE INDEX idx_users_email ON users(email);
       <li><b>POST</b>: Create a new user</li>
     </ul>
   </details>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Individual User (/api/users/[id])</h3>
     </summary>
     <ul>
@@ -273,8 +273,8 @@ CREATE INDEX idx_users_email ON users(email);
       <li><b>DELETE</b>: Delete a specific user</li>
     </ul>
   </details>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Tasks Collection (/api/tasks)</h3>
     </summary>
     <ul>
@@ -282,8 +282,8 @@ CREATE INDEX idx_users_email ON users(email);
       <li><b>POST</b>: Create a new task</li>
     </ul>
   </details>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Individual Task (/api/tasks/[id])</h3>
     </summary>
     <ul>
@@ -292,8 +292,8 @@ CREATE INDEX idx_users_email ON users(email);
       <li><b>DELETE</b>: Delete a specific task</li>
     </ul>
   </details>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Task Users (/api/tasks/[id]/users)</h3>
     </summary>
     <ul>
@@ -302,8 +302,8 @@ CREATE INDEX idx_users_email ON users(email);
       <li><b>DELETE</b>: Remove a user from a task</li>
     </ul>
   </details>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Authentication (/api/auth)</h3>
     </summary>
     <ul>
@@ -312,8 +312,8 @@ CREATE INDEX idx_users_email ON users(email);
     </ul>
   </details>
 </details>
-<details>
-  <summary class="cursor-pointer font-semibold text-lg">
+<details class="group">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
    <h2>Data Storage</h2>
   </summary>
   <ul>
@@ -324,12 +324,12 @@ CREATE INDEX idx_users_email ON users(email);
     <li><b>Email uniqueness</b> constraint</li>
   </ul>
 </details>
-<details>
-  <summary class="cursor-pointer font-semibold text-lg">
+<details class="group">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
     <h2>Development</h2>
   </summary>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Adding New Fields</h3>
     </summary>
     <ol>
@@ -340,8 +340,8 @@ CREATE INDEX idx_users_email ON users(email);
       <li>Update display components</li>
     </ol>
   </details>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Database Migrations</h3>
     </summary>
     <ol>
@@ -350,8 +350,8 @@ CREATE INDEX idx_users_email ON users(email);
       <li>Run migrations during deployment</li>
     </ol>
   </details>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Performance Optimization</h3>
     </summary>
     <ul>
@@ -361,8 +361,8 @@ CREATE INDEX idx_users_email ON users(email);
       <li>Use pagination for large datasets</li>
     </ul>
   </details>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Security Considerations</h3>
     </summary>
     <ul>
@@ -373,12 +373,12 @@ CREATE INDEX idx_users_email ON users(email);
     </ul>
   </details>
 </details>
-<details>
-  <summary class="cursor-pointer font-semibold text-lg">
+<details class="group">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
     <h2>Production Deployment</h2>
   </summary>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Database Setup</h3>
     </summary>
     <ol>
@@ -392,8 +392,8 @@ NODE_ENV=production</code></pre>
       </li>
     </ol>
   </details>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Deployment Platforms</h3>
     </summary>
     <ul>
@@ -405,12 +405,12 @@ NODE_ENV=production</code></pre>
     </ul>
   </details>
 </details>
-<details>
-  <summary class="cursor-pointer font-semibold text-lg">
+<details class="group">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
     <h2>Troubleshooting</h2>
   </summary>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Common Issues</h3>
     </summary>
     <ul>
@@ -419,8 +419,8 @@ NODE_ENV=production</code></pre>
       <li>Env issues → ensure <code>.env.local</code> exists, restart dev server</li>
     </ul>
   </details>
-  <details>
-    <summary class="cursor-pointer font-semibold text-lg">
+  <details class="group">
+    <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
       <h3>Development Tips</h3>
     </summary>
     <ul>
@@ -430,8 +430,8 @@ NODE_ENV=production</code></pre>
     </ul>
   </details>
 </details>
-<details>
-  <summary class="cursor-pointer font-semibold text-lg">
+<details class="group">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
     <h2>Learn More</h2>
   </summary>
   <ul>
@@ -440,8 +440,8 @@ NODE_ENV=production</code></pre>
     <li><a href="https://github.com/vercel/next.js">Next.js GitHub Repository</a></li>
   </ul>
 </details>
-<details>
-  <summary class="cursor-pointer font-semibold text-lg">
+<details class="group">
+  <summary class="cursor-pointer font-semibold text-lg transition-colors duration-300 group-open:text-blue-500">
     <h2>License</h2>
   </summary>
   <p>This project is open source and available under the <a href="LICENSE">MIT License</a>.</p>
