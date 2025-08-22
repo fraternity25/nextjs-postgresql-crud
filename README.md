@@ -14,93 +14,184 @@ This is a full-stack CRUD application built with [Next.js](https://nextjs.org) a
 
 ## Project Structure
 
-```
-├── components/
-│ ├── ConfirmModal.js # Reusable confirmation dialog
-│ ├── icons.js # Centralized icon exports
-│ ├── Layout.js # Main app layout with header/sidebar
-│ ├── ProfileMenu.js # Dropdown menu for user profile
-│ ├── Sidebar.js # Sidebar navigation component
-│ ├── SignupForm.js # Signup form component
-│ ├── TaskActionSelect.js # Dropdown for task actions
-│ ├── TaskList.js # Task listing UI
-│ ├── TasksForm/
-│ │ ├── CreateForm.js # Form for creating a new task
-│ │ └── index.js # Exports task form components
-│ ├── TasksLayout.js # Layout for task-related pages
-│ ├── Toast.js # Notification/toast component
-│ ├── UserActionSelect.js # Dropdown for user actions
-│ ├── UserForm.js # Form for adding/editing users
-│ ├── UserList.js # User listing UI
-│ └── UsersLayout.js # Layout for user-related pages
-│
-├── contexts/
-│ ├── TasksContext.js # Context provider for tasks state
-│ └── UsersContext.js # Context provider for users state
-│
-├── hooks/
-│ └── useTasksForm.js # Custom hook for task form logic
-│
-├── lib/
-│ ├── authOptions.js # NextAuth configuration
-│ ├── dataService.js # Data access layer with PostgreSQL
-│ ├── db.js # Database connection setup
-│ └── utils.js # Utility/helper functions
-│
-├── pages/
-│ ├── api/
-│ │ ├── auth/
-│ │ │ ├── [...nextauth].js # NextAuth API route
-│ │ │ └── signup.js # Signup API route
-│ │ ├── tasks/
-│ │ │ ├── [id].js # Single task API route
-│ │ │ ├── [id]/users.js # Manage users for a task
-│ │ │ └── tasks.js # Tasks collection API
-│ │ ├── users/
-│ │ │ └── [id].js # Single user API route
-│ │ └── users.js # Users collection API
-│ │
-│ ├── auth/
-│ │ ├── index.js # Auth landing page
-│ │ ├── login.js # Login page
-│ │ └── signup.js # Signup page
-│ │
-│ ├── tasks/
-│ │ ├── [id]/
-│ │ │ ├── edit.js # Edit task page
-│ │ │ └── users.js # Assign users to task
-│ │ ├── index.js # Tasks list page
-│ │ └── new.js # Create task page
-│ │
-│ ├── users/
-│ │ ├── [id]/
-│ │ │ ├── edit.js # Edit user page
-│ │ │ └── tasks.js # View user’s tasks
-│ │ └── index.js # Users list page
-│ │
-│ ├── profile/
-│ │ └── index.js # User profile page
-│ │
-│ ├── _app.js # Custom App component
-│ ├── _document.js # Custom Document
-│ └── index.js # Home page
-│
-├── public/ # Static assets
-│
-├── scripts/
-│ └── seed.js # DB seeding script
-│
-├── styles/
-│ └── globals.css # Global Tailwind styles
-│
-├── eslint.config.mjs # ESLint configuration
-├── jsconfig.json # Path aliases
-├── next.config.mjs # Next.js configuration
-├── package.json
-├── postcss.config.js # PostCSS config for Tailwind
-├── tailwind.config.js # Tailwind configuration
-└── README.md
-```
+<details>
+   <summary>
+      <strong>📁 components/</strong>
+   </summary>
+
+   - `ConfirmModal.js` # Reusable confirmation dialog
+   - `icons.js` # Centralized icon exports
+   - `Layout.js` # Main app layout with header/sidebar
+   - `ProfileMenu.js` # Dropdown menu for user profile
+   - `Sidebar.js` # Sidebar navigation component
+   - `SignupForm.js` # Signup form component
+   - `TaskActionSelect.js` # Dropdown for task actions
+   - `TaskList.js` # Task listing UI
+   <details>
+      <summary>
+         <strong>📁 TasksForm/</strong>
+      </summary>
+
+      - `CreateForm.js` # Form for creating a new task
+      - `index.js` # Exports task form components
+   </details>
+
+   - `TasksLayout.js` # Layout for task-related pages
+   - `Toast.js` # Notification/toast component
+   - `UserActionSelect.js` # Dropdown for user actions
+   - `UserForm.js` # Form for adding/editing users
+   - `UserList.js` # User listing UI
+   - `UsersLayout.js` # Layout for user-related pages
+</details>
+
+<details>
+   <summary>
+      <strong>📁 contexts/</strong>
+   </summary>
+
+   - `TasksContext.js` # Context provider for tasks state
+   - `UsersContext.js` # Context provider for users state
+</details>
+
+<details>
+   <summary>
+      <strong>📁 hooks/</strong>
+   </summary>
+
+   - `useTasksForm.js` # Custom hook for task form logic
+</details>
+
+<details>
+   <summary>
+      <strong>📁 lib/</strong>
+   </summary>
+
+   - `authOptions.js` # NextAuth configuration
+   - `dataService.js` # Data access layer with PostgreSQL
+   - `db.js` # Database connection setup
+   - `utils.js` # Utility/helper functions
+</details>
+
+<details>
+   <summary>
+      <strong>📁 pages/</strong>
+   </summary>
+   <details>
+      <summary>
+         <strong>📁 api/</strong>
+      </summary>
+      <details>
+         <summary>
+            <strong>📁 auth/</strong>
+         </summary>
+
+         - `[...nextauth].js` # NextAuth API route
+         - `signup.js` # Signup API route
+      </details>
+      <details>
+         <summary>
+            <strong>📁 tasks/</strong>
+         </summary>
+
+         - `[id].js` # Single task API route
+         - `[id]/users.js` # Manage users for a task
+         - `tasks.js` # Tasks collection API
+      </details>
+      <details>
+         <summary>
+            <strong>📁 users/</strong>
+         </summary>
+
+         - `[id].js` # Single user API route
+         - `users.js` # Users collection API
+      </details>
+   </details>
+
+   <details>
+      <summary>
+         <strong>📁 auth/</strong>
+      </summary>
+
+      - `index.js` # Auth landing page
+      - `login.js` # Login page
+      - `signup.js` # Signup page
+   </details>
+
+   <details>
+      <summary>
+         <strong>📁 tasks/</strong>
+      </summary>
+      <details>
+         <summary>
+            <strong>📁 [id]/</strong>
+         </summary>
+
+         - `edit.js` # Edit task page
+         - `users.js` # Assign users to task
+      </details>
+
+      - `index.js` # Tasks list page
+      - `new.js` # Create task page
+   </details>
+
+   <details>
+      <summary>
+         <strong>📁 users/</strong>
+      </summary>
+      <details>
+         <summary>
+            <strong>📁 [id]/</strong>
+         </summary>
+
+         - `edit.js` # Edit user page
+         - `tasks.js` # View user's tasks
+      </details>
+
+      - `index.js` # Users list page
+   </details>
+
+   <details>
+      <summary>
+         <strong>📁 profile/</strong>
+      </summary>
+
+      - `index.js` # User profile page
+   </details>
+
+   - `_app.js` # Custom App component
+   - `_document.js` # Custom Document
+   - `index.js` # Home page
+</details>
+
+<details>
+   <summary>
+      <strong>📁 public/</strong> # Static assets
+   </summary>
+</details>
+
+<details>
+   <summary>
+      <strong>📁 scripts/</strong>
+   </summary>
+
+   - `seed.js` # DB seeding script
+</details>
+
+<details>
+   <summary>
+      <strong>📁 styles/</strong>
+   </summary>
+
+   - `globals.css` # Global Tailwind styles
+</details>
+
+- `eslint.config.mjs` # ESLint configuration
+- `jsconfig.json` # Path aliases
+- `next.config.mjs` # Next.js configuration
+- `package.json`
+- `postcss.config.js` # PostCSS config for Tailwind
+- `tailwind.config.js` # Tailwind configuration
+- `README.md`
 
 ## Getting Started
 ### Prerequisites
