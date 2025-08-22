@@ -55,7 +55,7 @@ Tables are created and seeded using scripts/seed.js.
 CREATE INDEX idx_users_email ON users(email);
 ```
 
-<details open>
+<details>
    <summary class="cursor-pointer font-semibold text-lg">
       <h2>Project Structure</h2>
    </summary>
