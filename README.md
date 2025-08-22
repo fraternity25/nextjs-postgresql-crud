@@ -103,7 +103,6 @@ This is a full-stack CRUD application built with [Next.js](https://nextjs.org) a
 ```
 
 ## Getting Started
-
 ### Prerequisites
 
 - Node.js (version 14 or higher)
@@ -113,106 +112,91 @@ This is a full-stack CRUD application built with [Next.js](https://nextjs.org) a
 ### Installation
 
 1. Clone or create the project directory
-
 2. Install dependencies:
    ```bash
    npm install
    ```
-
 3. Set up PostgreSQL database:
    - Create a new PostgreSQL database
-   - Run the schema from `sql/schema.sql` to create the required tables
-
+   - Run the seed script to create the required tables and demo data: `node scripts/seed.js` 
+   
 4. Configure environment variables:
-   - Copy `.env.local.example` to `.env.local`
-   - Update the database connection details:
-   ```env
-   DATABASE_URL=postgresql://username:password@localhost:5432/your_database_name
-   ```
+   - Create a `.env.local` file in the root directory with the following variables:
 
+   ```env
+   # Database Configuration
+   PGHOST=localhost
+   PGUSER=user_in_pgadmin
+   PGPASSWORD=password_of_pgadmin
+   PGDATABASE=nextcrud
+   PGPORT=5432
+   NEXTAUTH_SECRET=your_secret_key
+   # Optional: Connection pool settings
+   DB_POOL_MIN=2
+   DB_POOL_MAX=10
+   ```
 5. Run the development server:
    ```bash
    npm run dev
    ```
-
 6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
 ## Database Setup
-
-### Schema
-
-The application uses the following PostgreSQL schema:
+Tables are created and seeded using scripts/seed.js.
 
 ```sql
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 -- Optional: Create an index on email for better performance
 CREATE INDEX idx_users_email ON users(email);
 ```
 
-### Environment Variables
-
-Create a `.env.local` file in the root directory with the following variables:
-
-```env
-# Database Configuration
-DATABASE_URL=postgresql://username:password@localhost:5432/database_name
-
-# Optional: Connection pool settings
-DB_POOL_MIN=2
-DB_POOL_MAX=10
-```
-
 ## API Endpoints
+### Users Collection (`/api/users`)
+- **GET**: Retrieve all users
+- **POST**: Create a new user
 
-### Users Collection (/api/users)
-- **GET** - Retrieve all users
-- **POST** - Create a new user
+### Individual User (`/api/users/[id]`)
+- **GET**: Retrieve a specific user
+- **PUT**: Update a specific user
+- **DELETE**: Delete a specific user
 
-### Individual User (/api/users/[id])
-- **GET** - Retrieve a specific user
-- **PUT** - Update a specific user
-- **DELETE** - Delete a specific user
+### Tasks Collection (`/api/tasks`)
+- **GET**: Retrieve all tasks
+- **POST**: Create a new task
+
+### Individual Task (`/api/tasks/[id]`)
+- **GET**: Retrieve a specific task
+- **PUT**: Update a specific task
+- **DELETE**: Delete a specific task
+
+### Task Users (`/api/tasks/[id]/users`)
+- **GET**: List users assigned to a task
+- **POST**: Assign a user to a task
+- **DELETE**: Remove a user from a task
+
+### Authentication (`/api/auth`)
+- **POST** `/auth/signup`: Register new user
+- `[...nextauth].js`: NextAuth handler for login/session
 
 ## Data Storage
-
 The application uses PostgreSQL for data persistence with the following features:
-
-- **Connection pooling** for efficient database connections
+- **Connection pooling** via pg.Pool (lib/db.js)
 - **Prepared statements** for security and performance
 - **Transaction support** for data integrity
 - **Automatic timestamps** for created_at and updated_at fields
 - **Email uniqueness** constraint
 
 ## Development
-
 ### Adding New Fields
-
 To add new fields to the user model:
-
-1. **Update the database schema:**
-   ```sql
-   ALTER TABLE users ADD COLUMN new_field VARCHAR(255);
-   ```
-
-2. **Update the DataService methods** in `lib/dataService.js`
-
-3. **Update the UserForm component** in `components/UserForm.js`
-
-4. **Update the API validation** in `pages/api/users.js` and `pages/api/users/[id].js`
-
+1. **Update database schema (via a migration or directly in scripts/seed.js)**
+2. **Update data access methods** in `lib/dataService.js`
+3. **Update forms** in `components/UserForm.js, components/TasksForm/`
+4. **Update API routes** in `pages/api/...`
 5. **Update the display components** as needed
 
 ### Database Migrations
-
 For production deployments, consider implementing a migration system:
 
 1. Create migration files in a `migrations/` directory
@@ -220,42 +204,31 @@ For production deployments, consider implementing a migration system:
 3. Run migrations as part of your deployment process
 
 ### Performance Optimization
-
 - Use connection pooling (already configured in `lib/db.js`)
 - Add database indexes for frequently queried fields
 - Consider implementing caching for read-heavy operations
 - Use pagination for large datasets
 
 ### Security Considerations
-
 - Environment variables are used for database credentials
 - Prepared statements prevent SQL injection
 - Input validation is implemented in API routes
 - Email uniqueness is enforced at the database level
 
-## Styling
-
-The app uses Tailwind CSS for styling. All styles are utility-based and responsive.
-
 ## Production Deployment
-
 ### Database Setup
-
 1. Set up a PostgreSQL database (e.g., using services like AWS RDS, Heroku Postgres, or Supabase)
 2. Run the schema creation script
-3. Configure the `DATABASE_URL` environment variable
-
-### Environment Variables
-
-Ensure the following environment variables are set in your production environment:
+3. Environment variables needed in production:
 
 ```env
 DATABASE_URL=postgresql://username:password@host:port/database_name
+NEXTAUTH_SECRET=your_secret
+NEXTAUTH_URL=https://your-domain.com
 NODE_ENV=production
 ```
 
 ### Deployment Platforms
-
 This app can be deployed on:
 - Vercel (recommended for Next.js)
 - Netlify
@@ -266,37 +239,28 @@ This app can be deployed on:
 Make sure your hosting platform supports PostgreSQL connections and environment variables.
 
 ## Troubleshooting
-
 ### Common Issues
-
 1. **Database connection errors:**
    - Verify DATABASE_URL is correct
    - Ensure PostgreSQL is running
    - Check firewall settings
-
 2. **Schema errors:**
    - Ensure the database schema is properly created
    - Check table and column names match the code
-
 3. **Environment variable issues:**
    - Verify `.env.local` exists and has correct values
    - Restart the development server after changes
 
 ### Development Tips
-
 - Check the browser's network tab for API request/response details
 - Use PostgreSQL logs to debug database-related issues
 - Consider using a database GUI tool like pgAdmin for easier database management
 
 ## Learn More
-
 To learn more about Next.js, take a look at the following resources:
-
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js)
 
 ## License
-
 This project is open source and available under the [MIT License](LICENSE).
