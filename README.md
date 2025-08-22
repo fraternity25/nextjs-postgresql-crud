@@ -16,28 +16,90 @@ This is a full-stack CRUD application built with [Next.js](https://nextjs.org) a
 
 ```
 ├── components/
-│   └── UserForm.js          # Reusable form component
+│ ├── ConfirmModal.js # Reusable confirmation dialog
+│ ├── icons.js # Centralized icon exports
+│ ├── Layout.js # Main app layout with header/sidebar
+│ ├── ProfileMenu.js # Dropdown menu for user profile
+│ ├── Sidebar.js # Sidebar navigation component
+│ ├── SignupForm.js # Signup form component
+│ ├── TaskActionSelect.js # Dropdown for task actions
+│ ├── TaskList.js # Task listing UI
+│ ├── TasksForm/
+│ │ ├── CreateForm.js # Form for creating a new task
+│ │ └── index.js # Exports task form components
+│ ├── TasksLayout.js # Layout for task-related pages
+│ ├── Toast.js # Notification/toast component
+│ ├── UserActionSelect.js # Dropdown for user actions
+│ ├── UserForm.js # Form for adding/editing users
+│ ├── UserList.js # User listing UI
+│ └── UsersLayout.js # Layout for user-related pages
+│
+├── contexts/
+│ ├── TasksContext.js # Context provider for tasks state
+│ └── UsersContext.js # Context provider for users state
+│
+├── hooks/
+│ └── useTasksForm.js # Custom hook for task form logic
+│
 ├── lib/
-│   ├── dataService.js       # Data access layer with PostgreSQL
-│   └── db.js                # Database connection configuration
+│ ├── authOptions.js # NextAuth configuration
+│ ├── dataService.js # Data access layer with PostgreSQL
+│ ├── db.js # Database connection setup
+│ └── utils.js # Utility/helper functions
+│
 ├── pages/
-│   ├── api/
-│   │   ├── users.js         # API routes for users collection
-│   │   └── users/[id].js    # API routes for individual users
-│   ├── users/
-│   │   ├── new.js           # Create user page
-│   │   ├── [id].js          # View user page
-│   │   └── [id]/edit.js     # Edit user page
-│   ├── _app.js              # App component
-│   └── index.js             # Home page (users list)
+│ ├── api/
+│ │ ├── auth/
+│ │ │ ├── [...nextauth].js # NextAuth API route
+│ │ │ └── signup.js # Signup API route
+│ │ ├── tasks/
+│ │ │ ├── [id].js # Single task API route
+│ │ │ ├── [id]/users.js # Manage users for a task
+│ │ │ └── tasks.js # Tasks collection API
+│ │ ├── users/
+│ │ │ └── [id].js # Single user API route
+│ │ └── users.js # Users collection API
+│ │
+│ ├── auth/
+│ │ ├── index.js # Auth landing page
+│ │ ├── login.js # Login page
+│ │ └── signup.js # Signup page
+│ │
+│ ├── tasks/
+│ │ ├── [id]/
+│ │ │ ├── edit.js # Edit task page
+│ │ │ └── users.js # Assign users to task
+│ │ ├── index.js # Tasks list page
+│ │ └── new.js # Create task page
+│ │
+│ ├── users/
+│ │ ├── [id]/
+│ │ │ ├── edit.js # Edit user page
+│ │ │ └── tasks.js # View user’s tasks
+│ │ └── index.js # Users list page
+│ │
+│ ├── profile/
+│ │ └── index.js # User profile page
+│ │
+│ ├── _app.js # Custom App component
+│ ├── _document.js # Custom Document
+│ └── index.js # Home page
+│
+├── public/ # Static assets
+│
+├── scripts/
+│ └── seed.js # DB seeding script
+│
 ├── styles/
-│   └── globals.css          # Global styles with Tailwind
-├── sql/
-│   └── schema.sql           # Database schema initialization
+│ └── globals.css # Global Tailwind styles
+│
+├── eslint.config.mjs # ESLint configuration
+├── jsconfig.json # Path aliases
+├── next.config.mjs # Next.js configuration
 ├── package.json
-├── tailwind.config.js
-├── postcss.config.js
-└── .env.local.example       # Environment variables template
+├── postcss.config.js # PostCSS config for Tailwind
+├── tailwind.config.js # Tailwind configuration
+└── README.md
 ```
 
 ## Getting Started
@@ -222,7 +284,6 @@ Make sure your hosting platform supports PostgreSQL connections and environment 
 
 ### Development Tips
 
-- Use `console.log` to debug database queries
 - Check the browser's network tab for API request/response details
 - Use PostgreSQL logs to debug database-related issues
 - Consider using a database GUI tool like pgAdmin for easier database management
