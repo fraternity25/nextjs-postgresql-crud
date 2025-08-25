@@ -140,11 +140,16 @@ export default function useTasksForm({
       }
       else if(selectedRole === "owner") {
         newMap.set(selectedUserId, "owner");
-        newMap.set(task.owner.id, "reviewer");
+        //check if there is a value like "reviewer" already in the newMap
+        if(newMap.size != 2) {
+          newMap.set(task.owner.id, "reviewer");
+        }
       } 
       else if(selectedRole === "reviewer") {
         newMap.set(selectedUserId, "reviewer");
-        newMap.set(task.reviewer.id, "owner");
+        if(newMap.size != 2) {
+          newMap.set(task.reviewer.id, "owner");
+        }
       } 
       return newMap;
     });

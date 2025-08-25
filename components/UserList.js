@@ -18,8 +18,10 @@ export default function UserList({ task, mode, rolesMap }) {
 
   const isView = mode === "view";
   const isEdit = mode === "edit";
-  const owner = { ...task.owner, role:"owner"};
-  const reviewer = { ...task.reviewer, role:"reviewer"};
+  const owner = task.owner.id ? { ...task.owner, role: "owner" } : null;
+  const reviewer = task.reviewer.id ? { ...task.reviewer, role: "reviewer" } : null;
+  console.log("owner = ", owner);
+  console.log("reviewer = ", reviewer);
 
   useEffect(() => {
     if (status !== 'loading' && (!session || session.user.role !== "admin")) {
@@ -43,7 +45,9 @@ export default function UserList({ task, mode, rolesMap }) {
 
       if (newRole !== originalRole) {
         newMap.set(id, newRole);
-        newMap.set(otherId, originalRole);
+        if (otherId) {
+          newMap.set(otherId, originalRole);
+        }
       }
       else {
         newMap.delete(id);
@@ -66,8 +70,11 @@ export default function UserList({ task, mode, rolesMap }) {
         });
       }
       else if(isDelete) {
+        const deleteOwner = owner && selectedUserIdList.includes(owner.id) ? true : false;
+        const deleteReviewer = reviewer && selectedUserIdList.includes(reviewer.id) ? true : false;
         await onSubmit({
-          deleteUserIds: selectedUserIdList
+          deleteOwner,
+          deleteReviewer
         });
       }
       router.push("/tasks");
@@ -96,7 +103,8 @@ export default function UserList({ task, mode, rolesMap }) {
       url = `/api/tasks/${task.id}/users`;
       options.method = "DELETE";
       options.body = JSON.stringify({
-        userIdList: formData.deleteUserIds
+        deleteOwner: formData.deleteOwner,
+        deleteReviewer: formData.deleteReviewer
       });
     }
 
@@ -127,7 +135,7 @@ export default function UserList({ task, mode, rolesMap }) {
   }
 
   return (
-    owner.id && reviewer.id ? (
+    owner.id || reviewer.id ? (
       <div className={isEdit ? `max-w-lg p-6 mx-auto` : ''}>
         {/* Header */}
         <div className="flex justify-between items-center">
@@ -187,11 +195,15 @@ export default function UserList({ task, mode, rolesMap }) {
         {/* User list */}
         <ol key={task.id}>
           {[owner, reviewer].map((user, i, array) => {
-            const otherId = array[i === 0 ? 1 : 0].id;
+            if (!user) return null;
+
+            const otherId = array[i === 0 ? 1 : 0]?.id;
             return (
               <li
                 key={user.id}
-                className={`w-full text-sm text-gray-700 ${isDelete && selectedUserIdList.includes(user.id) ? 'bg-red-500' : ''} border border-gray-300 rounded-md shadow-sm mt-1 py-2 px-3`}
+                className={`w-full text-sm text-gray-700 
+                  ${isDelete && selectedUserIdList.includes(user.id) ? 'bg-red-500' : ''} 
+                  border border-gray-300 rounded-md shadow-sm mt-1 py-2 px-3`}
               >
                 <div className='flex justify-between items-center'>
                   <div className="flex items-center gap-2">

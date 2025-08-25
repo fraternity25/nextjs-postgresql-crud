@@ -74,9 +74,11 @@ export default async function handler(req, res) {
           }
         }
 
-        if (!ownerId || !reviewerId) {
-          return res.status(400).json({ error: "user id's and roles are required" });
+        if (!ownerId && !reviewerId) {
+          return res.status(400).json({ error: "owner or reviewer is required" });
         }
+
+        console.log('[API] Assigning users to task:', { id, ownerId, reviewerId });
 
         await assignUserToTask(id, ownerId, reviewerId);
 

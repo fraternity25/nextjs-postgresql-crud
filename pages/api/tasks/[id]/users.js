@@ -7,13 +7,13 @@ export default async function handler(req, res) {
   switch (method) {
     case 'DELETE':
       try {
-        const { userIdList } = req.body;
+        const { deleteOwner, deleteReviewer } = req.body;
 
-        if (!userIdList || userIdList.length === 0) {
+        if (!deleteOwner && !deleteReviewer) {
           return res.status(400).json({ error: 'No users provided for deletion' });
         }
 
-        const result = await deleteAssignedUsers(taskId, userIdList);
+        const result = await deleteAssignedUsers(taskId, deleteOwner, deleteReviewer);
 
         res.status(200).json(result);
       } catch (error) {
