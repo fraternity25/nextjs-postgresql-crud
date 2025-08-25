@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { sidebarIcons } from '@/components/icons';
+import { generalIcons } from '@/components/icons';
 import { useRouter } from 'next/router';
 
 export default function CreateForm({ 
@@ -95,7 +95,7 @@ export default function CreateForm({
             })}
           </select>
           <FontAwesomeIcon 
-            icon={sidebarIcons.create} 
+            icon={generalIcons.create} 
             className="flex items-center cursor-pointer text-2xl bg-green-600 ml-2 p-1 text-white" 
             onClick={handleAddUser}
           />

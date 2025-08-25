@@ -142,7 +142,7 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
   };
   
   return (
-    <div className="max-w-md mx-auto mt-6">
+    <div className="max-w-[calc(26rem+10px)] mx-auto mt-6">
       <div className="bg-white shadow rounded-lg px-3 py-2">
         <div className="flex items-center justify-between mb-2">
           <h1 className="text-2xl font-bold text-center text-gray-900 mb-2">
@@ -301,8 +301,8 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
           )}
 
           {user.assigned_tasks.length > 0 ? (
-            <div className="flex items-center justify-between mt-4">
-              <TaskList user={user} />
+            <div className="mt-4">
+              <TaskList user={user} mode="view" />
             </div>
             ) : children
           }

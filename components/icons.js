@@ -1,13 +1,20 @@
 import {
-  faHome, faPlus, faHeadset, faCircleExclamation, faChevronLeft, faChevronRight, // Sidebar General icons
+  faPaperclip, faPlus, faCheck, faSquareCheck,// General icons
+  faHome, faHeadset, faCircleExclamation, faChevronLeft, faChevronRight, // Sidebar General icons
   faUsers, faUser, faUserPlus, faUserGear, faUserShield, faUserPen, faRightFromBracket, // User icons
-  faTasks, faCheckCircle, faClipboardList, faPlusSquare, faCalendarCheck, faListCheck, // Task icons
+  faTasks, faCheckCircle, faClipboardList, faPlusSquare, faCalendarCheck, faListCheck, faPenToSquare, // Task icons
   faBell, faBellSlash, faEnvelope, faExclamationTriangle, faCircleInfo, faCheckDouble  // Notification icons
 } from '@fortawesome/free-solid-svg-icons';
 
+const generalIcons = {
+  create: faPlus,
+  select: faCheck,
+  selectMultiple: faSquareCheck,
+  attach: faPaperclip,
+};
+
 const sidebarIcons = {
   home: faHome,
-  create: faPlus,
   forms: faHeadset,
   tickets: faCircleExclamation,
   collapse: faChevronLeft,
@@ -26,6 +33,7 @@ const userIcons = {
 
 const taskIcons = {
   list: faTasks,
+  edit: faPenToSquare,
   completed: faCheckCircle,
   details: faClipboardList,
   add: faPlusSquare,
@@ -42,4 +50,4 @@ const notificationIcons = {
   read: faCheckDouble
 };
 
-export { sidebarIcons, userIcons, taskIcons, notificationIcons };
+export { generalIcons, sidebarIcons, userIcons, taskIcons, notificationIcons };

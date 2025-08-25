@@ -81,7 +81,7 @@ export default function EditUser() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/*we are not inserting TaskList component as children since we are passing user prop*/}
       <UserForm onSubmit={onSubmit} user={user} mode="view+edit:role" /> 
     </div>

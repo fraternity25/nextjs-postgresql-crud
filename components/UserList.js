@@ -135,7 +135,7 @@ export default function UserList({ task, mode, rolesMap }) {
   }
 
   return (
-    owner.id || reviewer.id ? (
+    owner || reviewer ? (
       <div className={isEdit ? `max-w-lg p-6 mx-auto` : ''}>
         {/* Header */}
         <div className="flex justify-between items-center">
