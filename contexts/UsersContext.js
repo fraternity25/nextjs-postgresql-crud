@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const UsersContext = createContext();
 
@@ -40,4 +40,10 @@ export function UsersProvider({ children }) {
   );
 }
 
-export default UsersContext;
+export const useUsers = () => {
+  const context = useContext(UsersContext);
+  if (!context) {
+    throw new Error('useUsers must be used within a UsersProvider');
+  }
+  return context;
+};

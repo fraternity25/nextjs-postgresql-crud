@@ -1,17 +1,17 @@
 import TasksLayout from '@/components/TasksLayout';
-import TasksContext from '@/contexts/TasksContext';
 import TaskActionSelect from '@/components/TaskActionSelect';
 import ConfirmModal from '@/components/ConfirmModal';
 import Toast from '@/components/Toast';
 import Link from 'next/link';
-import { useState, useEffect, useContext } from 'react';
+import { useTasks } from '@/contexts/TasksContext';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
 function TasksPageContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { tasks, setTasks, error, setError } = useContext(TasksContext); 
+  const { tasks, setTasks, error, setError } = useTasks();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [toastMessages, setToastMessages] = useState([]);
@@ -31,7 +31,7 @@ function TasksPageContent() {
         method: 'DELETE',
       });
 
-      if (!response.ok) {
+      if (!res.ok) {
         throw new Error('Failed to delete task');
       }
 

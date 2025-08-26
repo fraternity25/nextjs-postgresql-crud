@@ -1,14 +1,14 @@
-import UsersContext from "@/contexts/UsersContext";
 import useTasksForm from "@/hooks/useTasksForm";
 import UsersLayout from '@/components/UsersLayout';
 import CreateForm from "@/components/TasksForm/CreateForm";
-import { useState, useEffect, useContext} from "react";
+import { useUsers } from "@/contexts/UsersContext";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSession } from 'next-auth/react';
 
 function EditTaskContent() {
   const router = useRouter();
-  const context = useContext(UsersContext); 
+  const context = useUsers(); 
   const [task, setTask] = useState(null);
   const { data: session, status } = useSession();
 

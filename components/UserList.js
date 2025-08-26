@@ -161,7 +161,7 @@ export default function UserList({ task, mode, rolesMap }) {
               <FontAwesomeIcon
                 icon={userIcons.settings}
                 className="cursor-pointer text-2xl bg-gray-100 rounded-full hover:text-gray-700 transition duration-75"
-                onClick={() => setMenuOpen(!menuOpen)}
+                onClick={() => {setMenuOpen(!menuOpen)}}
               />
               {menuOpen && (
                 <div 
@@ -174,7 +174,7 @@ export default function UserList({ task, mode, rolesMap }) {
                     className="inline-flex items-center p-1 rounded-md cursor-pointer border border-transparent 
                               shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-800
                               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    onClick={() => { setIsRoleChange(true); setIsDelete(false); setMenuOpen(false); }}
+                    onClick={() => { setIsRoleChange(!isRoleChange); setIsDelete(false); setMenuOpen(false); }}
                   >
                     Change Roles
                   </div>
@@ -182,7 +182,7 @@ export default function UserList({ task, mode, rolesMap }) {
                     className="inline-flex items-center p-2 rounded-md cursor-pointer border border-transparent 
                               shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 
                               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                    onClick={() => { setIsDelete(true); setIsRoleChange(false); setMenuOpen(false); }}
+                    onClick={() => { setIsDelete(!isDelete); setIsRoleChange(false); setMenuOpen(false); }}
                   >
                     Delete
                   </div>
@@ -202,8 +202,17 @@ export default function UserList({ task, mode, rolesMap }) {
               <li
                 key={user.id}
                 className={`w-full text-sm text-gray-700 
-                  ${isDelete && selectedUserIdList.includes(user.id) ? 'bg-red-500' : ''} 
+                  ${isDelete && selectedUserIdList.includes(user.id)?
+                    'bg-red-500 hover:bg-red-300' : isDelete ? 
+                    'hover:bg-red-300 cursor-pointer' : isRoleChange ? 
+                    'hover:bg-blue-100' : 'hover:bg-gray-100'
+                  } 
                   border border-gray-300 rounded-md shadow-sm mt-1 py-2 px-3`}
+                onClick={() => {
+                  if (isDelete) {
+                    toggleUserSelection(user.id);
+                  }
+                }}
               >
                 <div className='flex justify-between items-center'>
                   <div className="flex items-center gap-2">

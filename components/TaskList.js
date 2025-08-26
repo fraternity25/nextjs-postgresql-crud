@@ -119,8 +119,8 @@ export default function TaskList({ user, mode }) {
                 key={task.task_id}
                 className={`inline-flex justify-between items-center text-sm text-gray-700 
                   ${isDelete && selectedTaskIdList.includes(task.task_id)?
-                    'bg-red-500 hover:bg-red-300' : !isDelete ? 
-                    'hover:bg-green-300' : 'hover:bg-red-300'
+                    'bg-red-500 hover:bg-red-300' : isDelete ? 
+                    'hover:bg-red-300' : 'hover:bg-green-300'
                   } 
                   border border-gray-300 rounded-md shadow-sm`}  
               >

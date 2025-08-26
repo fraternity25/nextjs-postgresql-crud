@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const TasksContext = createContext();
 
@@ -31,4 +31,10 @@ export function TasksProvider({ children }) {
   );
 }
 
-export default TasksContext;
+export const useTasks = () => {
+  const context = useContext(TasksContext);
+  if (!context) {
+    throw new Error('useTasks must be used within a TasksProvider');
+  }
+  return context;
+};

@@ -1,19 +1,19 @@
 import UsersLayout from "@/components/UsersLayout";
 import TasksLayout from "@/components/TasksLayout";
-import UsersContext from "@/contexts/UsersContext";
-import TasksContext from "@/contexts/TasksContext";
 import UserActionSelect from "@/components/UserActionSelect";
 import ConfirmModal from "@/components/ConfirmModal";
 import Toast from "@/components/Toast";
-import { useState, useEffect, useContext } from "react";
+import { useUsers } from "@/contexts/UsersContext"; 
+import { useTasks } from "@/contexts/TasksContext";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 function UsersPageContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { users, setUsers, error, setError } = useContext(UsersContext); 
-  const { tasks } = useContext(TasksContext); 
+  const { users, setUsers, error, setError } = useUsers(); 
+  const { tasks } = useTasks(); 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [toastMessages, setToastMessages] = useState([]);

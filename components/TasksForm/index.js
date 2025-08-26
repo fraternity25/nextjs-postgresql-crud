@@ -1,8 +1,8 @@
-import UsersContext from '@/contexts/UsersContext';
 import useTasksForm from '@/hooks/useTasksForm';
 import CreateForm from './CreateForm'
+import { useUsers } from '@/contexts/UsersContext';
 import { useSession } from 'next-auth/react';
-import { useEffect, useContext } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 export default function TasksForm({
@@ -10,7 +10,7 @@ export default function TasksForm({
   userId = "",
   onSubmit,
 }) {
-  const context = useContext(UsersContext); 
+  const context = useUsers(); 
   const { states, handlers, renderers, controls }= useTasksForm({mode:"new", context, tasks:tasks, userId:userId, onSubmit:onSubmit});
   const { data: session, status} = useSession();
   const router = useRouter();

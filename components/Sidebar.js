@@ -84,7 +84,7 @@ const Sidebar = () => {
             <li key={index}>
               <Link
                 href={item.href}
-                className={`flex items-center p-2 rounded-lg group ${router.pathname.startsWith(item.href) ? 'bg-blue-100 text-blue-600' : 'text-gray-900 hover:bg-gray-100'}`}
+                className={`flex items-center p-2 rounded-lg group ${router.pathname.startsWith(item.href) ? 'bg-blue-100 text-blue-600' : 'text-gray-900 hover:bg-gray-200'}`}
                 title={isCollapsed ? item.tooltip : ''}
               >
                 <FontAwesomeIcon 
@@ -101,7 +101,7 @@ const Sidebar = () => {
         <div className="absolute bottom-4 left-0 right-0 px-3">
           <button 
             onClick={toggleSidebar}
-            className="w-full flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+            className="w-full flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-200"
           >
             <FontAwesomeIcon 
               icon={isCollapsed ? sidebarIcons.expand : sidebarIcons.collapse} 

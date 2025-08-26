@@ -46,7 +46,6 @@ export default function UserDetailPage() {
       throw new Error(error.error || 'Failed to update user');
     }
 
-    // Force session refresh to get updated data
     <Toast
       messages={[
         {

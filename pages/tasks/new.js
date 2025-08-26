@@ -1,13 +1,13 @@
 import TasksLayout from '@/components/TasksLayout';
 import UsersLayout from '@/components/UsersLayout';
-import TasksContext from '@/contexts/TasksContext';
 import TasksForm from '@/components/TasksForm';
+import { useTasks } from '@/contexts/TasksContext';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useEffect, useContext } from 'react';
+import { useEffect } from 'react';
 
 function NewTaskContent() {
-  const { tasks } = useContext(TasksContext); 
+  const { tasks } = useTasks(); 
   const { data: session, status } = useSession();
   const router = useRouter();
 
