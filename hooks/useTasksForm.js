@@ -1,4 +1,4 @@
-import UserList from '@/components/UserList';
+import UserList from '@/components/lists/UserList';
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';

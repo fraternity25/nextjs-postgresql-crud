@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from "react";
-import UserList from "@/components/UserList";
+import UserList from "@/components/lists/UserList";
 
 export default function TaskUsersPage() {
   const router = useRouter();

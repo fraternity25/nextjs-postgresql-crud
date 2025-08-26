@@ -1,5 +1,5 @@
 import TasksLayout from '@/components/layouts/TasksLayout';
-import TaskActionSelect from '@/components/TaskActionSelect';
+import TaskActionSelect from '@/components/selects/TaskActionSelect';
 import ConfirmModal from '@/components/ConfirmModal';
 import Toast from '@/components/Toast';
 import Link from 'next/link';

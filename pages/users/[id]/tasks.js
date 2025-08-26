@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import TaskList from '@/components/TaskList';
+import TaskList from '@/components/lists/TaskList';
 
 export default function UserTasksPage() {
   const router = useRouter();

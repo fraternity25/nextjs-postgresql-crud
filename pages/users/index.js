@@ -1,6 +1,6 @@
 import UsersLayout from "@/components/layouts/UsersLayout";
 import TasksLayout from "@/components/layouts/TasksLayout";
-import UserActionSelect from "@/components/UserActionSelect";
+import UserActionSelect from "@/components/selects/UserActionSelect";
 import ConfirmModal from "@/components/ConfirmModal";
 import Toast from "@/components/Toast";
 import { useUsers } from "@/contexts/UsersContext"; 
