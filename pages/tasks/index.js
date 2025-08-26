@@ -1,4 +1,4 @@
-import TasksLayout from '@/components/TasksLayout';
+import TasksLayout from '@/components/layouts/TasksLayout';
 import TaskActionSelect from '@/components/TaskActionSelect';
 import ConfirmModal from '@/components/ConfirmModal';
 import Toast from '@/components/Toast';

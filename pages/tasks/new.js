@@ -1,6 +1,6 @@
-import TasksLayout from '@/components/TasksLayout';
-import UsersLayout from '@/components/UsersLayout';
-import TasksForm from '@/components/TasksForm';
+import TasksLayout from '@/components/layouts/TasksLayout';
+import UsersLayout from '@/components/layouts/UsersLayout';
+import TasksForm from '@/components/forms/TasksForm';
 import { useTasks } from '@/contexts/TasksContext';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';

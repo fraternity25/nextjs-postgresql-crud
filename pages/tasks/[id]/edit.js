@@ -1,6 +1,6 @@
 import useTasksForm from "@/hooks/useTasksForm";
-import UsersLayout from '@/components/UsersLayout';
-import CreateForm from "@/components/TasksForm/CreateForm";
+import UsersLayout from '@/components/layouts/UsersLayout';
+import CreateForm from "@/components/forms/TasksForm/CreateForm";
 import { useUsers } from "@/contexts/UsersContext";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";

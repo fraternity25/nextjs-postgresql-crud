@@ -1,5 +1,5 @@
-import UsersLayout from "@/components/UsersLayout";
-import TasksLayout from "@/components/TasksLayout";
+import UsersLayout from "@/components/layouts/UsersLayout";
+import TasksLayout from "@/components/layouts/TasksLayout";
 import UserActionSelect from "@/components/UserActionSelect";
 import ConfirmModal from "@/components/ConfirmModal";
 import Toast from "@/components/Toast";

@@ -1,4 +1,4 @@
-import UserForm from '@/components/UserForm';
+import UserForm from '@/components/forms/UserForm';
 import Toast from '@/components/Toast';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
