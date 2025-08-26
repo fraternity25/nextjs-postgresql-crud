@@ -18,6 +18,7 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
 
   const { data: session, status, update } = useSession();
   const isAdmin = session?.user?.role === 'admin';
+  const isChanged = name !== user?.name || email !== user?.email || role !== user?.role;
 
   // Parse the mode string into permission flags
   const parseMode = (modeString) => {
@@ -311,8 +312,12 @@ export default function UserForm({  mode = 'view', user = null, onSubmit = null,
             {(!isView || editRole) && ( 
               <button
                 type="submit"
-                disabled={loading || status === 'loading'}
-                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                disabled={loading || status === 'loading' || !isChanged}
+                className="px-4 py-2 border border-transparent 
+                rounded-md shadow-sm text-sm font-medium text-white 
+                bg-indigo-600 hover:bg-indigo-700 focus:outline-none 
+                focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 
+                disabled:opacity-50"
               >
                 {loading || status === 'loading' ? 
                   'Loading...' : editRole || isEdit ? 

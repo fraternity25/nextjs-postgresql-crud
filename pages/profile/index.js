@@ -48,12 +48,29 @@ function UserDetailContent() {
       throw new Error(error.error || 'Failed to update user');
     }
 
-    addToast([
+    const toastMessages = [
       {
         type: "h1",
         content: "Profile updated successfully!",
-      },
-    ]);
+      }
+    ];
+
+    if(user.name != userData.name) {
+      toastMessages.push({
+        type: "p",
+        content: `Name changed from ${user.name} to ${userData.name}`,
+      });
+    }
+
+    if(user.email != userData.email) {
+      toastMessages.push({
+        type: "p",
+        content: `Email changed from ${user.email} to ${userData.email}`,
+      });
+    }
+
+    addToast(toastMessages);
+    
 
     return response.json();
   };

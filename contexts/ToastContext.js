@@ -1,9 +1,19 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const ToastContext = createContext();
 
 export function ToastProvider({ children }) {
-  const [toastMessages, setToastMessages] = useState([]);
+  //const [toastMessages, setToastMessages] = useState([]);
+  const [toastMessages, setToastMessages] = useState(() => {
+    if (typeof window !== 'undefined') {
+        return JSON.parse(localStorage.getItem('toasts') || '[]');
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('toasts', JSON.stringify(toastMessages));
+  }, [toastMessages]);
 
   const addToast = (messages, time = 5000) => {
     const id = Date.now();

@@ -15,13 +15,14 @@ function UsersContent() {
   const router = useRouter();
   const { users, setUsers, error, setError } = useUsers(); 
   const { tasks } = useTasks();
-  const { addToast } = useToast(); 
+  const { toastMessages, addToast } = useToast(); 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
 
   const isAdmin = session?.user?.role === "admin";
 
   console.log("session = ", session);
+  console.log("toastMessages = ", toastMessages);
 
   // Giriş yapılmamışsa auth sayfasına yönlendir
   useEffect(() => {

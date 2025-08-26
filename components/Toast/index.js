@@ -50,11 +50,14 @@ export default function Toast({ messages = [], time = 4000, onClose }) {
 
   return (
     <div 
-      className={`fixed top-4 left-1/2 transform -translate-x-1/2 bg-yellow-100 
-        border border-yellow-400 text-yellow-800 px-4 py-2 rounded shadow-lg z-50 
-        w-full max-w-md overflow-hidden transition-opacity duration-500 ${
-        isClosing ? 'opacity-0' : 'opacity-100'
-      }`}
+      className={`relative bg-yellow-100 border 
+        border-yellow-400 text-yellow-800 px-4 
+        py-2 rounded shadow-lg z-50 w-full 
+        max-w-md overflow-hidden transition-opacity 
+        duration-500 ${ isClosing ? 
+          'opacity-0' : 'opacity-100'
+        }`
+      }
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{ '--toast-duration': `${time}ms` }}
