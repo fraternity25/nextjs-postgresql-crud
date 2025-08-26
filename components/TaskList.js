@@ -70,14 +70,14 @@ export default function TaskList({ user, mode }) {
       </div>
     );
   }
-  const calcRem = isDelete ? "calc(46rem)" : "calc(45rem)";
+  //let calcRem = isDelete ? "calc(46rem)" : "calc(45rem)";
 
   return (
     <div className="space-y-2">
     {
       user.assigned_tasks.length > 0 ? (
         <>
-          <div className={`max-w-[${calcRem}] flex justify-between items-center`}>
+          <div className={`${isDelete ? "max-w-[calc(46rem)]" : "max-w-[calc(45rem)]"} flex justify-between items-center`}>
             <h2 className="text-2xl font-bold text-gray-900 mb-1">
               Assigned Tasks for {user.name}
             </h2>
@@ -118,7 +118,10 @@ export default function TaskList({ user, mode }) {
               <li 
                 key={task.task_id}
                 className={`inline-flex justify-between items-center text-sm text-gray-700 
-                  ${isDelete && selectedTaskIdList.includes(task.task_id) ? 'bg-red-500' : ''} 
+                  ${isDelete && selectedTaskIdList.includes(task.task_id)?
+                    'bg-red-500 hover:bg-red-300' : !isDelete ? 
+                    'hover:bg-green-300' : 'hover:bg-red-300'
+                  } 
                   border border-gray-300 rounded-md shadow-sm`}  
               >
                 <div 
@@ -141,11 +144,17 @@ export default function TaskList({ user, mode }) {
                     className={`flex flex-col @md:flex-row @md:justify-between @md:items-center 
                       shadow-sm py-2 px-2 w-full
                       focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 @sm:text-sm 
-                      ${!isAdmin ?
-                        'pointer-events-none opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'
+                      ${!isAdmin &&
+                        'pointer-events-none opacity-50 cursor-not-allowed' 
                       }
                     `}
-                    aria-disabled={!isAdmin}
+                    aria-disabled={!isAdmin || isDelete}
+                    onClick={(e) => {
+                      if (isAdmin && isDelete) {
+                        e.preventDefault();
+                        toggleTaskSelection(task.task_id);
+                      }
+                    }}
                     tabIndex={!isAdmin ? -1 : undefined}
                   >
                     <div className="flex flex-row @md:items-center space-x-8 @md:space-x-2">
@@ -194,7 +203,7 @@ export default function TaskList({ user, mode }) {
             ))}
           </ol>
 
-          <div className="flex justify-end">
+          <div className="max-w-[calc(46rem)] flex justify-end">
             {isDelete && (
               <button
                 className={`mt-4 px-4 py-2 rounded ${
