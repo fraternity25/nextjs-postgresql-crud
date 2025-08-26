@@ -1,11 +1,13 @@
+import ToastLayout from "@/components/layouts/ToastLayout";
 import UserForm from '@/components/forms/UserForm';
-import Toast from '@/components/Toast';
+import { useToast } from '@/contexts/ToastContext';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 
 //const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-export default function UserDetailPage() {
+function UserDetailContent() {
+  const { addToast } = useToast(); 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -46,15 +48,12 @@ export default function UserDetailPage() {
       throw new Error(error.error || 'Failed to update user');
     }
 
-    <Toast
-      messages={[
-        {
-          type: "h1",
-          content: "Profile updated successfully!",
-        },
-      ]}
-      time={5000}
-    />
+    addToast([
+      {
+        type: "h1",
+        content: "Profile updated successfully!",
+      },
+    ]);
 
     return response.json();
   };
@@ -88,5 +87,13 @@ export default function UserDetailPage() {
       {/*we are not inserting TaskList component as children since we are passing tasks prop*/}
       <UserForm onSubmit={onSubmit} user={user} mode="edit:exclude:role" />
     </div>
+  );
+}
+
+export default function UserDetailPage() {
+  return (
+    <ToastLayout>
+      <UserDetailContent />
+    </ToastLayout>
   );
 }

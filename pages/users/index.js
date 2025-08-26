@@ -1,22 +1,23 @@
 import UsersLayout from "@/components/layouts/UsersLayout";
 import TasksLayout from "@/components/layouts/TasksLayout";
+import ToastLayout from "@/components/layouts/ToastLayout";
 import UserActionSelect from "@/components/selects/UserActionSelect";
 import ConfirmModal from "@/components/ConfirmModal";
-import Toast from "@/components/Toast";
 import { useUsers } from "@/contexts/UsersContext"; 
 import { useTasks } from "@/contexts/TasksContext";
+import { useToast } from '@/contexts/ToastContext';
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
-function UsersPageContent() {
+function UsersContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { users, setUsers, error, setError } = useUsers(); 
-  const { tasks } = useTasks(); 
+  const { tasks } = useTasks();
+  const { addToast } = useToast(); 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
-  const [toastMessages, setToastMessages] = useState([]);
 
   const isAdmin = session?.user?.role === "admin";
 
@@ -46,7 +47,7 @@ function UsersPageContent() {
       });
 
       if (idleTasks.length > 0) {
-        setToastMessages([
+        addToast([
           {
             type: "h1",
             content:
@@ -188,13 +189,6 @@ function UsersPageContent() {
                   }}
                 />
               )}
-              {toastMessages.length !== 0 && (
-                <Toast
-                  messages={toastMessages}
-                  time={5000}
-                  onClose={() => setToastMessages([])}
-                />
-              )}
             </tbody>
           </table>
 
@@ -213,7 +207,9 @@ export default function UsersPage() {
   return (
     <UsersLayout>
       <TasksLayout>
-        <UsersPageContent />
+        <ToastLayout>
+          <UsersContent />
+        </ToastLayout>
       </TasksLayout>
     </UsersLayout>
   );

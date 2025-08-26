@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
-function TasksPageContent() {
+function TasksContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { tasks, setTasks, error, setError } = useTasks();
@@ -211,7 +211,7 @@ function TasksPageContent() {
 export default function TasksPage() {
   return (
     <TasksLayout>
-      <TasksPageContent />
+      <TasksContent />
     </TasksLayout>
   );
 }

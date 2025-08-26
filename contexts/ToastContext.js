@@ -8,11 +8,6 @@ export function ToastProvider({ children }) {
   const addToast = (messages, time = 5000) => {
     const id = Date.now();
     setToastMessages(prev => [...prev, { id, messages, time }]);
-    
-    // Auto-remove after specified time
-    setTimeout(() => {
-      removeToast(id);
-    }, time);
   };
 
   const removeToast = (id) => {

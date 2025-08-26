@@ -55,7 +55,7 @@ function NewTaskContent() {
   );
 }
 
-export default function NewTask() {
+export default function NewTaskPage() {
   return (
     <TasksLayout>
       <NewTaskContent />

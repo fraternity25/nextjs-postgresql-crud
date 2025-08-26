@@ -1,5 +1,5 @@
-import Sidebar from './Sidebar';
-import ProfileMenu from './ProfileMenu';
+import Sidebar from '@/components/Sidebar';
+import ProfileMenu from '@/components/ProfileMenu';
 
 const Layout = ({ children }) => {
   return (

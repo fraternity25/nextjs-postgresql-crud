@@ -114,7 +114,7 @@ function EditTaskContent() {
   );
 }
 
-export default function EditTask() {
+export default function EditTaskPage() {
   return (
     <UsersLayout>
       <EditTaskContent />
