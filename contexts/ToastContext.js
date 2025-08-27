@@ -1,4 +1,6 @@
+import { toastMessagesToString } from '@/lib/utils';
 import { createContext, useContext, useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 
 const ToastContext = createContext();
 
@@ -6,6 +8,7 @@ export function ToastProvider({ children }) {
   //const [toastMessages, setToastMessages] = useState([]);
   const [toastMessages, setToastMessages] = useState([]);
   const [isMounted, setIsMounted] = useState(false);
+  const { data: session } = useSession();
 
   useEffect(() => {
     setIsMounted(true);
@@ -20,8 +23,14 @@ export function ToastProvider({ children }) {
   }, [toastMessages, isMounted]);
 
   const addToast = ({messages, time = 5000, type = "default"}) => {
-    const id = Date.now() + Math.random();
-    setToastMessages(prev => [...prev, { id, messages, time, type }]);
+    const res = fetch('/api/notifications', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId: session?.user?.id, message: toastMessagesToString(messages) }),
+    });
+    setToastMessages(prev => [...prev, { messages, time, type }]);
   };
 
   const removeToast = (id) => {

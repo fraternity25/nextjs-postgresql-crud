@@ -1,5 +1,21 @@
 import { useEffect, useState, useRef } from 'react';
 
+export function ToastMessages({messages}) {
+  return (
+    messages.map((msg, i) => {
+      const Tag = msg.type;
+      if (Tag == "ul") {
+        return (
+          <Tag key={i} className="list-disc ml-4">
+            {msg.content.map((li, j) => <li key={j}>{li}</li>)}
+          </Tag>
+        );
+      }
+      return <Tag key={i}>{msg.content}</Tag>;
+    })
+  );
+}
+
 export default function Toast({ messages = [], time = 4000, type="warning", onClose }) {
   const [isClosing, setIsClosing] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -91,17 +107,7 @@ export default function Toast({ messages = [], time = 4000, type="warning", onCl
     >
       {/* Messages */}
       <div className="py-2">
-        {messages.map((msg, i) => {
-          const Tag = msg.type;
-          if (Tag === "ul") {
-            return (
-              <Tag key={i} className="list-disc ml-4">
-                {msg.content.map((li, j) => <li key={j}>{li}</li>)}
-              </Tag>
-            );
-          }
-          return <Tag key={i}>{msg.content}</Tag>;
-        })}
+        <ToastMessages messages={messages} />
 
         {/*
           TO DO: Add a <Link> here that says "see this notification" 

@@ -14,7 +14,7 @@ export default function GlobalToast() {
       <div className="flex flex-col items-center">
         {toastMessages.map((toast) => (
           <Toast
-            key={toast.id}
+            key={Date.now() + Math.random()}
             messages={toast.messages} // Each toast gets its own messages array
             time={toast.time}
             type={toast.type}
