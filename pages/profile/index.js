@@ -69,8 +69,7 @@ function UserDetailContent() {
       });
     }
 
-    addToast(toastMessages);
-    
+    addToast({messages:toastMessages, type:"success"});
 
     return response.json();
   };

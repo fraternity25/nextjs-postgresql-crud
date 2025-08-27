@@ -4,20 +4,24 @@ const ToastContext = createContext();
 
 export function ToastProvider({ children }) {
   //const [toastMessages, setToastMessages] = useState([]);
-  const [toastMessages, setToastMessages] = useState(() => {
-    if (typeof window !== 'undefined') {
-        return JSON.parse(localStorage.getItem('toasts') || '[]');
-    }
-    return [];
-  });
+  const [toastMessages, setToastMessages] = useState([]);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('toasts', JSON.stringify(toastMessages));
-  }, [toastMessages]);
+    setIsMounted(true);
+    const savedToasts = JSON.parse(localStorage.getItem('toasts') || '[]');
+    setToastMessages(savedToasts);
+  }, []);
 
-  const addToast = (messages, time = 5000) => {
-    const id = Date.now();
-    setToastMessages(prev => [...prev, { id, messages, time }]);
+  useEffect(() => {
+    if (isMounted) {
+      localStorage.setItem('toasts', JSON.stringify(toastMessages));
+    }
+  }, [toastMessages, isMounted]);
+
+  const addToast = ({messages, time = 5000, type = "default"}) => {
+    const id = Date.now() + Math.random();
+    setToastMessages(prev => [...prev, { id, messages, time, type }]);
   };
 
   const removeToast = (id) => {

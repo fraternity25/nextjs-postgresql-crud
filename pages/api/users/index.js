@@ -1,4 +1,4 @@
-import { getUsers } from '../../lib/dataService';
+import { getUsers } from '@/lib/dataService';
 
 export default async function handler(req, res) {
   const { method } = req;

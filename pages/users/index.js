@@ -29,7 +29,7 @@ function UsersContent() {
     if (status === "unauthenticated" && !session) {
       router.push("/auth");
     } 
-  }, [status]);
+  }, [status, session, router]);
 
   const deleteUser = async (id) => {
     try {

@@ -17,6 +17,7 @@ export default function GlobalToast() {
             key={toast.id}
             messages={toast.messages} // Each toast gets its own messages array
             time={toast.time}
+            type={toast.type}
             onClose={() => removeToast(toast.id)}
           />
         ))}

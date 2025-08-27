@@ -1,12 +1,39 @@
 import { useEffect, useState, useRef } from 'react';
 
-export default function Toast({ messages = [], time = 4000, onClose }) {
+export default function Toast({ messages = [], time = 4000, type="warning", onClose }) {
   const [isClosing, setIsClosing] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [remainingTime, setRemainingTime] = useState(time);
   const startTimeRef = useRef(null);
   const timerRef = useRef(null);
   const remainingTimeRef = useRef(time);
+  const onCloseRef = useRef(onClose);
+
+  const colors = {
+    error: {
+      bg: "bg-red-100 border-red-400 text-red-800",
+      sliderBg: "bg-red-500",
+    },
+    success: {
+      bg: "bg-green-100 border-green-400 text-green-800",
+      sliderBg: "bg-green-500",
+    },
+    info: {
+      bg: "bg-blue-100 border-blue-400 text-blue-800",
+      sliderBg: "bg-blue-500",
+    },
+    default: { // Using a "default" key for the last case
+      bg: "bg-yellow-100 border-yellow-400 text-yellow-800",
+      sliderBg: "bg-yellow-500",
+    },
+  };
+  colors.warning = colors.default;
+  const { bg, sliderBg } = colors[type] || colors.default;
+
+  // onClose ref'ini güncelle
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   // Update remaining time ref when time prop changes
   useEffect(() => {
@@ -15,6 +42,11 @@ export default function Toast({ messages = [], time = 4000, onClose }) {
   }, [time]);
 
   useEffect(() => {
+    const handleClose = () => {
+      setIsClosing(true);
+      setTimeout(() => onCloseRef.current(), 300);
+    };
+
     if (isClosing) return;
 
     if (isHovered) {
@@ -32,11 +64,7 @@ export default function Toast({ messages = [], time = 4000, onClose }) {
     } else {
       // Resume/Start: use remaining time
       startTimeRef.current = Date.now();
-      timerRef.current = setTimeout(() => {
-          setIsClosing(true);
-          setTimeout(onClose, 300);
-        }, remainingTimeRef.current
-      );
+      timerRef.current = setTimeout(handleClose, remainingTimeRef.current);
     }
 
     return () => {
@@ -44,14 +72,13 @@ export default function Toast({ messages = [], time = 4000, onClose }) {
         clearTimeout(timerRef.current);
       }
     };
-  }, [isHovered, isClosing, onClose]);
+  }, [isHovered, isClosing]);
 
   if (messages.length === 0) return null;
 
   return (
     <div 
-      className={`relative bg-yellow-100 border 
-        border-yellow-400 text-yellow-800 px-4 
+      className={`relative border ${bg} px-4 
         py-2 rounded shadow-lg z-50 w-full 
         max-w-md overflow-hidden transition-opacity 
         duration-500 ${ isClosing ? 
@@ -87,7 +114,7 @@ export default function Toast({ messages = [], time = 4000, onClose }) {
       </div>
 
       {/* Sliding bar with pause control */}
-      <div className={`absolute bottom-0 left-0 h-1 bg-yellow-500 animate-slide-right-to-left ${
+      <div className={`absolute bottom-0 left-0 h-1 ${sliderBg} animate-slide-right-to-left ${
         isHovered ? 'pause-animation' : ''
       }`} />
     </div>
