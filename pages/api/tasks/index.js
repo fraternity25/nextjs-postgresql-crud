@@ -1,4 +1,4 @@
-import { getTasks, createTask } from '@/lib/dataService';
+import { getTasks, createTask } from '@/lib/dataService/tasks';
 
 export default async function handler(req, res) {
   const { method } = req;

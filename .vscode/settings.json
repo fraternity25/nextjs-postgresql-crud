@@ -1,0 +1,109 @@
+{
+  "funcList": {
+    "doubleSpacing": true,
+    "filters": [
+      {
+        "extensions": [".c", ".h"],
+        "native": "/^[a-z]+\\s+\\w+\\(/mgi",
+        "display": "/\\S* +(\\w+)/1",
+        "sort": 0
+      },
+      {
+        "extensions": [".cpp", ".hpp"],
+        "native": "/(?:^\\w+\\s+|^)\\w+[:]*\\w+\\(/mgi",
+        "display": "/[\\S ]+(\\w+)/",
+        "sort": 0
+      },
+      {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "native": "/^(?:export(?:\\s+default)?\\s+)?(?:async\\s+)?function\\s+[\\w$]+\\s*\\([^)]*\\)/gm",
+        "display": "/\\s*([^\\n]+)/1",
+        "sort": 0
+      },
+      {
+        "extensions": [".php"],
+        "native": "/(?:^|\\s)function\\s+\\w+\\(/mg",
+        "display": "/\\s*function\\s+(\\w+)/1",
+        "sort": 0
+      },
+      {
+        "extensions": [".java"],
+        "native": "/(?:public |private |protected |static |final |synchronized )*[\\w<>\\[\\]]+\\s+\\w+\\s*\\(.*\\)\\s*\\{?/mg",
+        "display": "/[\\w<>\\[\\] ]+ +(\\w+\\s*\\(.*\\))/1",
+        "sort": 0
+      },
+      {
+        "extensions": [".py"],
+        "native": "/^def \\w+\\(/mg",
+        "display": "/def (\\w+)/1",
+        "sort": 0
+      },
+      {
+        "extensions": [".rs"],
+        "native": "/^fn \\w+\\(/mg",
+        "display": "/fn (\\w+)/1",
+        "sort": 0
+      },
+      {
+        "extensions": [".go"],
+        "native": "/^func \\w+\\(/mg",
+        "display": "/func (\\w+)/1",
+        "sort": 0
+      },
+      {
+        "extensions": [".dart"],
+        "native": "/^\\w+ \\w+\\(/mg",
+        "display": "/\\S* +(\\w+)\\(/1",
+        "sort": 0
+      },
+      {
+        "extensions": [".swift"],
+        "native": "/^func \\w+\\(/mg",
+        "display": "/func (\\w+)/1",
+        "sort": 0
+      },
+      {
+        "extensions": [".kt", ".kts"],
+        "native": "/fun \\w+\\(/mg",
+        "display": "/fun (\\w+)/1",
+        "sort": 0
+      },
+      {
+        "extensions": [".lua"],
+        "native": "/^function \\w+\\(/mg",
+        "display": "/function (\\w+)/1",
+        "sort": 0
+      },
+      {
+        "extensions": [".jl"],
+        "native": "/^function \\w+\\(/mg",
+        "display": "/function (\\w+)/1",
+        "sort": 0
+      },
+      {
+        "extensions": [".scala"],
+        "native": "/^def \\w+\\(/mg",
+        "display": "/def (\\w+)/1",
+        "sort": 0
+      },
+      {
+        "extensions": [".hs"],
+        "native": "/^\\w+ ::/mg",
+        "display": "/(\\w+) ::/1",
+        "sort": 0
+      },
+      {
+        "extensions": [".asm"],
+        "native": "/^\\w+:\\s*$/mg",
+        "display": "/\\w+/",
+        "sort": 0
+      },
+      {
+        "extensions": [".ps1"],
+        "native": "/function\\s+\\w+-?\\w*\\s*{/img",
+        "display": "/function\\s+(\\w+-?\\w*)/1i",
+        "sort": 0
+      }
+    ]
+  }
+}

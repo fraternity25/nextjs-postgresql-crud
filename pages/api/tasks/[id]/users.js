@@ -1,4 +1,4 @@
-import { deleteAssignedUsers } from '@/lib/dataService';
+import { deleteAssignedUsers } from '@/lib/dataService/tasks';
 
 export default async function handler(req, res) {
   const { method, query } = req;
