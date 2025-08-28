@@ -61,23 +61,19 @@ const ProfileMenu = () => {
             Account
           </Link>
 
-          <span
-            className="flex items-center rounded-md 
-            border border-gray-300 bg-white gap-2 px-2 
-            py-2 text-sm text-red-600 shadow-sm 
+          <button
+            className="inline-flex items-center rounded-md 
+            border border-gray-300 bg-white w-full gap-2 
+            px-2 py-2 text-sm text-red-600 shadow-sm 
             hover:bg-gray-100"
+            onClick={() => signOut({ callbackUrl: "/auth" })}
           >
             <FontAwesomeIcon 
                 icon={userIcons.logout} 
                 className="w-4 h-4" 
             />
-            <button
-              className="inline-block"
-              onClick={() => signOut({ callbackUrl: "/auth" })}
-            >
-              Logout
-            </button>
-          </span>
+            Logout
+          </button>
         </div>
       )}
     </div>

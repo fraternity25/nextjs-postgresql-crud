@@ -36,9 +36,9 @@ function History({user , onDelete}) {
           {user.notifications.map((notif) => (
             <li
               key={notif.id}
-              className={`p-4 hover:bg-gray-100 ${
+              className={`p-4 bg-blue-50 hover:bg-gray-100`/*${
                 !notif.is_read ? "bg-blue-50" : ""
-              }`}
+              }*/}
             >
               <div className="flex items-center justify-between">
                 <div>
@@ -194,7 +194,7 @@ export default function NotificationsContent() {
   ); */
 
   const self = allNotifications.find((u) => u.id == session?.user?.id);
-  console.log("self = ", self);
+  //console.log("self = ", self);
 
   return (
     <div className="max-w-7xl py-4 mx-auto px-4 sm:px-6 lg:px-8">
