@@ -16,11 +16,11 @@ export default async function handler(req, res) {
 
     case 'POST':
       try {
-        const { userId, message } = req.body;
+        const { userId, message, type } = req.body;
         if (!userId || !message) {
           return res.status(400).json({ error: 'userId and message required' });
         }
-        const notification = await createNotification(userId, message);
+        const notification = await createNotification(userId, message, type);
         res.status(201).json(notification);
       } catch (err) {
         console.error('[API] Error creating notification:', err);

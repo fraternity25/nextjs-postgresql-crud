@@ -22,13 +22,13 @@ export function ToastProvider({ children }) {
     }
   }, [toastMessages, isMounted]);
 
-  const addToast = ({messages, time = 5000, type = "default"}) => {
+  const addToast = ({messages, time = 5000, type = "info"}) => {
     const res = fetch('/api/notifications', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userId: session?.user?.id, message: toastMessagesToString(messages) }),
+      body: JSON.stringify({ userId: session?.user?.id, message: toastMessagesToString(messages), type: type }),
     });
     setToastMessages(prev => [...prev, { messages, time, type }]);
   };

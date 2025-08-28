@@ -1,6 +1,5 @@
 import { 
     getNotificationsByUser, 
-    markNotificationAsRead, 
     deleteNotification 
 } from '@/lib/dataService/notifications';
 
@@ -19,7 +18,7 @@ export default async function handler(req, res) {
       }
       break;
 
-    case 'PUT': // mark as read
+    /* case 'PUT': 
       try {
         const updated = await markNotificationAsRead(id);
         res.status(200).json(updated);
@@ -27,7 +26,7 @@ export default async function handler(req, res) {
         console.error('[API] Error marking notification as read:', err);
         res.status(500).json({ error: 'Failed to mark notification as read' });
       }
-      break;
+      break; */
 
     case 'DELETE':
       try {
