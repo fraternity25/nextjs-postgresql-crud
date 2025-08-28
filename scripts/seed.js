@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import bcrypt from 'bcrypt';
-import pool from '../lib/db.js';
+import pool from '@/lib/db.js';
 
 //dotenv.config({ path: '.env.local' });
 
@@ -47,7 +47,7 @@ async function seed() {
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id),
         message TEXT NOT NULL,
-        is_read BOOLEAN DEFAULT FALSE,
+        type TEXT DEFAULT 'info',
         created_at TIMESTAMP DEFAULT NOW()
       );
     `);

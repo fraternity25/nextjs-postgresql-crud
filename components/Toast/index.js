@@ -16,7 +16,7 @@ export function ToastMessages({messages}) {
   );
 }
 
-export default function Toast({ messages = [], time = 4000, type="warning", onClose }) {
+export default function Toast({ messages = [], time = 4000, type="info", onClose }) {
   const [isClosing, setIsClosing] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [remainingTime, setRemainingTime] = useState(time);
@@ -43,7 +43,7 @@ export default function Toast({ messages = [], time = 4000, type="warning", onCl
       sliderBg: "bg-yellow-500",
     },
   };
-  colors.warning = colors.default;
+  colors.info = colors.default;
   const { bg, sliderBg } = colors[type] || colors.default;
 
   // onClose ref'ini güncelle
