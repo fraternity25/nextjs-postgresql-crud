@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { sidebarIcons } from "@/components/icons";
 import { stringToToastMessages } from "@/lib/utils";
 import { ToastMessages } from "@/components/Toast";
 import { useState, useEffect } from "react";
@@ -6,15 +8,20 @@ import { useRouter } from "next/router";
 
 function HistoryHeader({self, user}) {
   return (
-    <h2 className="text-sm font-semibold text-gray-700">
+    <h2 
+      className="text-sm font-semibold text-black w-full
+      bg-[radial-gradient(ellipse_100%_60%_at_center,_var(--tw-gradient-stops))]
+      to-gray-900/70 via-black/70 from-gray-900/80 
+      p-2 border border-black rounded-md 
+      shadow-sm"
+    >
       <div className='flex justify-between items-center'>
         <div 
           className={`flex items-center gap-2 
-            ${self ? "text-md font-bold text-gray-800" : ""}
+            ${self ? "text-md font-bold " : ""}
           `}
         >
           {self ? "Your notification history" : `${user.name} (${user.email})`}
-          {/*unreadCount > 0 && `(${unreadCount} unread)`*/}
         </div>
         <div>{user.role}</div>
       </div>
@@ -27,18 +34,16 @@ function History({user , onDelete}) {
   const isFindNotif = user.notifications?.length > 0;
 
   const content = !isFindNotif ? (
-      <div className="text-center py-6 bg-white">
+      <div className="text-center py-6">
         <p className="text-gray-500">No notifications found</p>
       </div>
     ) : (
-      <div className="bg-gray-50 rounded-md py-2">
+      <div className="rounded-md">
         <ul className="divide-y divide-gray-200">
           {user.notifications.map((notif) => (
             <li
               key={notif.id}
-              className={`p-4 bg-blue-50 hover:bg-gray-100`/*${
-                !notif.is_read ? "bg-blue-50" : ""
-              }*/}
+              className={`p-4 hover:bg-gray-100`}
             >
               <div className="flex items-center justify-between">
                 <div>
@@ -58,15 +63,6 @@ function History({user , onDelete}) {
                   </p>
                 </div>
                 <div className="flex items-center space-x-2">
-                  {/*!notif.is_read && (
-                    <button
-                      onClick={() => markAsRead(notif.id)}
-                      className="text-sm text-blue-600 hover:text-blue-800"
-                    >
-                      Mark as read
-                    </button>
-                  )*/}
-
                   {isAdmin && 
                     <button
                       className="inline-flex items-center p-2 rounded-md cursor-pointer border border-transparent 
@@ -91,6 +87,7 @@ export default function NotificationsContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [allNotifications, setAllNotifications] = useState([]); // [{ id, name, email, role, notifications: [...] }, ...]
+  const [expandedList, setExpandedList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -131,26 +128,6 @@ export default function NotificationsContent() {
     }
   };
 
-  /* const markAsRead = async (notificationId) => {
-    try {
-      const response = await fetch(`/api/notifications/${notificationId}`, {
-        method: "PUT",
-      });
-      if (!response.ok) throw new Error("Failed to mark as read");
-
-      setAllNotifications((prev) =>
-        prev.map((user) => ({
-          ...user,
-          notifications: user.notifications.map((notif) =>
-            notif.id === notificationId ? { ...notif, is_read: true } : notif
-          ),
-        }))
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  }; */
-
   const deleteNotification = async (notificationId) => {
     try {
       const response = await fetch(`/api/notifications/${notificationId}`, {
@@ -171,6 +148,12 @@ export default function NotificationsContent() {
     }
   };
 
+  const toggleExpand = (id) => {
+    setExpandedList((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
   if (status === "loading" || loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -187,22 +170,49 @@ export default function NotificationsContent() {
     );
   }
 
-  // tüm kullanıcılar için unreadCount
-  /* const unreadCount = allNotifications.reduce(
-    (sum, user) => sum + user.notifications.filter((n) => !n.is_read).length,
+  const count = allNotifications.reduce(
+    (sum, user) => sum + user.notifications.length,
     0
-  ); */
+  );
 
   const self = allNotifications.find((u) => u.id == session?.user?.id);
-  //console.log("self = ", self);
+  const isExpanded = expandedList.includes(self?.id);
 
   return (
-    <div className="max-w-7xl py-4 mx-auto px-4 sm:px-6 lg:px-8">
+    <div 
+      className="max-w-md mx-auto mt-4 border 
+      border-gray-300 rounded-lg shadow-md
+      py-4 px-4"
+    >
+      <h1 className="text-xl font-bold text-black mb-4">
+        Notifications {count > 0 && `(${count})`}
+      </h1>
       <div className="sm:flex sm:items-center sm:justify-between">
-        <div className="sm:flex-auto">
-          <h1 className="text-xl font-bold text-black mb-4">Notifications</h1>
-          <HistoryHeader self={true} user={self || session?.user} />
-          <History user={self || session?.user} onDelete={deleteNotification} />
+        <div className="sm:flex-auto rounded-lg bg-blue-100">
+          <button 
+            className="flex items-center w-full border-b border-gray-300
+            rounded-md gap-2 p-2 hover:bg-gray-300"
+            onClick={() => toggleExpand(self.id)}
+          >
+            <FontAwesomeIcon
+              className={`w-4 h-4 text-gray-500 
+                transition-transform duration-300 transform 
+                ${isExpanded ? 
+                  'rotate-90' : ''
+                }
+              `}
+              icon={sidebarIcons.expand}
+            />
+            <HistoryHeader self={true} user={self || session?.user} />
+          </button>
+          <div 
+            className={`transition-[max-height] ease-in-out duration-500 
+            overflow-hidden ${isExpanded ? 'max-h-96' : 'max-h-0'}`}
+          >
+            {isExpanded && (
+              <History user={self || session?.user} onDelete={deleteNotification} />
+            )}
+          </div>
         </div>
       </div>
 
@@ -210,11 +220,40 @@ export default function NotificationsContent() {
         <div className="mt-4 flex flex-col space-y-2">
           {allNotifications
             .filter((user) => user.id != session?.user?.id)
-            .map((user) =>
-            <div key={user.id} >
-              <HistoryHeader self={false} user={user} />
-              <History user={user} onDelete={deleteNotification}/>
-            </div>
+            .map((user) => {
+              const isExpanded = expandedList.includes(user.id);
+              return (
+                <div 
+                  key={user.id} 
+                  className="rounded-lg bg-blue-100"
+                >
+                  <button 
+                    className="flex items-center w-full border-b border-gray-300
+                    rounded-md gap-2 p-2 hover:bg-gray-300"
+                    onClick={() => toggleExpand(user.id)}
+                  >
+                    <FontAwesomeIcon
+                      className={`w-4 h-4 text-gray-500 
+                        transition-transform duration-300 transform 
+                        ${isExpanded ? 
+                          'rotate-90' : ''
+                        }
+                      `}
+                      icon={sidebarIcons.expand}
+                    />
+                    <HistoryHeader self={false} user={user} />
+                  </button>
+                  <div 
+                    className={`transition-[max-height] ease-in-out duration-500 
+                    overflow-hidden ${isExpanded ? 'max-h-96' : 'max-h-0'}`}
+                  >
+                    {isExpanded && (
+                      <History user={user} onDelete={deleteNotification} />
+                    )}
+                  </div>
+                </div>
+              );
+            }
           )}
         </div>
       }

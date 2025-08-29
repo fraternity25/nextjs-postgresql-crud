@@ -1,9 +1,21 @@
 import {
-  faPaperclip, faPlus, faCheck, faSquareCheck,// General icons
-  faHome, faHeadset, faCircleExclamation, faChevronLeft, faChevronRight, // Sidebar General icons
-  faUsers, faUser, faUserPlus, faUserGear, faUserShield, faUserPen, faRightFromBracket, // User icons
-  faTasks, faCheckCircle, faClipboardList, faPlusSquare, faCalendarCheck, faListCheck, faPenToSquare, // Task icons
-  faBell, faBellSlash, faEnvelope, faExclamationTriangle, faCircleInfo, faCheckDouble  // Notification icons
+  // General icons
+  faPaperclip, faPlus, faCheck, faSquareCheck,
+  // Sidebar General icons
+  faHome, faHeadset, faCircleExclamation, 
+  faChevronLeft, faChevronRight, faChevronDown, 
+  faChevronUp,
+  // User icons
+  faUsers, faUser, faUserPlus, faUserGear, 
+  faUserShield, faUserPen, faRightFromBracket, 
+  // Task icons
+  faTasks, faCheckCircle, faClipboardList, 
+  faPlusSquare, faCalendarCheck, faListCheck, 
+  faPenToSquare, 
+  // Notification icons
+  faBell, faBellSlash, faEnvelope, 
+  faExclamationTriangle, faCircleInfo, 
+  faCheckDouble  
 } from '@fortawesome/free-solid-svg-icons';
 
 const generalIcons = {
@@ -18,7 +30,9 @@ const sidebarIcons = {
   forms: faHeadset,
   tickets: faCircleExclamation,
   collapse: faChevronLeft,
-  expand: faChevronRight
+  expand: faChevronRight,
+  up: faChevronUp,
+  down: faChevronDown
 };
 
 const userIcons = {

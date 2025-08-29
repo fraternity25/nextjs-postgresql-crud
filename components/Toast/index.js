@@ -25,7 +25,7 @@ export function ToastMessages({messages, type="info"}) {
 
   return (
     <div 
-      className={`border ${bg} px-4 
+      className={`border max-w-[250px] rounded-lg shadow-md ${bg} px-4 
         py-2`
       }
     >
@@ -33,12 +33,12 @@ export function ToastMessages({messages, type="info"}) {
           const Tag = msg.type;
           if (Tag == "ul") {
             return (
-              <Tag key={i} className="list-disc ml-4">
+              <Tag key={i} className="list-disc ml-4 text-wrap">
                 {msg.content.map((li, j) => <li key={j}>{li}</li>)}
               </Tag>
             );
           }
-          return <Tag key={i}>{msg.content}</Tag>;
+          return <Tag key={i} className="text-wrap">{msg.content}</Tag>;
       })}
     </div>
   );

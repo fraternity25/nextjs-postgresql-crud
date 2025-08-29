@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "node scripts/seed.js"
+    "seed": "node scripts/seed.js",
+    "backup": "node scripts/backupDB.js backup",
+    "backup:list": "node scripts/backupDB.js list",
+    "backup:restore": "node scripts/backupDB.js restore",
+    "backup:restore-latest": "node scripts/backupDB.js restore-latest"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.0.0",

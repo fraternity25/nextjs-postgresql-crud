@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import bcrypt from 'bcrypt';
-import pool from '@/lib/db.js';
+import pool from '../lib/db.js';
 
 //dotenv.config({ path: '.env.local' });
 
@@ -35,9 +35,9 @@ async function seed() {
         description TEXT,
         deadline DATE,
         created_at TIMESTAMP DEFAULT NOW(),
-        created_by INTEGER REFERENCES users(id),
-        owner_id INTEGER REFERENCES users(id),
-        reviewer_id INTEGER REFERENCES users(id),
+        created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+        owner_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+        reviewer_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
         status TEXT DEFAULT 'pending'
       );
     `);
@@ -45,7 +45,7 @@ async function seed() {
     await client.query(`
       CREATE TABLE IF NOT EXISTS notifications (
         id SERIAL PRIMARY KEY,
-        user_id INTEGER REFERENCES users(id),
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
         message TEXT NOT NULL,
         type TEXT DEFAULT 'info',
         created_at TIMESTAMP DEFAULT NOW()
