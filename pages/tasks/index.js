@@ -23,7 +23,7 @@ function TasksContent() {
     if (status === 'unauthenticated') {
       router.push('/auth');
     } 
-  }, [status]);
+  }, [status, router]);
 
   const deleteTask = async (id) => {
     try {

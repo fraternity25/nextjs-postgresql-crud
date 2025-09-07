@@ -13,7 +13,7 @@ export default function Home() {
     } else if (status === 'unauthenticated') {
       router.replace('/auth');
     }
-  }, [status]);
+  }, [status, router]);
 
   return null;
 }

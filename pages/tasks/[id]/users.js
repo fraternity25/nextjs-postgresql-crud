@@ -14,6 +14,21 @@ export default function TaskUsersPage() {
   const { id } = router.query;
 
   useEffect(() => {
+    const fetchTask = async () => {
+      try {
+          const res = await fetch(`/api/tasks/${id}`);
+          if (!res.ok) {
+            throw new Error('Failed to fetch task');
+          }
+          const data = await res.json();
+          setTask(data);
+      } catch (err) {
+          setError(err.message);
+      } finally {
+          setLoading(false);
+      }
+    };
+
     if (id){
       fetchTask();
     }
@@ -27,21 +42,6 @@ export default function TaskUsersPage() {
       setRolesMap(map);
     }
   }, [task]);
-
-  const fetchTask = async () => {
-    try {
-        const res = await fetch(`/api/tasks/${id}`);
-        if (!res.ok) {
-        throw new Error('Failed to fetch task');
-        }
-        const data = await res.json();
-        setTask(data);
-    } catch (err) {
-        setError(err.message);
-    } finally {
-        setLoading(false);
-    }
-  };
 
   if (status === 'loading' || loading) {
     return (

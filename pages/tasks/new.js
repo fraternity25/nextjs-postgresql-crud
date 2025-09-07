@@ -15,7 +15,7 @@ function NewTaskContent() {
     if (status !== 'loading' && (!session || session.user.role !== "admin")) {
       router.push('/');
     }
-  }, [status, session]);
+  }, [status, session, router]);
 
   if (status === 'loading') return <p className="p-6">Loading...</p>;
 

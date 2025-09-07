@@ -18,28 +18,28 @@ function EditTaskContent() {
     if (status !== 'loading' && (!session || session.user.role !== "admin")) {
       router.push('/');
     }
-  }, [status, session]);
+  }, [status, session, router]);
 
   useEffect(() => {
+    const fetchTask = async () => {
+      try {
+        const res = await fetch(`/api/tasks/${id}`);
+        if (!res.ok) {
+          throw new Error('Failed to fetch task');
+        }
+        const data = await res.json();
+        setTask(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (id) {
       fetchTask();
     }
-  }, [id]);
-
-  const fetchTask = async () => {
-    try {
-      const res = await fetch(`/api/tasks/${id}`);
-      if (!res.ok) {
-        throw new Error('Failed to fetch task');
-      }
-      const data = await res.json();
-      setTask(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [id, setError, setLoading]);
 
   const onSubmit = async (updatedData) => {
     const body = JSON.stringify({
